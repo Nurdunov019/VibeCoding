@@ -1,7 +1,7 @@
 import json
 import os
-import jwt
 from datetime import datetime
+from jose import jwt
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
