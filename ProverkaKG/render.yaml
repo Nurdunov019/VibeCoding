@@ -1,0 +1,26 @@
+# ProverkaKG — Render Blueprint
+# Deploy: Dashboard → Blueprints → New Blueprint Instance → select this repo
+
+services:
+  - type: web
+    name: proverkakg
+    runtime: python
+    region: frankfurt
+    plan: free
+    rootDir: ProverkaKG
+    buildCommand: |
+      pip install -r backend/requirements.txt &&
+      cd frontend && npm ci && npm run build
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./proverkakg.db
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+    disk:
+      name: proverkakg-data
+      mountPath: /opt/render/project/src/ProverkaKG/backend
+      sizeGB: 1
