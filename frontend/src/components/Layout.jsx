@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
@@ -9,6 +10,7 @@ import LanguageSwitcher from './LanguageSwitcher'
 import WhatsAppButton from './WhatsAppButton'
 import RegionPicker from './RegionPicker'
 import MobileNav from './MobileNav'
+import MobileProfileSheet from './MobileProfileSheet'
 
 export default function Layout() {
   const { pathname } = useLocation()
@@ -17,6 +19,7 @@ export default function Layout() {
   const { t } = useLocale()
   const { openLogin, openRegister } = useAuthModal()
   const navigate = useNavigate()
+  const [profileOpen, setProfileOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
@@ -39,15 +42,6 @@ export default function Layout() {
 
           <div className="header-mobile-actions">
             <LanguageSwitcher />
-            {loading ? null : user ? (
-              <button type="button" className="btn-accent btn-sm mobile-auth-btn" onClick={handleLogout}>
-                {t('auth.logout')}
-              </button>
-            ) : (
-              <button type="button" className="btn-accent btn-sm mobile-auth-btn" onClick={openLogin}>
-                {t('auth.login')}
-              </button>
-            )}
           </div>
 
           <nav className="nav-menu desktop-only">
@@ -105,7 +99,11 @@ export default function Layout() {
         </div>
       </footer>
 
-      <MobileNav />
+      <MobileNav
+        profileOpen={profileOpen}
+        onProfileOpen={() => setProfileOpen((v) => !v)}
+      />
+      <MobileProfileSheet open={profileOpen} onClose={() => setProfileOpen(false)} />
       <WhatsAppButton />
       <AuthModal />
     </div>

@@ -1,8 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
-import { WHATSAPP_URL } from '../constants/regions'
 import { useLocale } from '../context/LocaleContext'
 
-function IconHome({ active }) {
+function IconHome() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 01-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 014 19v-8.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -10,7 +9,7 @@ function IconHome({ active }) {
   )
 }
 
-function IconObjects({ active }) {
+function IconObjects() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M5 10.5L12 5l7 5.5V18a1 1 0 01-1 1h-4v-5H10v5H6a1 1 0 01-1-1v-7.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -19,7 +18,7 @@ function IconObjects({ active }) {
   )
 }
 
-function IconMap({ active }) {
+function IconMap() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M5 10.5L12 5l7 5.5V18a1 1 0 01-1 1h-4v-5H10v5H6a1 1 0 01-1-1v-7.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -29,16 +28,16 @@ function IconMap({ active }) {
   )
 }
 
-function IconAdd() {
+function IconProfile() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M5 19c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   )
 }
 
-export default function MobileNav() {
+export default function MobileNav({ profileOpen, onProfileOpen }) {
   const { pathname, hash } = useLocation()
   const { t } = useLocale()
 
@@ -51,21 +50,21 @@ export default function MobileNav() {
   return (
     <nav className="mobile-nav" aria-label={t('mobileNav.label')}>
       <Link to="/" className={itemClass(isHome)}>
-        <IconHome active={isHome} />
+        <IconHome />
         <span>{t('mobileNav.home')}</span>
       </Link>
       <Link to="/#complexes" className={itemClass(isObjects)}>
-        <IconObjects active={isObjects} />
+        <IconObjects />
         <span>{t('mobileNav.objects')}</span>
       </Link>
       <Link to="/map" className={itemClass(isMap)}>
-        <IconMap active={isMap} />
+        <IconMap />
         <span>{t('mobileNav.search')}</span>
       </Link>
-      <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mobile-nav-item">
-        <IconAdd />
-        <span>{t('mobileNav.add')}</span>
-      </a>
+      <button type="button" className={itemClass(profileOpen)} onClick={onProfileOpen}>
+        <IconProfile />
+        <span>{t('mobileNav.profile')}</span>
+      </button>
     </nav>
   )
 }
