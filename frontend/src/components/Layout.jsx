@@ -27,18 +27,30 @@ export default function Layout() {
     <div className="app">
       <header className="header">
         <div className="container header-top">
-          <div className="header-brand">
-            <Link to="/" className="logo">
-              <span className="logo-mark">✓</span>
-              <div>
-                <span className="logo-text">ProverkaKG</span>
-                <span className="logo-tag">{t('tagline')}</span>
-              </div>
-            </Link>
-            <RegionPicker />
+          <Link to="/" className="logo">
+            <span className="logo-mark">✓</span>
+            <div>
+              <span className="logo-text">ProverkaKG</span>
+              <span className="logo-tag desktop-only-inline">{t('tagline')}</span>
+            </div>
+          </Link>
+
+          <RegionPicker />
+
+          <div className="header-mobile-actions">
+            <LanguageSwitcher />
+            {loading ? null : user ? (
+              <button type="button" className="btn-accent btn-sm mobile-auth-btn" onClick={handleLogout}>
+                {t('auth.logout')}
+              </button>
+            ) : (
+              <button type="button" className="btn-accent btn-sm mobile-auth-btn" onClick={openLogin}>
+                {t('auth.login')}
+              </button>
+            )}
           </div>
 
-          <nav className="nav-menu">
+          <nav className="nav-menu desktop-only">
             <Link to="/" className={pathname === '/' ? 'active' : ''}>{t('nav.complexes')}</Link>
             <Link to="/map" className={pathname === '/map' ? 'active' : ''}>{t('nav.map')}</Link>
             <Link to="/compare" className={pathname === '/compare' ? 'active' : ''}>
@@ -47,7 +59,7 @@ export default function Layout() {
             </Link>
           </nav>
 
-          <div className="header-actions">
+          <div className="header-actions desktop-only">
             <LanguageSwitcher />
             {loading ? null : user ? (
               <div className="user-menu">
