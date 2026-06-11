@@ -8,6 +8,7 @@ import CompareBar from './CompareBar'
 import LanguageSwitcher from './LanguageSwitcher'
 import WhatsAppButton from './WhatsAppButton'
 import RegionPicker from './RegionPicker'
+import MobileNav from './MobileNav'
 
 export default function Layout() {
   const { pathname } = useLocation()
@@ -92,6 +93,7 @@ export default function Layout() {
         </div>
       </footer>
 
+      <MobileNav />
       <WhatsAppButton />
       <AuthModal />
     </div>

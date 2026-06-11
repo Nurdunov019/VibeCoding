@@ -1399,6 +1399,51 @@ button { cursor: pointer; border: none; }
 .muted { color: var(--muted); }
 .empty { text-align: center; padding: 60px; color: var(--muted); }
 
+/* Mobile bottom nav */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 250;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  position: relative;
+  min-height: 52px;
+}
+.mobile-nav-item svg { flex-shrink: 0; }
+.mobile-nav-item.active {
+  color: #2563eb;
+}
+.mobile-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 0 0 3px 3px;
+}
+
 /* Responsive */
 @media (min-width: 1600px) {
   .container { max-width: 1400px; }
@@ -1420,6 +1465,18 @@ button { cursor: pointer; border: none; }
   }
 }
 
+@media (max-width: 768px) {
+  .mobile-nav { display: grid; }
+  .app { padding-bottom: 72px; }
+  .nav-menu { display: none; }
+  .header-actions .btn-outline,
+  .header-actions .btn-accent,
+  .header-actions .btn-ghost { display: none; }
+  .header-actions .user-menu .user-name { display: none; }
+  .whatsapp-float { display: none; }
+  .footer { padding-bottom: 16px; }
+}
+
 @media (max-width: 900px) {
   .stats-row, .digits-grid, .stats-compact { grid-template-columns: repeat(2, 1fr); }
   .map-wrap { grid-template-columns: 1fr; height: auto; }
@@ -1427,7 +1484,6 @@ button { cursor: pointer; border: none; }
   .admin-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .header-top { flex-wrap: wrap; height: auto; padding: 12px 0; }
-  .nav-menu { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; }
   .hero-banner { min-height: 420px; }
   .hero-banner-content { padding: 28px 20px 24px; }
   .hero-search { margin: 0 0 24px; padding: 32px 16px; }
@@ -1451,11 +1507,6 @@ button { cursor: pointer; border: none; }
   .header-brand { flex-wrap: wrap; gap: 8px; }
   .region-picker-btn { font-size: 14px; padding: 7px 10px; }
   .filter-compact input:not([type="checkbox"]), .filter-compact select { width: 100%; }
-  .whatsapp-float {
-    right: 12px;
-    bottom: 12px;
-    padding: 10px 14px;
-  }
   .wa-text { display: none; }
   .complex-actions { flex-direction: column; }
   .hero-banner { min-height: 480px; border-radius: 0; margin-left: -16px; margin-right: -16px; }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { api } from '../api'
 import ComplexCard from '../components/ComplexCard'
 import HeroSlider from '../components/HeroSlider'
@@ -6,6 +7,7 @@ import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
 
 export default function Home() {
+  const { hash } = useLocation()
   const { t } = useLocale()
   const [complexes, setComplexes] = useState([])
   const [stats, setStats] = useState(null)
@@ -15,6 +17,12 @@ export default function Home() {
   const { region } = useRegion()
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (hash === '#complexes') {
+      document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [hash])
 
   useEffect(() => {
     setLoading(true)
@@ -88,7 +96,7 @@ export default function Home() {
         )}
       </HeroSlider>
 
-      <section className="section-head-simple">
+      <section id="complexes" className="section-head-simple">
         <h2>{t('section.list')}</h2>
         <p className="muted">{complexes.length} {t('section.count')} · {t('section.compareHint')}</p>
       </section>
