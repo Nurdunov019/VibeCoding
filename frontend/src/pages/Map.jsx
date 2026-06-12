@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { api } from '../api'
+import { useLocale } from '../context/LocaleContext'
+import { useRegion } from '../context/RegionContext'
 import 'leaflet/dist/leaflet.css'
 
 const icon = new L.Icon({
@@ -18,6 +20,9 @@ const BISHKEK = [42.8746, 74.5698]
 export default function MapPage() {
   const [markers, setMarkers] = useState([])
   const [loading, setLoading] = useState(true)
+  const { t } = useLocale()
+  const { region } = useRegion()
+  const cityName = t(`regions.${region}`)
 
   useEffect(() => {
     api.getMapMarkers()
@@ -29,38 +34,17 @@ export default function MapPage() {
   return (
     <div className="map-page">
       <section className="page-header">
-        <h1>Поиск на карте</h1>
-        <p className="muted">ЖК Бишкекте — текшерүү статусу жана баасы</p>
+        <h1>{t('map.title')}</h1>
+        <p className="muted">{t('map.sub', { city: cityName })}</p>
       </section>
 
       {loading ? (
-        <p className="empty">Загрузка карты...</p>
+        <p className="empty">{t('map.loading')}</p>
       ) : markers.length === 0 ? (
-        <p className="empty">Координаталары бар объекттер жок</p>
+        <p className="empty">{t('map.noCoords')}</p>
       ) : (
-        <div className="map-wrap">
-          <MapContainer center={BISHKEK} zoom={12} className="map-container" scrollWheelZoom>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {markers.map((m) => (
-              <Marker key={m.slug} position={[m.latitude, m.longitude]} icon={icon}>
-                <Popup>
-                  <strong>{m.name}</strong>
-                  <br />
-                  {m.address}
-                  <br />
-                  ${m.price_per_sqm_usd?.toLocaleString()} / м²
-                  <br />
-                  Проверка: {m.verification_score}%
-                  <br />
-                  <Link to={`/complex/${m.slug}`}>Подробнее →</Link>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
-          <aside className="map-sidebar">
+        <div className="map-layout">
+          <section className="map-list">
             {markers.map((m) => (
               <Link key={m.slug} to={`/complex/${m.slug}`} className="map-list-item">
                 {m.image_url && <img src={m.image_url} alt="" />}
@@ -73,7 +57,31 @@ export default function MapPage() {
                 </div>
               </Link>
             ))}
-          </aside>
+          </section>
+
+          <div className="map-container-wrap">
+            <MapContainer center={BISHKEK} zoom={12} className="map-container" scrollWheelZoom>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {markers.map((m) => (
+                <Marker key={m.slug} position={[m.latitude, m.longitude]} icon={icon}>
+                  <Popup>
+                    <strong>{m.name}</strong>
+                    <br />
+                    {m.address}
+                    <br />
+                    ${m.price_per_sqm_usd?.toLocaleString()} / м²
+                    <br />
+                    {t('map.check')}: {m.verification_score}%
+                    <br />
+                    <Link to={`/complex/${m.slug}`}>{t('card.details')} →</Link>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
         </div>
       )}
     </div>

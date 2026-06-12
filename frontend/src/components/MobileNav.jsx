@@ -3,7 +3,7 @@ import { useLocale } from '../context/LocaleContext'
 
 function IconHome() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 01-1.5 1.5H15v-6H9v6H5.5A1.5 1.5 0 014 19v-8.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
     </svg>
   )
@@ -11,26 +11,26 @@ function IconHome() {
 
 function IconObjects() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M5 10.5L12 5l7 5.5V18a1 1 0 01-1 1h-4v-5H10v5H6a1 1 0 01-1-1v-7.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M9.5 12.5l2 2 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 20V9l8-5 8 5v11" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M9 20v-6h6v6" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
     </svg>
   )
 }
 
 function IconMap() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M5 10.5L12 5l7 5.5V18a1 1 0 01-1 1h-4v-5H10v5H6a1 1 0 01-1-1v-7.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <circle cx="15.5" cy="15.5" r="3.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M17.5 17.5L19.5 19.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 6l6-2 6 2 4-1.5v13l-4 1.5-6-2-6 2-4-1.5V4.5l4 1.5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M10 4v13M16 6v13" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="13" cy="10" r="1.5" fill="currentColor" />
     </svg>
   )
 }
 
 function IconAdd() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
       <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
       <path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
@@ -59,7 +59,7 @@ export default function MobileNav({ koshuuOpen, onKoshuu }) {
       </Link>
       <Link to="/map" className={itemClass(isMap)}>
         <IconMap />
-        <span>{t('mobileNav.search')}</span>
+        <span>{t('mobileNav.map')}</span>
       </Link>
       <button type="button" className={itemClass(koshuuOpen)} onClick={onKoshuu}>
         <IconAdd />

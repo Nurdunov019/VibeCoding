@@ -4,6 +4,7 @@ import { api } from '../api'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { REGIONS } from '../constants/regions'
+import { useLocale } from '../context/LocaleContext'
 
 const EMPTY_COMPLEX = {
   name: '', slug: '', developer: '', address: '', city: 'Бишкек', region: 'bishkek',
@@ -30,6 +31,7 @@ function slugify(name) {
 export default function Admin() {
   const { user, loading: authLoading } = useAuth()
   const { openLogin } = useAuthModal()
+  const { t } = useLocale()
   const navigate = useNavigate()
   const [complexes, setComplexes] = useState([])
   const [selected, setSelected] = useState(null)
@@ -72,7 +74,7 @@ export default function Admin() {
       if (editingId) {
         const updated = await api.adminUpdateComplex(editingId, form)
         setForm(updated)
-        setMsg('Объект обновлён')
+        setMsg(t('admin.updated'))
       } else {
         const created = await api.adminCreateComplex(form)
         setEditingId(created.id)
@@ -182,26 +184,27 @@ export default function Admin() {
     }
   }, [authLoading, user, openLogin, navigate])
 
-  if (authLoading || !user?.is_admin) return <p className="empty">Загрузка...</p>
+  if (authLoading || !user?.is_admin) return <p className="empty">{t('admin.loading')}</p>
 
   return (
     <div className="admin-page">
-      <div className="admin-header">
-        <h1>Админ панель</h1>
-        <p className="muted">ЖК башкаруу · сүрөт · документ · рейтинг</p>
+      <div className="admin-sticky">
+        <div className="admin-header">
+          <h1>{t('admin.title')}</h1>
+          <p className="muted">{t('admin.sub')}</p>
+        </div>
+        <div className="admin-tabs">
+          <button type="button" className={tab === 'complexes' ? 'active' : ''} onClick={() => setTab('complexes')}>{t('admin.tabComplexes')}</button>
+          <button type="button" className={tab === 'documents' ? 'active' : ''} onClick={() => setTab('documents')} disabled={!editingId}>{t('admin.tabDocuments')}</button>
+        </div>
       </div>
 
       {msg && <div className="admin-msg">{msg}</div>}
 
-      <div className="admin-tabs">
-        <button type="button" className={tab === 'complexes' ? 'active' : ''} onClick={() => setTab('complexes')}>ЖК</button>
-        <button type="button" className={tab === 'documents' ? 'active' : ''} onClick={() => setTab('documents')} disabled={!editingId}>Документтер</button>
-      </div>
-
       <div className="admin-grid">
         <aside className="admin-list">
           <button type="button" className="btn-accent btn-sm btn-block" onClick={() => { resetForm(); setTab('complexes') }}>
-            + Жаңы ЖК
+            + {t('admin.newComplex')}
           </button>
           {complexes.map((c) => (
             <button
@@ -221,7 +224,7 @@ export default function Admin() {
         <div className="admin-form-panel">
           {tab === 'complexes' && (
             <form onSubmit={saveComplex} className="admin-form">
-              <h2>{editingId ? 'ЖК түзөтүү' : 'Жаңы ЖК кошуу'}</h2>
+              <h2>{editingId ? t('admin.editComplex') : t('admin.addComplex')}</h2>
 
               <div className="admin-upload-block">
                 <label className="upload-label">
@@ -295,9 +298,9 @@ export default function Admin() {
               </div>
 
               <div className="admin-actions">
-                <button type="submit" className="btn-accent">Сактоо</button>
+                <button type="submit" className="btn-accent">{t('admin.save')}</button>
                 {editingId && (
-                  <button type="button" className="btn-danger" onClick={() => deleteComplex(editingId)}>Өчүрүү</button>
+                  <button type="button" className="btn-danger" onClick={() => deleteComplex(editingId)}>{t('admin.delete')}</button>
                 )}
               </div>
             </form>
@@ -305,7 +308,7 @@ export default function Admin() {
 
           {tab === 'documents' && editingId && (
             <div>
-              <h2>Документтер — {form.name}</h2>
+              <h2>{t('admin.documents')} — {form.name}</h2>
               <div className="doc-admin-list">
                 {documents.map((d) => (
                   <div key={d.id} className="doc-admin-item">

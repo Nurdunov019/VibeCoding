@@ -16,7 +16,16 @@ export function LocaleProvider({ children }) {
     document.documentElement.lang = lang === 'ky' ? 'ky' : lang
   }, [lang])
 
-  const t = (key) => get(translations[lang], key)
+  const t = (key, vars) => {
+    let str = get(translations[lang], key)
+    if (typeof str !== 'string') return key
+    if (vars) {
+      Object.entries(vars).forEach(([k, v]) => {
+        str = str.replaceAll(`{${k}}`, String(v))
+      })
+    }
+    return str
+  }
 
   return (
     <LocaleContext.Provider value={{ lang, setLang, t }}>
