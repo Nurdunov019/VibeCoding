@@ -1261,8 +1261,10 @@ button { cursor: pointer; border: none; }
 .modal-header {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 24px;
+  text-align: center;
 }
 .modal-logo {
   width: 32px;
