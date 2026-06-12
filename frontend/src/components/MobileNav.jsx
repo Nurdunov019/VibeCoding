@@ -52,8 +52,7 @@ export default function MobileNav({ koshuuOpen, onKoshuu }) {
   const { user } = useAuth()
   const { t } = useLocale()
 
-  const inAdmin = pathname.startsWith('/admin')
-  const showAdminTab = inAdmin && user?.is_admin
+  const showAdminTab = !!user?.is_admin
 
   const isHome = pathname === '/' && hash !== '#complexes'
   const isObjects = pathname.startsWith('/complex') || (pathname === '/' && hash === '#complexes')
