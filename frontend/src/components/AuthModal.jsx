@@ -4,11 +4,20 @@ import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useLocale } from '../context/LocaleContext'
 
+function useDesktopFocus() {
+  const [allow, setAllow] = useState(false)
+  useEffect(() => {
+    setAllow(window.matchMedia('(hover: hover) and (pointer: fine)').matches)
+  }, [])
+  return allow
+}
+
 export default function AuthModal() {
   const { mode, close, openLogin, openRegister, isOpen } = useAuthModal()
   const { login, register } = useAuth()
   const { t } = useLocale()
   const navigate = useNavigate()
+  const allowAutoFocus = useDesktopFocus()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -38,6 +47,28 @@ export default function AuthModal() {
     if (isOpen) window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [isOpen, close])
+
+  useEffect(() => {
+    if (!isOpen) {
+      document.documentElement.style.removeProperty('--keyboard-offset')
+      return undefined
+    }
+    const vv = window.visualViewport
+    if (!vv) return undefined
+
+    const sync = () => {
+      const offset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop)
+      document.documentElement.style.setProperty('--keyboard-offset', `${offset}px`)
+    }
+    sync()
+    vv.addEventListener('resize', sync)
+    vv.addEventListener('scroll', sync)
+    return () => {
+      vv.removeEventListener('resize', sync)
+      vv.removeEventListener('scroll', sync)
+      document.documentElement.style.removeProperty('--keyboard-offset')
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -105,16 +136,34 @@ export default function AuthModal() {
         )}
 
         {mode === 'login' ? (
-          <form onSubmit={handleLogin} className="modal-form">
+          <form onSubmit={handleLogin} className="modal-form" autoComplete="on">
             <label>
               {t('auth.email')}
-              <input type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
+              <input
+                type="email"
+                name="email"
+                inputMode="email"
+                autoComplete="username"
+                placeholder={t('auth.emailPlaceholder')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoFocus={allowAutoFocus}
+              />
             </label>
             <label>
               {t('auth.password')}
               <div className="password-wrap">
-                <input type={showPass ? 'text' : 'password'} placeholder={t('auth.passwordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1}>
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  name="password"
+                  autoComplete="current-password"
+                  placeholder={t('auth.passwordPlaceholder')}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1} aria-label="Toggle password">
                   {showPass ? '🙈' : '👁'}
                 </button>
               </div>
@@ -124,20 +173,46 @@ export default function AuthModal() {
             </button>
           </form>
         ) : (
-          <form onSubmit={handleRegister} className="modal-form">
+          <form onSubmit={handleRegister} className="modal-form" autoComplete="on">
             <label>
               {t('auth.fullName')}
-              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required autoFocus />
+              <input
+                type="text"
+                name="name"
+                autoComplete="name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                autoFocus={allowAutoFocus}
+              />
             </label>
             <label>
               {t('auth.email')}
-              <input type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input
+                type="email"
+                name="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder={t('auth.emailPlaceholder')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </label>
             <label>
               {t('auth.password')}
               <div className="password-wrap">
-                <input type={showPass ? 'text' : 'password'} placeholder={t('auth.passwordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} minLength={6} required />
-                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1}>
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  name="new-password"
+                  autoComplete="new-password"
+                  placeholder={t('auth.passwordPlaceholder')}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={6}
+                  required
+                />
+                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1} aria-label="Toggle password">
                   {showPass ? '🙈' : '👁'}
                 </button>
               </div>

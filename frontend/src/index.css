@@ -1360,6 +1360,8 @@ button { cursor: pointer; border: none; }
   justify-content: center;
   padding: 20px;
   animation: modalFadeIn 0.2s ease;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 @keyframes modalFadeIn {
   from { opacity: 0; }
@@ -1374,6 +1376,7 @@ button { cursor: pointer; border: none; }
   width: min(420px, 100%);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
   animation: modalSlideUp 0.25s ease;
+  margin: auto;
 }
 @keyframes modalSlideUp {
   from { opacity: 0; transform: translateY(16px) scale(0.98); }
@@ -1773,8 +1776,6 @@ button { cursor: pointer; border: none; }
 /* ── Phone landscape ── */
 @media (max-height: 500px) and (orientation: landscape) and (max-width: 900px) {
   .hero-banner { min-height: 280px; }
-  .modal-overlay { align-items: flex-start; padding-top: 12px; overflow-y: auto; }
-  .modal-card { max-height: calc(100vh - 24px); overflow-y: auto; }
 }
 
 /* ── Small phone (≤479px) ── */
@@ -1789,6 +1790,19 @@ button { cursor: pointer; border: none; }
 
 /* ── Mobile + tablet (≤1023px) — bottom nav like Telegram ── */
 @media (max-width: 1023px) {
+  .modal-overlay {
+    align-items: flex-start;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, calc(var(--keyboard-offset, 0px) + env(safe-area-inset-bottom)));
+  }
+  .modal-card {
+    max-height: calc(100dvh - var(--keyboard-offset, 0px) - 32px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 0;
+    margin-bottom: var(--keyboard-offset, 0px);
+  }
+
   .desktop-only,
   .desktop-only-inline,
   .nav-menu,

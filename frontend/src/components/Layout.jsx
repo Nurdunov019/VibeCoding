@@ -103,12 +103,9 @@ export default function Layout() {
       <MobileNav
         hidden={navHidden}
         koshuuOpen={profileOpen}
-        onKoshuu={() => {
-          if (user) setProfileOpen((v) => !v)
-          else openLogin()
-        }}
+        onKoshuu={() => setProfileOpen((v) => !v)}
       />
-      <MobileProfileSheet open={profileOpen && !!user} onClose={() => setProfileOpen(false)} />
+      <MobileProfileSheet open={profileOpen} onClose={() => setProfileOpen(false)} />
       <AuthModal />
     </div>
   )
