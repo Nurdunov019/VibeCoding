@@ -65,8 +65,23 @@ def health():
 
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend" / "dist"
+
+NO_CACHE_HEADERS = {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0",
+}
+ASSET_CACHE_HEADERS = {"Cache-Control": "public, max-age=31536000, immutable"}
+
+
 if FRONTEND_DIR.exists():
-    app.mount("/assets", StaticFiles(directory=FRONTEND_DIR / "assets"), name="assets")
+
+    @app.get("/assets/{asset_path:path}")
+    def serve_asset(asset_path: str):
+        fp = FRONTEND_DIR / "assets" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
 
     @app.get("/{full_path:path}")
     def spa(full_path: str):
@@ -74,8 +89,8 @@ if FRONTEND_DIR.exists():
             raise HTTPException(status_code=404)
         fp = FRONTEND_DIR / full_path
         if fp.is_file():
-            return FileResponse(fp)
-        return FileResponse(FRONTEND_DIR / "index.html")
+            return FileResponse(fp, headers=NO_CACHE_HEADERS)
+        return FileResponse(FRONTEND_DIR / "index.html", headers=NO_CACHE_HEADERS)
 else:
 
     @app.get("/")
