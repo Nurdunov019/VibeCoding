@@ -1480,11 +1480,15 @@ button { cursor: pointer; border: none; }
 .admin-tabs { display: flex; gap: 8px; margin-bottom: 0; flex-wrap: wrap; }
 .admin-tabs button {
   padding: 10px 18px;
+  min-height: var(--tap-min);
   border-radius: 8px;
   background: white;
   border: 1.5px solid var(--border);
   font-weight: 600;
   color: var(--muted);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 .admin-tabs button.active { background: var(--primary); color: white; border-color: var(--primary); }
 .admin-tabs button:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -1495,11 +1499,16 @@ button { cursor: pointer; border: none; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
+  padding: 14px 16px;
+  min-height: var(--tap-min);
   background: white;
   border: 1.5px solid var(--border);
   border-radius: 10px;
   text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
 }
 .admin-list-item.active { border-color: var(--primary); background: var(--primary-light); }
 .admin-list-item strong { font-size: 14px; }
@@ -1535,10 +1544,30 @@ button { cursor: pointer; border: none; }
   border-radius: var(--radius);
   border: 1px dashed var(--border);
 }
-.upload-label input[type="file"] {
+.admin-upload-block .upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.upload-label {
   display: block;
-  margin-top: 8px;
-  font-size: 13px;
+  position: relative;
+  cursor: pointer;
+  font-weight: 600;
+}
+.upload-label input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;
 }
 .admin-preview {
   width: 100%;
@@ -1589,7 +1618,9 @@ button { cursor: pointer; border: none; }
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 250;
+  z-index: 400;
+  pointer-events: auto;
+  touch-action: manipulation;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -1627,6 +1658,9 @@ button { cursor: pointer; border: none; }
   cursor: pointer;
   font-family: inherit;
   width: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 .mobile-nav-item svg { flex-shrink: 0; }
 .mobile-nav-item.active {
@@ -1648,9 +1682,10 @@ button { cursor: pointer; border: none; }
   max-width: 64px;
   font-size: 10px;
 }
-.mobile-nav-admin .mobile-nav-item span {
-  max-width: 52px;
-}
+  .mobile-nav-admin .mobile-nav-item span {
+    max-width: 56px;
+    font-size: 9px;
+  }
 .page-loader { padding: 40px 16px; }
 
 .profile-sheet-backdrop {

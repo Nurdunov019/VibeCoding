@@ -56,8 +56,11 @@ export default function Admin() {
     setSelected(c)
     setForm({ ...c })
     setEditingId(c.id)
-    setTab('documents')
+    setTab('complexes')
     loadDocs(c.id)
+    requestAnimationFrame(() => {
+      document.querySelector('.admin-form-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
   }
 
   const resetForm = () => {
@@ -179,8 +182,8 @@ export default function Admin() {
 
   useEffect(() => {
     if (!authLoading && !user?.is_admin) {
-      openLogin()
       navigate('/', { replace: true })
+      openLogin()
     }
   }, [authLoading, user, openLogin, navigate])
 

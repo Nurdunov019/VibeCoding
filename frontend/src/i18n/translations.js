@@ -119,7 +119,7 @@ export const translations = {
       naryn: 'Нарын', talas: 'Талас', batken: 'Баткен',
     },
     whatsapp: { label: 'WhatsApp' },
-    mobileNav: { label: 'Главное меню', home: 'Главная', objects: 'Объекты', map: 'Карта', add: 'Добавить' },
+    mobileNav: { label: 'Главное меню', home: 'Главная', objects: 'Объекты', map: 'Карта', add: 'Профиль' },
     map: {
       title: 'Поиск на карте', sub: 'ЖК в {city} — статус проверки и цена',
       loading: 'Загрузка карты...', noCoords: 'Нет объектов с координатами', check: 'Проверка',
@@ -205,7 +205,7 @@ export const translations = {
       naryn: 'Naryn', talas: 'Talas', batken: 'Batken',
     },
     whatsapp: { label: 'WhatsApp' },
-    mobileNav: { label: 'Main menu', home: 'Home', objects: 'Objects', map: 'Map', add: 'Add' },
+    mobileNav: { label: 'Main menu', home: 'Home', objects: 'Objects', map: 'Map', add: 'Profile' },
     map: {
       title: 'Search on map', sub: 'Complexes in {city} — verification status and price',
       loading: 'Loading map...', noCoords: 'No complexes with coordinates', check: 'Verification',

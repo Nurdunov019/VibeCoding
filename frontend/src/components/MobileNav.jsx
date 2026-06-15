@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useLocale } from '../context/LocaleContext'
 
@@ -47,8 +47,9 @@ function IconAdd() {
   )
 }
 
-export default function MobileNav({ hidden, koshuuOpen, onKoshuu }) {
+export default function MobileNav({ hidden, koshuuOpen, onKoshuu, onNavClick }) {
   const { pathname, hash } = useLocation()
+  const navigate = useNavigate()
   const { user } = useAuth()
   const { t } = useLocale()
 
@@ -61,31 +62,65 @@ export default function MobileNav({ hidden, koshuuOpen, onKoshuu }) {
 
   const itemClass = (active) => `mobile-nav-item${active ? ' active' : ''}`
 
+  const beforeNav = () => {
+    onNavClick?.()
+    window.scrollTo(0, 0)
+  }
+
+  const goHome = () => {
+    beforeNav()
+    navigate('/')
+  }
+
+  const goObjects = () => {
+    beforeNav()
+    if (pathname === '/') {
+      document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      if (hash !== '#complexes') navigate('/#complexes', { replace: true })
+    } else {
+      navigate('/#complexes')
+    }
+  }
+
+  const goMap = () => {
+    beforeNav()
+    navigate('/map')
+  }
+
+  const goAdmin = () => {
+    beforeNav()
+    navigate('/admin')
+  }
+
+  const handleKoshuu = () => {
+    onKoshuu?.()
+  }
+
   return (
     <nav
       className={`mobile-nav${showAdminTab ? ' mobile-nav-admin' : ''}${hidden ? ' mobile-nav--hidden' : ''}`}
       aria-label={t('mobileNav.label')}
       aria-hidden={hidden}
     >
-      <Link to="/" className={itemClass(isHome)}>
+      <button type="button" className={itemClass(isHome)} onClick={goHome}>
         <IconHome />
         <span>{t('mobileNav.home')}</span>
-      </Link>
-      <Link to="/#complexes" className={itemClass(isObjects)}>
+      </button>
+      <button type="button" className={itemClass(isObjects)} onClick={goObjects}>
         <IconObjects />
         <span>{t('mobileNav.objects')}</span>
-      </Link>
-      <Link to="/map" className={itemClass(isMap)}>
+      </button>
+      <button type="button" className={itemClass(isMap)} onClick={goMap}>
         <IconMap />
         <span>{t('mobileNav.map')}</span>
-      </Link>
+      </button>
       {showAdminTab && (
-        <Link to="/admin" className={itemClass(isAdmin)}>
+        <button type="button" className={itemClass(isAdmin)} onClick={goAdmin}>
           <IconAdmin />
           <span>{t('nav.admin')}</span>
-        </Link>
+        </button>
       )}
-      <button type="button" className={itemClass(koshuuOpen)} onClick={onKoshuu}>
+      <button type="button" className={itemClass(koshuuOpen)} onClick={handleKoshuu}>
         <IconAdd />
         <span>{t('mobileNav.add')}</span>
       </button>

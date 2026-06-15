@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
@@ -21,6 +21,12 @@ export default function Layout() {
   const navigate = useNavigate()
   const [profileOpen, setProfileOpen] = useState(false)
   const { hidden: navHidden } = useMobileNavScroll()
+
+  useEffect(() => {
+    setProfileOpen(false)
+  }, [pathname])
+
+  const closeProfile = () => setProfileOpen(false)
 
   const handleLogout = () => {
     logout()
@@ -104,8 +110,9 @@ export default function Layout() {
         hidden={navHidden}
         koshuuOpen={profileOpen}
         onKoshuu={() => setProfileOpen((v) => !v)}
+        onNavClick={closeProfile}
       />
-      <MobileProfileSheet open={profileOpen} onClose={() => setProfileOpen(false)} />
+      <MobileProfileSheet open={profileOpen} onClose={closeProfile} />
       <AuthModal />
     </div>
   )
