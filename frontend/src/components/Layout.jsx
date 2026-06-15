@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
+import { useMobileNavScroll } from '../hooks/useMobileNavScroll'
 import AuthModal from './AuthModal'
 import CompareBar from './CompareBar'
 import LanguageSwitcher from './LanguageSwitcher'
@@ -19,6 +20,7 @@ export default function Layout() {
   const { openLogin, openRegister } = useAuthModal()
   const navigate = useNavigate()
   const [profileOpen, setProfileOpen] = useState(false)
+  const { hidden: navHidden } = useMobileNavScroll()
 
   const handleLogout = () => {
     logout()
@@ -26,7 +28,7 @@ export default function Layout() {
   }
 
   return (
-    <div className="app">
+    <div className={`app${navHidden ? ' app--nav-hidden' : ''}`}>
       <header className="header">
         <div className="container header-top">
           <RegionPicker />
@@ -70,7 +72,7 @@ export default function Layout() {
         </div>
       </header>
 
-      <CompareBar />
+      <CompareBar navHidden={navHidden} />
 
       <main className="main container">
         <Outlet />
@@ -99,6 +101,7 @@ export default function Layout() {
       </footer>
 
       <MobileNav
+        hidden={navHidden}
         koshuuOpen={profileOpen}
         onKoshuu={() => {
           if (user) setProfileOpen((v) => !v)

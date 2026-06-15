@@ -47,7 +47,7 @@ function IconAdd() {
   )
 }
 
-export default function MobileNav({ koshuuOpen, onKoshuu }) {
+export default function MobileNav({ hidden, koshuuOpen, onKoshuu }) {
   const { pathname, hash } = useLocation()
   const { user } = useAuth()
   const { t } = useLocale()
@@ -62,7 +62,11 @@ export default function MobileNav({ koshuuOpen, onKoshuu }) {
   const itemClass = (active) => `mobile-nav-item${active ? ' active' : ''}`
 
   return (
-    <nav className={`mobile-nav${showAdminTab ? ' mobile-nav-admin' : ''}`} aria-label={t('mobileNav.label')}>
+    <nav
+      className={`mobile-nav${showAdminTab ? ' mobile-nav-admin' : ''}${hidden ? ' mobile-nav--hidden' : ''}`}
+      aria-label={t('mobileNav.label')}
+      aria-hidden={hidden}
+    >
       <Link to="/" className={itemClass(isHome)}>
         <IconHome />
         <span>{t('mobileNav.home')}</span>
