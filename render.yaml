@@ -16,7 +16,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ADMIN_PASSWORD
-        generateValue: true
+        value: "112233"
       - key: ADMIN_EMAIL
         value: admin@proverkakg.kg
       - key: DATABASE_URL

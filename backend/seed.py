@@ -3,7 +3,7 @@ from auth import hash_password
 from models import User, Complex, Document, LegalReport, Review
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@proverkakg.kg")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "112233")
 
 SAMPLE_PDF = "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf"
 
@@ -167,7 +167,10 @@ def seed_database(db):
             is_admin=True,
         )
         db.add(admin)
-        db.commit()
+    else:
+        admin.password_hash = hash_password(ADMIN_PASSWORD)
+        admin.is_admin = True
+    db.commit()
 
     if db.query(Complex).count() > 0:
         for data in DEMO_COMPLEXES:
