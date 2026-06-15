@@ -111,6 +111,24 @@
   .admin-page {
     padding-bottom: calc(84px + env(safe-area-inset-bottom));
   }
+
+  .admin-sticky {
+    position: static;
+    top: auto;
+    margin: 0 0 28px;
+    padding: 0 0 18px;
+  }
+  .admin-grid { margin-top: 0; gap: 24px; }
+  .admin-form-panel {
+    margin-top: 20px;
+    padding-top: 40px;
+  }
+  .admin-form-title,
+  .admin-form h2,
+  .admin-form h3 {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
 }
 
 /* ── Phone (≤767px) ── */
@@ -204,9 +222,33 @@
 
 @media (max-width: 767px) {
   .map-container-wrap { height: 360px; }
-  .admin-sticky { top: var(--header-h); margin: 0 0 12px; padding: 10px 0 8px; }
-  .admin-grid { grid-template-columns: 1fr; }
-  .admin-form-panel { scroll-margin-top: calc(var(--header-h) + 72px); }
+  .admin-grid { grid-template-columns: 1fr; gap: 20px; }
+  .admin-list-wrap { gap: 14px; }
+  .admin-new-btn { min-height: 52px; font-size: 15px; }
+  .admin-list {
+    max-height: 200px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: white;
+  }
+  .admin-list-title { display: block; padding: 0 2px; }
+  .admin-form-panel {
+    margin-top: 24px;
+    padding: 44px 16px 20px;
+    scroll-margin-top: calc(var(--header-h) + 48px);
+  }
+  .admin-form-title,
+  .admin-form h2,
+  .admin-form h3 {
+    margin-top: 20px;
+    padding-top: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  .admin-upload-block .upload-label { min-height: 140px; font-size: 16px; }
   .footer-grid { grid-template-columns: 1fr; }
   .hero-banner { min-height: 420px; }
 }

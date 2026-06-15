@@ -41,6 +41,7 @@ export const translations = {
     admin: {
       title: 'Админ панель', sub: 'ЖК башкаруу · сүрөт · документ · рейтинг',
       tabComplexes: 'ЖК', tabDocuments: 'Документтер', newComplex: 'Жаңы ЖК',
+      newComplexHint: 'Жаңы ЖК формасы ачылды — талааларды толтуруп сактаңыз',
       editComplex: 'ЖК түзөтүү', addComplex: 'Жаңы ЖК кошуу', save: 'Сактоо', delete: 'Өчүрүү',
       loading: 'Жүктөлүүдө...', updated: 'Объект жаңыртылды', created: 'Объект кошулду',
       documents: 'Документтер', addDoc: 'Документ кошуу', editDoc: 'Документти түзөтүү',
@@ -127,6 +128,7 @@ export const translations = {
     admin: {
       title: 'Админ панель', sub: 'Управление ЖК · фото · документы · рейтинг',
       tabComplexes: 'ЖК', tabDocuments: 'Документы', newComplex: 'Новый ЖК',
+      newComplexHint: 'Форма нового ЖК открыта — заполните поля и нажмите Сохранить',
       editComplex: 'Редактировать ЖК', addComplex: 'Добавить ЖК', save: 'Сохранить', delete: 'Удалить',
       loading: 'Загрузка...', updated: 'Объект обновлён', created: 'Объект создан',
       documents: 'Документы', addDoc: 'Добавить документ', editDoc: 'Редактировать документ',
@@ -213,6 +215,7 @@ export const translations = {
     admin: {
       title: 'Admin panel', sub: 'Manage complexes · photos · documents · rating',
       tabComplexes: 'Complexes', tabDocuments: 'Documents', newComplex: 'New complex',
+      newComplexHint: 'New complex form opened — fill in the fields and save',
       editComplex: 'Edit complex', addComplex: 'Add complex', save: 'Save', delete: 'Delete',
       loading: 'Loading...', updated: 'Complex updated', created: 'Complex created',
       documents: 'Documents', addDoc: 'Add document', editDoc: 'Edit document',

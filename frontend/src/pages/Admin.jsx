@@ -52,15 +52,31 @@ export default function Admin() {
     api.adminGetDocuments(id).then(setDocuments).catch(console.error)
   }
 
+  const scrollToForm = () => {
+    requestAnimationFrame(() => {
+      const title = document.querySelector('.admin-form-title')
+      if (!title) return
+      const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'), 10) || 64
+      const y = title.getBoundingClientRect().top + window.scrollY - headerH - 56
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+    })
+  }
+
   const selectComplex = (c) => {
     setSelected(c)
     setForm({ ...c })
     setEditingId(c.id)
     setTab('complexes')
     loadDocs(c.id)
-    requestAnimationFrame(() => {
-      document.querySelector('.admin-form-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
+    setMsg('')
+    scrollToForm()
+  }
+
+  const startNewComplex = () => {
+    resetForm()
+    setTab('complexes')
+    setMsg(t('admin.newComplexHint'))
+    scrollToForm()
   }
 
   const resetForm = () => {
@@ -205,11 +221,17 @@ export default function Admin() {
       {msg && <div className="admin-msg">{msg}</div>}
 
       <div className="admin-grid">
-        <aside className="admin-list">
-          <button type="button" className="btn-accent btn-sm btn-block" onClick={() => { resetForm(); setTab('complexes') }}>
+        <aside className="admin-list-wrap">
+          <button
+            type="button"
+            className={`btn-accent btn-sm btn-block admin-new-btn${!editingId ? ' active' : ''}`}
+            onClick={startNewComplex}
+          >
             + {t('admin.newComplex')}
           </button>
-          {complexes.map((c) => (
+          <div className="admin-list">
+            <p className="admin-list-title">{t('admin.tabComplexes')}</p>
+            {complexes.map((c) => (
             <button
               key={c.id}
               type="button"
@@ -222,12 +244,13 @@ export default function Admin() {
               </span>
             </button>
           ))}
+          </div>
         </aside>
 
         <div className="admin-form-panel">
           {tab === 'complexes' && (
             <form onSubmit={saveComplex} className="admin-form">
-              <h2>{editingId ? t('admin.editComplex') : t('admin.addComplex')}</h2>
+              <h2 className="admin-form-title">{editingId ? t('admin.editComplex') : t('admin.addComplex')}</h2>
 
               <div className="admin-upload-block">
                 <label className="upload-label">
@@ -260,7 +283,7 @@ export default function Admin() {
                   Облус
                   <select value={form.region || 'bishkek'} onChange={(e) => setForm({ ...form, region: e.target.value })}>
                     {REGIONS.map((r) => (
-                      <option key={r.slug} value={r.slug}>{r.slug}</option>
+                      <option key={r.slug} value={r.slug}>{t(`regions.${r.key}`)}</option>
                     ))}
                   </select>
                 </label>
