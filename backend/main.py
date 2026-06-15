@@ -9,7 +9,7 @@ from sqlalchemy import inspect, text
 
 from database import Base, engine, SessionLocal
 from seed import seed_database
-from routers import admin, auth, complexes, documents, legal
+from routers import admin, auth, complexes, documents, legal, reviews
 
 Base.metadata.create_all(bind=engine)
 
@@ -43,6 +43,7 @@ app.include_router(admin.router)
 app.include_router(complexes.router)
 app.include_router(documents.router)
 app.include_router(legal.router)
+app.include_router(reviews.router)
 
 UPLOADS_DIR = Path(__file__).parent / "uploads"
 UPLOADS_DIR.mkdir(exist_ok=True)

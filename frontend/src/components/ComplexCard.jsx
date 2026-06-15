@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useCompare } from '../context/CompareContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { useLocale } from '../context/LocaleContext'
 
@@ -12,15 +11,13 @@ const STATUS_KEYS = {
 
 export default function ComplexCard({ complex }) {
   const { t } = useLocale()
-  const { toggle, isSelected, slugs, max } = useCompare()
   const { toggle: toggleFav, isFavorite } = useFavorites()
   const stKey = STATUS_KEYS[complex.verification_status] || STATUS_KEYS.unverified
   const statusLabel = complex.status === 'commissioned' ? t('card.commissioned') : t('card.building')
-  const selected = isSelected(complex.slug)
-  const full = slugs.length >= max && !selected
   const fav = isFavorite(complex.slug)
 
   const detailUrl = `/complex/${complex.slug}`
+  const legalUrl = `${detailUrl}?tab=legal`
 
   return (
     <article className="complex-card elitka-card">
@@ -64,14 +61,7 @@ export default function ComplexCard({ complex }) {
         </div>
         <div className="complex-actions">
           <Link to={detailUrl} className="btn-outline btn-sm">{t('card.details')}</Link>
-          <button
-            type="button"
-            className={`btn-compare btn-sm ${selected ? 'active' : ''}`}
-            onClick={() => toggle(complex.slug)}
-            disabled={full}
-          >
-            {selected ? t('card.compared') : `+ ${t('card.compare')}`}
-          </button>
+          <Link to={legalUrl} className="btn-legal btn-sm">{t('card.legal')}</Link>
         </div>
       </div>
     </article>

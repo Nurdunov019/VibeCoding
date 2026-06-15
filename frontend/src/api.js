@@ -29,9 +29,12 @@ export const api = {
     request('/complexes/compare', { method: 'POST', body: JSON.stringify({ slugs }) }),
   getDocuments: (slug) => request(`/documents/complex/${slug}`),
   verifyComplex: (slug) => request(`/documents/verify/${slug}`),
-  requestLegalAccess: (slug, email, days = 3) =>
-    request(`/legal/request/${slug}`, { method: 'POST', body: JSON.stringify({ email, days }) }),
+  requestLegalAccess: (slug, email) =>
+    request(`/legal/request/${slug}`, { method: 'POST', body: JSON.stringify({ email }) }),
   viewLegalReport: (token) => request(`/legal/view/${token}`),
+  getReviews: (slug) => request(`/reviews/${slug}`),
+  postReview: (slug, rating, text) =>
+    request(`/reviews/${slug}`, { method: 'POST', body: JSON.stringify({ rating, text }) }),
   login: (email, password) =>
     request('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   register: (email, password, full_name) =>

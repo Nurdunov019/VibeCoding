@@ -1,5 +1,5 @@
 from auth import hash_password
-from models import User, Complex, Document, LegalReport
+from models import User, Complex, Document, LegalReport, Review
 
 SAMPLE_PDF = "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf"
 
@@ -125,6 +125,34 @@ DOCS_TEMPLATE = [
 ]
 
 
+DEMO_REVIEWS = [
+    ("Айгүл Т.", 5, "Жашоо ыңгайлуу, кореилер жакшы. Баардык документтер туура, менеджмент тез жооп берет."),
+    ("Нурбек К.", 4, "Жакшы ЖК, бирок парковка аз. Кошуна жакшы, инфраструктура жакында."),
+]
+
+
+def seed_reviews(db):
+    green = db.query(Complex).filter(Complex.slug == "green-side").first()
+    if not green or green.status != "commissioned":
+        return
+    if db.query(Review).filter(Review.complex_id == green.id).count() > 0:
+        return
+
+    for i, (name, rating, text) in enumerate(DEMO_REVIEWS):
+        email = f"resident{i + 1}@demo.kg"
+        user = db.query(User).filter(User.email == email).first()
+        if not user:
+            user = User(
+                email=email,
+                password_hash=hash_password("demo123"),
+                full_name=name,
+                is_admin=False,
+            )
+            db.add(user)
+            db.flush()
+        db.add(Review(complex_id=green.id, user_id=user.id, rating=rating, text=text))
+
+
 def seed_database(db):
     admin = db.query(User).filter(User.email == "admin@proverkakg.kg").first()
     if not admin:
@@ -182,6 +210,7 @@ def seed_database(db):
                 prepared_at="15.01.2026",
                 file_path=SAMPLE_PDF,
             ))
+        seed_reviews(db)
         db.commit()
         return
 
@@ -231,4 +260,5 @@ def seed_database(db):
             file_path=SAMPLE_PDF,
         ))
 
+    seed_reviews(db)
     db.commit()

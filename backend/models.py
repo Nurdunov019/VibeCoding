@@ -46,6 +46,7 @@ class Complex(Base):
 
     documents = relationship("Document", back_populates="complex", cascade="all, delete-orphan")
     legal_reports = relationship("LegalReport", back_populates="complex", cascade="all, delete-orphan")
+    reviews = relationship("Review", back_populates="complex", cascade="all, delete-orphan")
 
 
 class Document(Base):
@@ -98,3 +99,17 @@ class ReportAccess(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     report = relationship("LegalReport", back_populates="access_grants")
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+
+    id = Column(Integer, primary_key=True)
+    complex_id = Column(Integer, ForeignKey("complexes.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    rating = Column(Integer, nullable=False)  # 1-5
+    text = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    complex = relationship("Complex", back_populates="reviews")
+    user = relationship("User")

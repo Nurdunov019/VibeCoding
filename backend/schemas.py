@@ -191,7 +191,6 @@ class VerificationResult(BaseModel):
 
 class RequestLegalAccess(BaseModel):
     email: EmailStr
-    days: int = Field(default=3, ge=1, le=4)
 
 
 class LegalAccessOut(BaseModel):
@@ -212,3 +211,25 @@ class LegalReportView(BaseModel):
     views_left: int
     watermark: str
     pdf_url: Optional[str] = None
+
+
+class ReviewCreate(BaseModel):
+    rating: int = Field(ge=1, le=5)
+    text: str = Field(min_length=10, max_length=2000)
+
+
+class ReviewOut(BaseModel):
+    id: int
+    rating: int
+    text: str
+    author_name: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ReviewSummary(BaseModel):
+    average_rating: float
+    count: int
+    reviews: List[ReviewOut]
