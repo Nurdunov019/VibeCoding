@@ -3,7 +3,7 @@ from auth import hash_password
 from models import User, Complex, Document, LegalReport, Review
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@proverkakg.kg")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "112233")
+ADMIN_PASSWORD = "112233"
 
 SAMPLE_PDF = "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf"
 

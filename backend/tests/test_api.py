@@ -7,8 +7,6 @@ from fastapi.testclient import TestClient
 _test_dir = tempfile.mkdtemp(prefix="proverkakg-test-")
 os.environ["DATABASE_URL"] = f"sqlite:///{_test_dir}/test.db"
 os.environ["SECRET_KEY"] = "test-secret-key"
-os.environ["ADMIN_EMAIL"] = "admin@test.kg"
-os.environ["ADMIN_PASSWORD"] = "test-admin-pass"
 
 from main import app  # noqa: E402
 
@@ -61,6 +59,6 @@ def test_login_invalid(client):
 
 
 def test_admin_login(client):
-    r = client.post("/api/auth/login", json={"email": "admin@test.kg", "password": "test-admin-pass"})
+    r = client.post("/api/auth/login", json={"email": "admin@proverkakg.kg", "password": "112233"})
     assert r.status_code == 200
     assert "access_token" in r.json()
