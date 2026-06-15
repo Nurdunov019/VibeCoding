@@ -64,7 +64,6 @@ export default function Layout() {
             <LanguageSwitcher />
             {loading ? null : user ? (
               <div className="user-menu">
-                <span className="user-name">{user.full_name}</span>
                 {user.is_admin && <Link to="/admin" className="btn-outline btn-sm">{t('nav.admin')}</Link>}
                 <button type="button" className="btn-ghost btn-sm" onClick={handleLogout}>{t('auth.logout')}</button>
               </div>
