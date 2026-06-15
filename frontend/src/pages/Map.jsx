@@ -31,6 +31,19 @@ export default function MapPage() {
       .finally(() => setLoading(false))
   }, [])
 
+  const complexLinks = (slug, status) => {
+    const base = `/complex/${slug}`
+    return (
+      <div className="map-item-actions">
+        <Link to={base} className="btn-outline btn-sm">{t('card.details')}</Link>
+        <Link to={`${base}?tab=legal`} className="btn-legal btn-sm">{t('card.legal')}</Link>
+        {status === 'commissioned' && (
+          <Link to={`${base}?tab=reviews`} className="btn-outline btn-sm">{t('card.reviews')}</Link>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className="map-page">
       <section className="page-header">
@@ -46,16 +59,17 @@ export default function MapPage() {
         <div className="map-layout">
           <section className="map-list">
             {markers.map((m) => (
-              <Link key={m.slug} to={`/complex/${m.slug}`} className="map-list-item">
+              <article key={m.slug} className="map-list-item">
                 {m.image_url && <img src={m.image_url} alt="" />}
-                <div>
+                <div className="map-list-body">
                   <strong>{m.name}</strong>
                   <span className="muted">{m.address}</span>
                   <span className={`badge badge-${m.verification_status === 'verified' ? 'ok' : m.verification_status === 'risk' ? 'bad' : 'warn'}`}>
-                    {m.verification_score}%
+                    {t('map.check')}: {m.verification_score}%
                   </span>
+                  {complexLinks(m.slug, m.status)}
                 </div>
-              </Link>
+              </article>
             ))}
           </section>
 
@@ -77,6 +91,14 @@ export default function MapPage() {
                     {t('map.check')}: {m.verification_score}%
                     <br />
                     <Link to={`/complex/${m.slug}`}>{t('card.details')} →</Link>
+                    <br />
+                    <Link to={`/complex/${m.slug}?tab=legal`}>{t('card.legal')} →</Link>
+                    {m.status === 'commissioned' && (
+                      <>
+                        <br />
+                        <Link to={`/complex/${m.slug}?tab=reviews`}>{t('card.reviews')} →</Link>
+                      </>
+                    )}
                   </Popup>
                 </Marker>
               ))}

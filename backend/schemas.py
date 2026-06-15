@@ -111,6 +111,7 @@ class MapMarker(BaseModel):
     name: str
     slug: str
     address: str
+    status: str = "building"
     latitude: float
     longitude: float
     price_per_sqm_usd: Optional[float] = None

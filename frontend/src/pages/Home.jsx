@@ -98,7 +98,7 @@ export default function Home() {
 
       <section id="complexes" className="section-head-simple">
         <h2>{t('section.list')}</h2>
-        <p className="muted">{complexes.length} {t('section.count')} · {t('section.compareHint')}</p>
+        <p className="muted">{complexes.length} {t('section.count')} · {t('section.legalHint')}</p>
       </section>
 
       {loading ? (
