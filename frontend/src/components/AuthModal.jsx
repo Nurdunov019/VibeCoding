@@ -236,10 +236,6 @@ export default function AuthModal() {
             </>
           )}
         </p>
-
-        {mode === 'login' && (
-          <p className="auth-demo muted">admin@proverkakg.kg / admin123</p>
-        )}
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from database import get_db
+from messages import COMPLEX_NOT_FOUND, COMPLEX_NOT_FOUND_SLUG
 from models import Complex, Document
 from schemas import ComplexOut, CompareItem, CompareRequest, MapMarker
 
@@ -64,7 +65,7 @@ def compare_complexes(data: CompareRequest, db: Session = Depends(get_db)):
     for slug in data.slugs:
         c = db.query(Complex).filter(Complex.slug == slug).first()
         if not c:
-            raise HTTPException(status_code=404, detail=f"Объект «{slug}» табылган жок")
+            raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND_SLUG.format(slug=slug))
         docs = db.query(Document).filter(Document.complex_id == c.id).all()
         valid = sum(1 for d in docs if d.status == "valid")
         missing = sum(1 for d in docs if d.status == "missing")
@@ -81,5 +82,5 @@ def compare_complexes(data: CompareRequest, db: Session = Depends(get_db)):
 def get_complex(slug: str, db: Session = Depends(get_db)):
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     return complex_

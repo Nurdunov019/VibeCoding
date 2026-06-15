@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from database import get_db
+from messages import COMPLEX_NOT_FOUND, LEGAL_ACCESS_NOT_FOUND, LEGAL_NOT_AVAILABLE
 from models import Complex, LegalReport, ReportAccess
 from schemas import RequestLegalAccess, LegalAccessOut, LegalReportView
 
@@ -17,11 +18,11 @@ UNLIMITED_EXPIRES = datetime(2099, 12, 31, 23, 59, 59)
 def request_access(slug: str, data: RequestLegalAccess, db: Session = Depends(get_db)):
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
 
     report = db.query(LegalReport).filter(LegalReport.complex_id == complex_.id).first()
     if not report:
-        raise HTTPException(status_code=404, detail="Юридическое заключение пока недоступно")
+        raise HTTPException(status_code=404, detail=LEGAL_NOT_AVAILABLE)
 
     existing = (
         db.query(ReportAccess)
@@ -54,7 +55,7 @@ def request_access(slug: str, data: RequestLegalAccess, db: Session = Depends(ge
 def view_report(token: str, db: Session = Depends(get_db)):
     grant = db.query(ReportAccess).filter(ReportAccess.access_token == token).first()
     if not grant:
-        raise HTTPException(status_code=404, detail="Доступ не найден")
+        raise HTTPException(status_code=404, detail=LEGAL_ACCESS_NOT_FOUND)
 
     report = grant.report
     complex_ = report.complex

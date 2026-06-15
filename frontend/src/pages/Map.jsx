@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import { api } from '../api'
+import ComplexActionLinks from '../components/ComplexActionLinks'
 import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
+import { verificationBadgeClass } from '../utils/complex'
 import 'leaflet/dist/leaflet.css'
 
 const icon = new L.Icon({
@@ -31,19 +33,6 @@ export default function MapPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  const complexLinks = (slug, status) => {
-    const base = `/complex/${slug}`
-    return (
-      <div className="map-item-actions">
-        <Link to={base} className="btn-outline btn-sm">{t('card.details')}</Link>
-        <Link to={`${base}?tab=legal`} className="btn-legal btn-sm">{t('card.legal')}</Link>
-        {status === 'commissioned' && (
-          <Link to={`${base}?tab=reviews`} className="btn-outline btn-sm">{t('card.reviews')}</Link>
-        )}
-      </div>
-    )
-  }
-
   return (
     <div className="map-page">
       <section className="page-header">
@@ -64,10 +53,10 @@ export default function MapPage() {
                 <div className="map-list-body">
                   <strong>{m.name}</strong>
                   <span className="muted">{m.address}</span>
-                  <span className={`badge badge-${m.verification_status === 'verified' ? 'ok' : m.verification_status === 'risk' ? 'bad' : 'warn'}`}>
+                  <span className={`badge badge-${verificationBadgeClass(m.verification_status)}`}>
                     {t('map.check')}: {m.verification_score}%
                   </span>
-                  {complexLinks(m.slug, m.status)}
+                  <ComplexActionLinks slug={m.slug} status={m.status} className="map-item-actions" />
                 </div>
               </article>
             ))}

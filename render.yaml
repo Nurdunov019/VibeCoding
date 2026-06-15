@@ -15,6 +15,10 @@ services:
     envVars:
       - key: SECRET_KEY
         generateValue: true
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: admin@proverkakg.kg
       - key: DATABASE_URL
         value: sqlite:///./proverkakg.db
       - key: PYTHON_VERSION

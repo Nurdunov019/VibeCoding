@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from auth import require_user
 from database import get_db
+from messages import COMPLEX_NOT_FOUND, REVIEWS_COMMISSIONED_ONLY
 from models import Complex, Review, User
 from schemas import ReviewCreate, ReviewOut, ReviewSummary
 
@@ -12,9 +13,9 @@ router = APIRouter(prefix="/api/reviews", tags=["reviews"])
 def _get_commissioned_complex(slug: str, db: Session) -> Complex:
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     if complex_.status != "commissioned":
-        raise HTTPException(status_code=400, detail="Отзывы доступны только для сданных объектов")
+        raise HTTPException(status_code=400, detail=REVIEWS_COMMISSIONED_ONLY)
     return complex_
 
 

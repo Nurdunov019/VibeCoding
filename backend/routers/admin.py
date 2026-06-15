@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from auth import require_admin
 from database import get_db
+from messages import COMPLEX_NOT_FOUND, DOCUMENT_NOT_FOUND, FILE_TOO_LARGE, FILE_TYPE_UNSUPPORTED, SLUG_TAKEN
 from models import Complex, Document, User
 from schemas import ComplexCreate, ComplexOut, ComplexUpdate, DocumentCreate, DocumentOut, DocumentUpdate
 from services.verification import sync_complex_verification
@@ -30,7 +31,7 @@ async def upload_file(
     ext = Path(file.filename or "").suffix.lower()
     allowed = ALLOWED_IMAGE if kind == "image" else ALLOWED_DOC
     if ext not in allowed:
-        raise HTTPException(status_code=400, detail=f"Файл түрү колдоого алынбайт: {ext}")
+        raise HTTPException(status_code=400, detail=FILE_TYPE_UNSUPPORTED.format(ext=ext))
 
     subdir = "images" if kind == "image" else "documents"
     dest_dir = UPLOAD_DIR / subdir
@@ -40,7 +41,7 @@ async def upload_file(
     path = dest_dir / filename
     content = await file.read()
     if len(content) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="Файл 10MBдан чоң")
+        raise HTTPException(status_code=400, detail=FILE_TOO_LARGE)
 
     path.write_bytes(content)
     return {"url": f"/uploads/{subdir}/{filename}", "filename": filename}
@@ -61,7 +62,7 @@ def create_complex(
     _: User = Depends(require_admin),
 ):
     if db.query(Complex).filter(Complex.slug == data.slug).first():
-        raise HTTPException(status_code=400, detail="Slug ээлеген")
+        raise HTTPException(status_code=400, detail=SLUG_TAKEN)
     c = Complex(**data.model_dump())
     db.add(c)
     db.commit()
@@ -78,7 +79,7 @@ def update_complex(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(c, key, value)
     db.commit()
@@ -94,7 +95,7 @@ def delete_complex(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     db.delete(c)
     db.commit()
     return {"ok": True}
@@ -108,7 +109,7 @@ def recalculate_rating(
 ):
     c = sync_complex_verification(complex_id, db)
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     return c
 
 
@@ -120,7 +121,7 @@ def admin_complex_documents(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     return db.query(Document).filter(Document.complex_id == complex_id).order_by(Document.doc_type).all()
 
 
@@ -133,7 +134,7 @@ def create_document(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     doc = Document(complex_id=complex_id, **data.model_dump())
     db.add(doc)
     db.commit()
@@ -151,7 +152,7 @@ def update_document(
 ):
     doc = db.query(Document).filter(Document.id == doc_id).first()
     if not doc:
-        raise HTTPException(status_code=404, detail="Документ табылган жок")
+        raise HTTPException(status_code=404, detail=DOCUMENT_NOT_FOUND)
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(doc, key, value)
     db.commit()
@@ -168,7 +169,7 @@ def delete_document(
 ):
     doc = db.query(Document).filter(Document.id == doc_id).first()
     if not doc:
-        raise HTTPException(status_code=404, detail="Документ табылган жок")
+        raise HTTPException(status_code=404, detail=DOCUMENT_NOT_FOUND)
     complex_id = doc.complex_id
     db.delete(doc)
     db.commit()

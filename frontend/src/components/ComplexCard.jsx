@@ -1,24 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useFavorites } from '../context/FavoritesContext'
 import { useLocale } from '../context/LocaleContext'
-
-const STATUS_KEYS = {
-  verified: 'card.verified',
-  partial: 'card.partial',
-  unverified: 'card.unverified',
-  risk: 'card.risk',
-}
+import ComplexActionLinks from './ComplexActionLinks'
 
 export default function ComplexCard({ complex }) {
   const { t } = useLocale()
   const { toggle: toggleFav, isFavorite } = useFavorites()
   const statusLabel = complex.status === 'commissioned' ? t('card.commissioned') : t('card.building')
   const fav = isFavorite(complex.slug)
-  const isCommissioned = complex.status === 'commissioned'
-
   const detailUrl = `/complex/${complex.slug}`
-  const legalUrl = `${detailUrl}?tab=legal`
-  const reviewsUrl = `${detailUrl}?tab=reviews`
 
   return (
     <article className="complex-card elitka-card">
@@ -60,13 +50,7 @@ export default function ComplexCard({ complex }) {
           </div>
           <span className={`status-pill ${complex.status}`}>{statusLabel}</span>
         </div>
-        <div className={`complex-actions${isCommissioned ? ' complex-actions-3' : ''}`}>
-          <Link to={detailUrl} className="btn-outline btn-sm">{t('card.details')}</Link>
-          <Link to={legalUrl} className="btn-legal btn-sm">{t('card.legal')}</Link>
-          {isCommissioned && (
-            <Link to={reviewsUrl} className="btn-outline btn-sm">{t('card.reviews')}</Link>
-          )}
-        </div>
+        <ComplexActionLinks slug={complex.slug} status={complex.status} />
       </div>
     </article>
   )

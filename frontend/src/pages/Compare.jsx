@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../api'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
+import { complexUrls, verificationBadgeClass } from '../utils/complex'
 
 export default function Compare() {
   const { slugs, remove, clear } = useCompare()
@@ -99,7 +100,7 @@ export default function Compare() {
                   <td key={i.complex.slug}>
                     <strong>{i.complex.verification_score}%</strong>
                     <br />
-                    <span className={`badge badge-${i.complex.verification_status === 'verified' ? 'ok' : i.complex.verification_status === 'risk' ? 'bad' : 'warn'}`}>
+                    <span className={`badge badge-${verificationBadgeClass(i.complex.verification_status)}`}>
                       {t(`card.${i.complex.verification_status}`) || i.complex.verification_status}
                     </span>
                   </td>
@@ -117,7 +118,7 @@ export default function Compare() {
                 <td>{t('detail.legal')}</td>
                 {items.map((i) => (
                   <td key={i.complex.slug}>
-                    <Link to={`/complex/${i.complex.slug}?tab=legal`} className="btn-legal btn-sm">
+                    <Link to={complexUrls(i.complex.slug, i.complex.status).legal} className="btn-legal btn-sm">
                       {t('card.legal')}
                     </Link>
                   </td>
@@ -128,7 +129,7 @@ export default function Compare() {
                 {items.map((i) => (
                   <td key={i.complex.slug}>
                     {i.complex.status === 'commissioned' ? (
-                      <Link to={`/complex/${i.complex.slug}?tab=reviews`} className="btn-outline btn-sm">
+                      <Link to={complexUrls(i.complex.slug, i.complex.status).reviews} className="btn-outline btn-sm">
                         {t('card.reviews')}
                       </Link>
                     ) : (

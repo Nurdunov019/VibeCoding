@@ -1,5 +1,9 @@
+import os
 from auth import hash_password
 from models import User, Complex, Document, LegalReport, Review
+
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@proverkakg.kg")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
 SAMPLE_PDF = "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf"
 
@@ -154,11 +158,11 @@ def seed_reviews(db):
 
 
 def seed_database(db):
-    admin = db.query(User).filter(User.email == "admin@proverkakg.kg").first()
+    admin = db.query(User).filter(User.email == ADMIN_EMAIL).first()
     if not admin:
         admin = User(
-            email="admin@proverkakg.kg",
-            password_hash=hash_password("admin123"),
+            email=ADMIN_EMAIL,
+            password_hash=hash_password(ADMIN_PASSWORD),
             full_name="Администратор",
             is_admin=True,
         )

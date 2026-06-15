@@ -8,6 +8,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import jwt
 from sqlalchemy.orm import Session
 
+from messages import AUTH_REQUIRED, ADMIN_ONLY
 from database import get_db
 from models import User
 
@@ -47,11 +48,11 @@ def get_current_user(
 
 def require_user(user: Optional[User] = Depends(get_current_user)) -> User:
     if not user:
-        raise HTTPException(status_code=401, detail="Кирүү талап кылынат")
+        raise HTTPException(status_code=401, detail=AUTH_REQUIRED)
     return user
 
 
 def require_admin(user: User = Depends(require_user)) -> User:
     if not user.is_admin:
-        raise HTTPException(status_code=403, detail="Админ гана")
+        raise HTTPException(status_code=403, detail=ADMIN_ONLY)
     return user
