@@ -38,11 +38,11 @@ function IconAdmin() {
   )
 }
 
-function IconAdd() {
+function IconProfile() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   )
 }
@@ -121,8 +121,8 @@ export default function MobileNav({ hidden, koshuuOpen, onKoshuu, onNavClick }) 
         </button>
       )}
       <button type="button" className={itemClass(koshuuOpen)} onClick={handleKoshuu}>
-        <IconAdd />
-        <span>{t('mobileNav.add')}</span>
+        <IconProfile />
+        <span>{t('mobileNav.profile')}</span>
       </button>
     </nav>
   )
