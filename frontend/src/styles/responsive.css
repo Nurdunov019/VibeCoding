@@ -19,22 +19,48 @@
   .complex-body h3 { font-size: 16px; }
   .price-usd { font-size: 20px; }
   .tab-panel { padding: 18px 14px; }
-  .modal-card { padding: 24px 18px 20px; }
+  .modal-card.auth-modal {
+    padding: 24px 18px 20px;
+    border-radius: 20px;
+  }
+  .modal-header { margin-bottom: 20px; }
+  .modal-header h2 { font-size: 22px; }
+  .modal-form { gap: 14px; }
+  .modal-footer { margin-top: 18px; font-size: 13px; }
 }
 
 /* ── Mobile + tablet (≤1023px) — bottom nav like Telegram ── */
 @media (max-width: 1023px) {
   .modal-overlay {
-    align-items: flex-start;
+    align-items: center;
     padding-top: max(16px, env(safe-area-inset-top));
     padding-bottom: max(16px, calc(var(--keyboard-offset, 0px) + env(safe-area-inset-bottom)));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
-  .modal-card {
+  .modal-card,
+  .modal-card.auth-modal {
     max-height: calc(100dvh - var(--keyboard-offset, 0px) - 32px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    margin-top: 0;
-    margin-bottom: var(--keyboard-offset, 0px);
+    margin: auto;
+    width: min(400px, 100%);
+  }
+  .modal-card.auth-modal {
+    padding: 32px 24px 24px;
+  }
+  .modal-form input {
+    min-height: 48px;
+    padding: 12px 16px;
+  }
+  .modal-submit {
+    min-height: var(--tap-min);
+  }
+  .modal-close {
+    min-width: var(--tap-min);
+    min-height: var(--tap-min);
+    top: 12px;
+    right: 12px;
   }
 
   .desktop-only,
@@ -620,6 +646,21 @@
   .grid { grid-template-columns: repeat(2, 1fr); }
   .detail-hero { grid-template-columns: 1.3fr 1fr; align-items: start; }
   .admin-sticky { top: var(--header-h); }
+}
+
+/* ── Auth modal — laptop+ ── */
+@media (min-width: 1024px) {
+  .modal-card.auth-modal {
+    width: min(420px, calc(100vw - 48px));
+    padding: 40px 36px 32px;
+  }
+  .modal-header h2 { font-size: 26px; }
+  .modal-form input {
+    font-size: 15px;
+    min-height: auto;
+    padding: 14px 16px;
+  }
+  .modal-submit { min-height: 52px; }
 }
 
 /* ── Shared laptop+ (≥1024px) ── */

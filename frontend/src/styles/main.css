@@ -1432,7 +1432,7 @@ button { cursor: pointer; border: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
   animation: modalFadeIn 0.2s ease;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -1448,9 +1448,12 @@ button { cursor: pointer; border: none; }
   border-radius: 24px;
   padding: 36px 28px 28px;
   width: min(400px, 100%);
+  max-width: 100%;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
   animation: modalSlideUp 0.25s ease;
   margin: auto;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .modal-card {
   position: relative;
@@ -1511,9 +1514,11 @@ button { cursor: pointer; border: none; }
   padding: 14px 16px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  font-size: 15px;
+  font-size: 16px;
   background: white;
   color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
 }
 .modal-form input::placeholder { color: #b0b0b5; }
 .modal-form input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26, 107, 90, 0.12); }
@@ -1522,12 +1527,14 @@ button { cursor: pointer; border: none; }
 .password-wrap input { width: 100%; padding-right: 48px; }
 .pass-toggle {
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   color: var(--muted);
-  padding: 4px;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
   display: grid;
   place-items: center;
 }
@@ -1535,10 +1542,11 @@ button { cursor: pointer; border: none; }
 
 .modal-forgot-link {
   align-self: flex-end;
-  margin-top: 4px;
+  margin-top: 2px;
   background: none;
   border: none;
-  padding: 0;
+  padding: 6px 0;
+  min-height: 36px;
   font-size: 13px;
   font-weight: 600;
   color: var(--primary);
@@ -1561,6 +1569,11 @@ button { cursor: pointer; border: none; }
   text-align: center;
   font-size: 14px;
   line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
 }
 .modal-footer-text {
   color: var(--text);
