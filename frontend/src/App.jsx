@@ -16,6 +16,7 @@ const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const MapPage = lazy(() => import('./pages/Map'))
 const Compare = lazy(() => import('./pages/Compare'))
+const Favorites = lazy(() => import('./pages/Favorites'))
 const Admin = lazy(() => import('./pages/Admin'))
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="/legal/view/:token" element={<Suspense fallback={<PageLoader />}><LegalView /></Suspense>} />
               <Route path="/map" element={<Suspense fallback={<PageLoader />}><MapPage /></Suspense>} />
               <Route path="/compare" element={<Suspense fallback={<PageLoader />}><Compare /></Suspense>} />
+              <Route path="/favorites" element={<Suspense fallback={<PageLoader />}><Favorites /></Suspense>} />
               <Route path="/login" element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
               <Route path="/register" element={<Suspense fallback={<PageLoader />}><Register /></Suspense>} />
               <Route path="/admin" element={<Suspense fallback={<PageLoader />}><Admin /></Suspense>} />

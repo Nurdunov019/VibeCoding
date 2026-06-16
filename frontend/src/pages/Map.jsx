@@ -49,21 +49,23 @@ export default function MapPage() {
           <section className="map-list">
             {markers.map((m) => (
               <article key={m.slug} className="map-list-item">
-                <div className="map-list-thumb">
-                  {m.image_url ? (
-                    <img src={m.image_url} alt="" />
-                  ) : (
-                    <div className="map-list-thumb-ph" aria-hidden>🏢</div>
-                  )}
-                </div>
-                <div className="map-list-body">
-                  <strong>{m.name}</strong>
-                  <span className="muted">{m.address}</span>
-                  <span className={`badge badge-${verificationBadgeClass(m.verification_status)}`}>
-                    {t('map.check')}: {m.verification_score}%
-                  </span>
-                  <ComplexActionLinks slug={m.slug} status={m.status} className="map-item-actions" />
-                </div>
+                <Link to={`/complex/${m.slug}`} className="map-list-hit">
+                  <div className="map-list-thumb">
+                    {m.image_url ? (
+                      <img src={m.image_url} alt={m.name} loading="lazy" decoding="async" />
+                    ) : (
+                      <div className="map-list-thumb-ph" aria-hidden>🏢</div>
+                    )}
+                  </div>
+                  <div className="map-list-info">
+                    <strong>{m.name}</strong>
+                    <span className="muted">{m.address}</span>
+                    <span className={`badge badge-${verificationBadgeClass(m.verification_status)}`}>
+                      {t('map.check')}: {m.verification_score}%
+                    </span>
+                  </div>
+                </Link>
+                <ComplexActionLinks slug={m.slug} status={m.status} className="map-item-actions" />
               </article>
             ))}
           </section>

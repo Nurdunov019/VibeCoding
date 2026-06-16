@@ -53,6 +53,7 @@ export default function MobileProfileSheet({ open, onClose }) {
           {user?.is_admin && !pathname.startsWith('/admin') && (
             <Link to="/admin" className="profile-menu-item" onClick={onClose}>{t('nav.admin')}</Link>
           )}
+          <Link to="/favorites" className="profile-menu-item" onClick={onClose}>{t('features.favorites')}</Link>
           <Link to="/compare" className="profile-menu-item" onClick={onClose}>{t('nav.compare')}</Link>
           <div className="profile-menu-item profile-lang-row">
             <span>{t('profile.language')}</span>

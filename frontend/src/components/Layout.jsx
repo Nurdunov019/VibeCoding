@@ -93,6 +93,7 @@ export default function Layout() {
             <h4>{t('footer.sections')}</h4>
             <Link to="/">{t('nav.complexes')}</Link>
             <Link to="/map">{t('nav.map')}</Link>
+            <Link to="/favorites">{t('features.favorites')}</Link>
             <Link to="/compare">{t('nav.compare')}</Link>
           </div>
           <div>
