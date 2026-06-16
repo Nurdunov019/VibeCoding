@@ -49,6 +49,9 @@
     right: 0;
     z-index: 300;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    background: var(--surface);
   }
 
   .mobile-nav { display: grid !important; }
@@ -67,8 +70,9 @@
   .app {
     padding-top: var(--header-h);
     padding-bottom: calc(68px + env(safe-area-inset-bottom));
-    overflow-x: hidden;
+    overflow-x: clip;
     transition: padding-bottom 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    background: var(--bg);
   }
   .app--nav-hidden {
     padding-bottom: calc(12px + env(safe-area-inset-bottom));
@@ -133,23 +137,20 @@
 
 /* ── Phone (≤767px) ── */
 @media (max-width: 767px) {
-  :root { --header-h: 52px; --container-pad: 12px; }
-  .header-mobile-actions .lang-select {
-    padding: 6px 8px;
-    font-size: 11px;
-    max-width: 82px;
-  }
+  :root { --header-h: 52px; --container-pad: 12px; --header-chip-h: 34px; --header-chip-w: 92px; }
 
-  .main {
-    padding-bottom: 8px;
-    overflow-x: hidden;
-    width: 100%;
-  }
   .header .container {
     width: 100%;
     max-width: 100%;
     padding-left: 12px;
     padding-right: 12px;
+  }
+
+  .main {
+    padding-bottom: 8px;
+    overflow-x: clip;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .header-top {
@@ -163,7 +164,18 @@
     flex-wrap: nowrap;
   }
   .region-picker { grid-area: region; margin-left: 0; flex-shrink: 0; }
-  .region-picker-btn { padding: 6px 9px; font-size: 12px; }
+  .region-picker-btn,
+  .header-mobile-actions .lang-select {
+    height: var(--header-chip-h);
+    min-height: var(--header-chip-h);
+    min-width: var(--header-chip-w);
+    max-width: var(--header-chip-w);
+    font-size: 11px;
+    padding: 0 6px;
+  }
+  .header-mobile-actions .lang-select {
+    padding: 0 20px 0 6px;
+  }
   .header-logo {
     grid-area: logo;
     justify-self: center;
@@ -183,10 +195,11 @@
   .container {
     width: 100%;
     max-width: 100%;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
     margin-left: auto;
     margin-right: auto;
+    box-sizing: border-box;
   }
   .compare-bar .container,
   .compare-bar-inner {
@@ -213,7 +226,8 @@
 @media (max-width: 900px) {
   .stats-row, .digits-grid, .stats-compact { grid-template-columns: repeat(2, 1fr); }
   .admin-page h1 { font-size: 18px; }
-  .main { overflow-x: hidden; max-width: 100%; }
+  .main { overflow-x: clip; max-width: 100%; }
+  .admin-page { overflow-x: clip; }
   .hero-banner-content { padding: 28px 20px 24px; }
   .hero-search { margin: 0 0 24px; padding: 32px 16px; }
   .action-row { flex-direction: column; }
@@ -222,9 +236,43 @@
 
 @media (max-width: 767px) {
   .map-container-wrap { height: 360px; }
-  .admin-grid { grid-template-columns: 1fr; gap: 20px; }
-  .admin-list-wrap { gap: 14px; }
-  .admin-new-btn { min-height: 52px; font-size: 15px; }
+  .map-list-item {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+  }
+  .map-list-thumb {
+    width: 100%;
+    height: 132px;
+    border-radius: 0;
+  }
+  .map-list-body {
+    padding: 12px;
+    gap: 8px;
+  }
+  .map-item-actions {
+    margin-top: 4px;
+  }
+  .map-item-actions .btn-sm {
+    flex: 1 1 100%;
+    font-size: 12px;
+    padding: 10px 8px;
+  }
+
+  .admin-grid { grid-template-columns: 1fr; gap: 20px; min-width: 0; }
+  .admin-list-wrap { gap: 14px; min-width: 0; overflow-x: clip; }
+  .admin-new-btn {
+    min-height: 48px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .admin-list {
     max-height: 200px;
     overflow-y: auto;
@@ -265,6 +313,7 @@
       "class"
       "verified"
       "reset";
+    max-width: 100%;
   }
   .filter-compact input:not([type="checkbox"]), .filter-compact select { width: 100%; }
   .wa-text { display: none; }
@@ -462,6 +511,15 @@
 
 /* ── Shared laptop+ (≥1024px) ── */
 @media (min-width: 1024px) {
+  .region-picker-btn,
+  .lang-select {
+    min-width: auto;
+    max-width: none;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+  .lang-select { padding: 0 28px 0 12px; }
+
   .grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .filter-on-hero {
     grid-template-columns: minmax(160px, 1.4fr) repeat(2, minmax(130px, auto)) auto auto;

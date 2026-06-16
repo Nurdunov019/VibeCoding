@@ -21,5 +21,7 @@
   --container-pad: 16px;
   --container-max: 1280px;
   --header-h: 64px;
+  --header-chip-h: 36px;
+  --header-chip-w: 98px;
   --tap-min: 44px;
 }

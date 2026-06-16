@@ -49,7 +49,13 @@ export default function MapPage() {
           <section className="map-list">
             {markers.map((m) => (
               <article key={m.slug} className="map-list-item">
-                {m.image_url && <img src={m.image_url} alt="" />}
+                <div className="map-list-thumb">
+                  {m.image_url ? (
+                    <img src={m.image_url} alt="" />
+                  ) : (
+                    <div className="map-list-thumb-ph" aria-hidden>🏢</div>
+                  )}
+                </div>
                 <div className="map-list-body">
                   <strong>{m.name}</strong>
                   <span className="muted">{m.address}</span>
