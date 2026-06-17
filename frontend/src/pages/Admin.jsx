@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { REGIONS } from '../constants/regions'
 import { useLocale } from '../context/LocaleContext'
+import { statusLabel, translateApiError } from '../utils/translate'
 
 const EMPTY_COMPLEX = {
   name: '', slug: '', developer: '', address: '', city: 'Бишкек', region: 'bishkek',
@@ -99,21 +100,21 @@ export default function Admin() {
         setEditingId(created.id)
         setSelected(created)
         setForm(created)
-        setMsg('Объект создан')
+        setMsg(t('admin.created'))
       }
       load()
     } catch (err) {
-      setMsg(err.message)
+      setMsg(translateApiError(err.message, t))
     }
   }
 
   const deleteComplex = async (id) => {
-    if (!confirm('Удалить объект?')) return
+    if (!confirm(t('admin.confirmDeleteComplex'))) return
     await api.adminDeleteComplex(id)
     resetForm()
     setTab('complexes')
     load()
-    setMsg('Удалено')
+    setMsg(t('admin.deleted'))
   }
 
   const recalculate = async () => {
@@ -123,9 +124,12 @@ export default function Admin() {
       const updated = await api.adminRecalculate(editingId)
       setForm(updated)
       load()
-      setMsg(`Рейтинг эсептелди: ${updated.verification_score}% (${updated.verification_status})`)
+      setMsg(t('admin.recalculated', {
+        score: updated.verification_score,
+        status: statusLabel(t, 'card', updated.verification_status),
+      }))
     } catch (err) {
-      setMsg(err.message)
+      setMsg(translateApiError(err.message, t))
     }
   }
 
@@ -136,9 +140,9 @@ export default function Admin() {
     try {
       const { url } = await api.adminUpload(file, 'image')
       setForm((f) => ({ ...f, image_url: url }))
-      setMsg('Сүрөт жүктөлдү')
+      setMsg(t('admin.imageUploaded'))
     } catch (err) {
-      setMsg(err.message)
+      setMsg(translateApiError(err.message, t))
     } finally {
       setUploading(false)
     }
@@ -151,9 +155,9 @@ export default function Admin() {
     try {
       const { url } = await api.adminUpload(file, 'pdf')
       setDocForm((f) => ({ ...f, file_url: url }))
-      setMsg('PDF жүктөлдү')
+      setMsg(t('admin.pdfUploaded'))
     } catch (err) {
-      setMsg(err.message)
+      setMsg(translateApiError(err.message, t))
     } finally {
       setUploading(false)
     }
@@ -175,9 +179,9 @@ export default function Admin() {
       const updated = await api.adminRecalculate(editingId)
       setForm(updated)
       load()
-      setMsg(`Документ сакталды. Рейтинг: ${updated.verification_score}%`)
+      setMsg(t('admin.docSaved', { score: updated.verification_score }))
     } catch (err) {
-      setMsg(err.message)
+      setMsg(translateApiError(err.message, t))
     }
   }
 
@@ -187,13 +191,13 @@ export default function Admin() {
   }
 
   const deleteDoc = async (id) => {
-    if (!confirm('Удалить документ?')) return
+    if (!confirm(t('admin.confirmDeleteDoc'))) return
     await api.adminDeleteDocument(id)
     loadDocs(editingId)
     const updated = await api.adminRecalculate(editingId)
     setForm(updated)
     load()
-    setMsg(`Рейтинг жаңыланды: ${updated.verification_score}%`)
+    setMsg(t('admin.ratingUpdated', { score: updated.verification_score }))
   }
 
   useEffect(() => {
@@ -254,19 +258,19 @@ export default function Admin() {
 
               <div className="admin-upload-block">
                 <label className="upload-label">
-                  📷 Сүрөт жүктөө
+                  📷 {t('admin.uploadImage')}
                   <input type="file" accept="image/*" onChange={uploadImage} disabled={uploading} />
                 </label>
                 {form.image_url && (
                   <img src={form.image_url} alt="" className="admin-preview" />
                 )}
-                <label className="full">же URL
+                <label className="full">{t('admin.orUrl')}
                   <input value={form.image_url || ''} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
                 </label>
               </div>
 
               <div className="form-grid">
-                <label>Аталышы
+                <label>{t('admin.formName')}
                   <input
                     value={form.name}
                     onChange={(e) => {
@@ -276,49 +280,49 @@ export default function Admin() {
                     required
                   />
                 </label>
-                <label>Slug<input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} required /></label>
-                <label>Куруучу<input value={form.developer || ''} onChange={(e) => setForm({ ...form, developer: e.target.value })} /></label>
-                <label>Дарек<input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} required /></label>
+                <label>{t('admin.formSlug')}<input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} required /></label>
+                <label>{t('admin.formDeveloper')}<input value={form.developer || ''} onChange={(e) => setForm({ ...form, developer: e.target.value })} /></label>
+                <label>{t('admin.formAddress')}<input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} required /></label>
                 <label>
-                  Облус
+                  {t('admin.formRegion')}
                   <select value={form.region || 'bishkek'} onChange={(e) => setForm({ ...form, region: e.target.value })}>
                     {REGIONS.map((r) => (
                       <option key={r.slug} value={r.slug}>{t(`regions.${r.key}`)}</option>
                     ))}
                   </select>
                 </label>
-                <label>Баа USD<input type="number" value={form.price_per_sqm_usd || ''} onChange={(e) => setForm({ ...form, price_per_sqm_usd: +e.target.value })} /></label>
-                <label>Баа KGS<input type="number" value={form.price_per_sqm_kgs || ''} onChange={(e) => setForm({ ...form, price_per_sqm_kgs: +e.target.value })} /></label>
-                <label>Класс
+                <label>{t('admin.formPriceUsd')}<input type="number" value={form.price_per_sqm_usd || ''} onChange={(e) => setForm({ ...form, price_per_sqm_usd: +e.target.value })} /></label>
+                <label>{t('admin.formPriceKgs')}<input type="number" value={form.price_per_sqm_kgs || ''} onChange={(e) => setForm({ ...form, price_per_sqm_kgs: +e.target.value })} /></label>
+                <label>{t('admin.formClass')}
                   <select value={form.class_type || ''} onChange={(e) => setForm({ ...form, class_type: e.target.value })}>
-                    <option value="economy">Эконом</option>
-                    <option value="comfort">Комфорт</option>
-                    <option value="business">Бизнес</option>
-                    <option value="premium">Премиум</option>
+                    <option value="economy">{t('filter.economy')}</option>
+                    <option value="comfort">{t('filter.comfort')}</option>
+                    <option value="business">{t('filter.business')}</option>
+                    <option value="premium">{t('filter.premium')}</option>
                   </select>
                 </label>
-                <label>Объект статусу
+                <label>{t('admin.formComplexStatus')}
                   <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
-                    <option value="building">Курулуп жатат</option>
-                    <option value="commissioned">Берилген</option>
+                    <option value="building">{t('filter.building')}</option>
+                    <option value="commissioned">{t('filter.commissioned')}</option>
                   </select>
                 </label>
-                <label>Широта<input type="number" step="any" value={form.latitude || ''} onChange={(e) => setForm({ ...form, latitude: +e.target.value })} /></label>
-                <label>Долгота<input type="number" step="any" value={form.longitude || ''} onChange={(e) => setForm({ ...form, longitude: +e.target.value })} /></label>
-                <label className="full">Сүрөттөмө<textarea value={form.description || ''} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></label>
+                <label>{t('admin.formLat')}<input type="number" step="any" value={form.latitude || ''} onChange={(e) => setForm({ ...form, latitude: +e.target.value })} /></label>
+                <label>{t('admin.formLng')}<input type="number" step="any" value={form.longitude || ''} onChange={(e) => setForm({ ...form, longitude: +e.target.value })} /></label>
+                <label className="full">{t('admin.formDescription')}<textarea value={form.description || ''} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></label>
               </div>
 
               <div className="admin-rating-box">
                 <div>
-                  <strong>Текшерүү рейтинги: {form.verification_score}%</strong>
+                  <strong>{t('admin.rating')}: {form.verification_score}%</strong>
                   <span className={`badge badge-${form.verification_status === 'verified' ? 'ok' : form.verification_status === 'risk' ? 'bad' : 'warn'}`}>
-                    {form.verification_status}
+                    {statusLabel(t, 'card', form.verification_status)}
                   </span>
                 </div>
-                <p className="muted">Документтерге негизделип автоматтык эсептелет</p>
+                <p className="muted">{t('admin.ratingHint')}</p>
                 {editingId && (
                   <button type="button" className="btn-outline btn-sm" onClick={recalculate}>
-                    🔄 Рейтингти кайра эсептөө
+                    🔄 {t('admin.recalculate')}
                   </button>
                 )}
               </div>
@@ -339,12 +343,14 @@ export default function Admin() {
                 {documents.map((d) => (
                   <div key={d.id} className="doc-admin-item">
                     <div>
-                      <strong>{d.title}</strong>
-                      <span className={`badge badge-${d.status === 'valid' ? 'ok' : d.status === 'missing' ? 'bad' : 'warn'}`}>{d.status}</span>
+                      <strong>{statusLabel(t, 'docTypes', d.doc_type) || d.title}</strong>
+                      <span className={`badge badge-${d.status === 'valid' ? 'ok' : d.status === 'missing' ? 'bad' : 'warn'}`}>
+                        {statusLabel(t, 'docStatus', d.status)}
+                      </span>
                       {d.file_url && <span className="muted"> · PDF ✓</span>}
                     </div>
                     <div className="admin-actions">
-                      <button type="button" className="btn-ghost btn-sm" onClick={() => editDoc(d)}>Түзөтүү</button>
+                      <button type="button" className="btn-ghost btn-sm" onClick={() => editDoc(d)}>{t('admin.edit')}</button>
                       <button type="button" className="btn-danger btn-sm" onClick={() => deleteDoc(d.id)}>×</button>
                     </div>
                   </div>
@@ -352,39 +358,36 @@ export default function Admin() {
               </div>
 
               <form onSubmit={saveDoc} className="admin-form" style={{ marginTop: 24 }}>
-                <h3>{editingDocId ? 'Документти түзөтүү' : 'Документ кошуу'}</h3>
+                <h3>{editingDocId ? t('admin.editDoc') : t('admin.addDoc')}</h3>
                 <div className="form-grid">
-                  <label>Түрү
+                  <label>{t('admin.formDocType')}
                     <select value={docForm.doc_type} onChange={(e) => setDocForm({ ...docForm, doc_type: e.target.value })}>
-                      <option value="land_title">Жер участогу</option>
-                      <option value="construction_permit">Куруу уруксаты</option>
-                      <option value="expertise">Экспертиза</option>
-                      <option value="commissioning">Берүү актысы</option>
-                      <option value="ownership_scheme">Ээлигинин схемасы</option>
+                      {['land_title', 'construction_permit', 'expertise', 'commissioning', 'ownership_scheme'].map((type) => (
+                        <option key={type} value={type}>{t(`docTypes.${type}`)}</option>
+                      ))}
                     </select>
                   </label>
-                  <label>Аталышы<input value={docForm.title} onChange={(e) => setDocForm({ ...docForm, title: e.target.value })} required /></label>
-                  <label>Номер<input value={docForm.number || ''} onChange={(e) => setDocForm({ ...docForm, number: e.target.value })} /></label>
-                  <label>Статус
+                  <label>{t('admin.formDocTitle')}<input value={docForm.title} onChange={(e) => setDocForm({ ...docForm, title: e.target.value })} required /></label>
+                  <label>{t('admin.formDocNumber')}<input value={docForm.number || ''} onChange={(e) => setDocForm({ ...docForm, number: e.target.value })} /></label>
+                  <label>{t('admin.formDocStatus')}
                     <select value={docForm.status} onChange={(e) => setDocForm({ ...docForm, status: e.target.value })}>
-                      <option value="valid">✓ Действителен</option>
-                      <option value="expired">⚠ Истёк</option>
-                      <option value="missing">✕ Жок</option>
-                      <option value="pending">◷ Текшерүүдө</option>
+                      {['valid', 'expired', 'missing', 'pending'].map((s) => (
+                        <option key={s} value={s}>{t(`docStatus.${s}`)}</option>
+                      ))}
                     </select>
                   </label>
                   <label className="full upload-label">
-                    📄 PDF жүктөө
+                    📄 {t('admin.uploadPdf')}
                     <input type="file" accept=".pdf,application/pdf" onChange={uploadPdf} disabled={uploading} />
                   </label>
-                  <label className="full">же PDF URL
+                  <label className="full">{t('admin.orPdfUrl')}
                     <input value={docForm.file_url || ''} onChange={(e) => setDocForm({ ...docForm, file_url: e.target.value })} placeholder="https://..." />
                   </label>
                 </div>
                 <div className="admin-actions">
-                  <button type="submit" className="btn-accent">Сактоо</button>
+                  <button type="submit" className="btn-accent">{t('admin.save')}</button>
                   {editingDocId && (
-                    <button type="button" className="btn-ghost" onClick={() => { setDocForm(EMPTY_DOC); setEditingDocId(null) }}>Жокко чыгаруу</button>
+                    <button type="button" className="btn-ghost" onClick={() => { setDocForm(EMPTY_DOC); setEditingDocId(null) }}>{t('admin.cancel')}</button>
                   )}
                 </div>
               </form>

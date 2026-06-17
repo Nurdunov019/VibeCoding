@@ -1668,6 +1668,15 @@ button { cursor: pointer; border: none; }
 .auth-form { display: flex; flex-direction: column; gap: 16px; }
 .auth-form label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
 .auth-error { background: #fee2e2; color: var(--bad); padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+.auth-info {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
 .auth-footer { margin-top: 20px; text-align: center; font-size: 14px; }
 .auth-footer a { color: var(--primary); font-weight: 600; }
 .auth-demo { margin-top: 16px; font-size: 12px; text-align: center; }

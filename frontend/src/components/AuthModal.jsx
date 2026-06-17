@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useLocale } from '../context/LocaleContext'
+import { translateApiError } from '../utils/translate'
 
 function useDesktopFocus() {
   const [allow, setAllow] = useState(false)
@@ -11,6 +12,8 @@ function useDesktopFocus() {
   }, [])
   return allow
 }
+
+const SUPPORT_EMAIL = 'admin@proverkakg.kg'
 
 export default function AuthModal() {
   const { mode, close, openLogin, openRegister, isOpen } = useAuthModal()
@@ -25,6 +28,7 @@ export default function AuthModal() {
   const [showPass, setShowPass] = useState(false)
   const [error, setError] = useState('')
   const [emailTaken, setEmailTaken] = useState(false)
+  const [forgotHint, setForgotHint] = useState(false)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -38,6 +42,7 @@ export default function AuthModal() {
       setPassword('')
       setFullName('')
       setShowPass(false)
+      setForgotHint(false)
     }
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
@@ -81,7 +86,7 @@ export default function AuthModal() {
       close()
       if (user.is_admin) navigate('/admin')
     } catch (err) {
-      setError(err.message)
+      setError(translateApiError(err.message, t))
     } finally {
       setLoading(false)
     }
@@ -101,7 +106,7 @@ export default function AuthModal() {
         setError(t('auth.emailTaken'))
       } else {
         setEmailTaken(false)
-        setError(msg)
+        setError(translateApiError(msg, t))
       }
     } finally {
       setLoading(false)
@@ -111,8 +116,19 @@ export default function AuthModal() {
   const switchToLogin = () => {
     setError('')
     setEmailTaken(false)
+    setForgotHint(false)
     openLogin()
   }
+
+  const handleForgotPassword = () => {
+    setError('')
+    setForgotHint(true)
+    const subject = encodeURIComponent(t('auth.forgotMailSubject'))
+    const body = encodeURIComponent(t('auth.forgotMailBody', { email: email || '' }))
+    window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`
+  }
+
+  const forgotMailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(t('auth.forgotMailSubject'))}&body=${encodeURIComponent(t('auth.forgotMailBody', { email: email || '' }))}`
 
   const EyeIcon = ({ open }) => (
     open ? (
@@ -135,6 +151,13 @@ export default function AuthModal() {
         <div className="modal-header">
           <h2>{mode === 'login' ? t('auth.login') : t('auth.register')}</h2>
         </div>
+
+        {forgotHint && mode === 'login' && (
+          <div className="auth-info">
+            {t('auth.forgotHint')}{' '}
+            <a href={forgotMailto} className="modal-link">{SUPPORT_EMAIL}</a>
+          </div>
+        )}
 
         {error && (
           <div className="auth-error">
@@ -179,7 +202,9 @@ export default function AuthModal() {
                   <EyeIcon open={showPass} />
                 </button>
               </div>
-              <button type="button" className="modal-forgot-link">{t('auth.forgotPassword')}</button>
+              <button type="button" className="modal-forgot-link" onClick={handleForgotPassword}>
+                {t('auth.forgotPassword')}
+              </button>
             </label>
             <button type="submit" className="btn-accent btn-block modal-submit" disabled={loading}>
               {loading ? '...' : t('auth.login')}

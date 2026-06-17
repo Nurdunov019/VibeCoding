@@ -7,15 +7,9 @@ import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
+import { statusLabel, translateApiError } from '../utils/translate'
 
 const BASE_TABS = ['overview', 'location', 'building', 'documents', 'verify', 'legal']
-
-const DOC_STATUS = {
-  valid: '✓ Действителен',
-  expired: '⚠ Истёк',
-  missing: '✕ Отсутствует',
-  pending: '◷ На проверке',
-}
 
 import StarPicker from '../components/StarPicker'
 
@@ -86,7 +80,7 @@ export default function ComplexDetail() {
       const data = await api.requestLegalAccess(slug, email)
       setAccessInfo(data)
     } catch (err) {
-      alert(err.message)
+      alert(translateApiError(err.message, t))
     }
   }
 
@@ -105,7 +99,7 @@ export default function ComplexDetail() {
       setReviewMsg(t('reviews.saved'))
       loadReviews()
     } catch (err) {
-      setReviewMsg(err.message)
+      setReviewMsg(translateApiError(err.message, t))
     } finally {
       setReviewLoading(false)
     }
@@ -131,7 +125,7 @@ export default function ComplexDetail() {
           <div className="detail-badges">
             <span className="badge badge-score">{t('card.check')}: {complex.verification_score}%</span>
             <span className={`badge badge-${complex.verification_status === 'verified' ? 'ok' : complex.verification_status === 'risk' ? 'bad' : 'warn'}`}>
-              {complex.verification_status}
+              {statusLabel(t, 'card', complex.verification_status)}
             </span>
             <span className="price-tag">${complex.price_per_sqm_usd?.toLocaleString()} / м²</span>
             {isCommissioned && reviewsData?.count > 0 && (
@@ -165,7 +159,7 @@ export default function ComplexDetail() {
             <h2>{t('detail.overview')}</h2>
             <p>{complex.description}</p>
             <div className="info-grid">
-              <div><span>{t('detail.class')}</span><strong>{complex.class_type}</strong></div>
+              <div><span>{t('detail.class')}</span><strong>{statusLabel(t, 'filter', complex.class_type)}</strong></div>
               <div><span>{t('detail.completion')}</span><strong>{complex.completion_quarter} {complex.completion_year}</strong></div>
               <div><span>{t('detail.price')}</span><strong>${complex.price_per_sqm_usd} / {complex.price_per_sqm_kgs?.toLocaleString()} с</strong></div>
               <div><span>{t('detail.apartments')}</span><strong>{complex.apartments_count}</strong></div>
@@ -185,7 +179,7 @@ export default function ComplexDetail() {
               <div><span>{t('detail.address')}</span><strong>{complex.address}</strong></div>
               <div><span>{t('detail.buildings')}</span><strong>{complex.buildings_count}</strong></div>
               <div><span>{t('detail.floors')}</span><strong>{complex.floors}</strong></div>
-              <div><span>{t('detail.class')}</span><strong>{complex.class_type}</strong></div>
+              <div><span>{t('detail.class')}</span><strong>{statusLabel(t, 'filter', complex.class_type)}</strong></div>
               <div><span>{t('detail.apartments')}</span><strong>{complex.apartments_count}</strong></div>
             </div>
           </div>
@@ -199,11 +193,11 @@ export default function ComplexDetail() {
               {documents.map((d) => (
                 <div key={d.id} className={`doc-item doc-${d.status}`}>
                   <div>
-                    <strong>{d.title}</strong>
+                    <strong>{statusLabel(t, 'docTypes', d.doc_type) || d.title}</strong>
                     {d.number && <p className="muted">№ {d.number} • {d.issued_by}</p>}
                   </div>
                   <div className="doc-item-actions">
-                    <span>{DOC_STATUS[d.status] || d.status}</span>
+                    <span>{statusLabel(t, 'docStatus', d.status)}</span>
                     {d.file_url && d.status === 'valid' && (
                       <button type="button" className="btn-outline btn-sm" onClick={() => setViewingPdf(d)}>
                         PDF
@@ -231,15 +225,15 @@ export default function ComplexDetail() {
             <div className="verify-score">
               <div className="score-circle">{verification.score}%</div>
               <div>
-                <strong>{verification.status}</strong>
-                <p>{verification.valid_documents} / {verification.total_documents}</p>
+                <strong>{statusLabel(t, 'card', verification.status)}</strong>
+                <p>{t('verify.validCount', { valid: verification.valid_documents, total: verification.total_documents })}</p>
               </div>
             </div>
             <div className="check-list">
               {verification.checks.map((c) => (
                 <div key={c.type} className={`check-item check-${c.status}`}>
-                  <strong>{c.label}</strong>
-                  <span>{c.message}</span>
+                  <strong>{statusLabel(t, 'docTypes', c.type)}</strong>
+                  <span>{statusLabel(t, 'docMessages', c.status)}</span>
                 </div>
               ))}
             </div>
@@ -265,7 +259,7 @@ export default function ComplexDetail() {
               </form>
             ) : (
               <div className="access-granted">
-                <p>{accessInfo.message}</p>
+                <p>{t('legal.accessGranted')}</p>
                 <Link to={accessInfo.view_url} className="btn-primary">{t('legal.open')}</Link>
               </div>
             )}

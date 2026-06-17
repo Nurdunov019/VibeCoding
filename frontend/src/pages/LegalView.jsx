@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { api } from '../api'
 import PdfViewer from '../components/PdfViewer'
 import { useLocale } from '../context/LocaleContext'
+import { statusLabel, translateApiError } from '../utils/translate'
 
 export default function LegalView() {
   const { token } = useParams()
@@ -14,7 +15,7 @@ export default function LegalView() {
   useEffect(() => {
     api.viewLegalReport(token)
       .then(setReport)
-      .catch((e) => setError(e.message))
+      .catch((e) => setError(translateApiError(e.message, t)))
   }, [token])
 
   if (error) {
@@ -38,7 +39,7 @@ export default function LegalView() {
           <h1>{report.title}</h1>
           {report.summary && <p className="summary">{report.summary}</p>}
           <div className={`risk risk-${report.risk_level}`}>
-            {t('legal.risk')}: {report.risk_level}
+            {t('legal.risk')}: {statusLabel(t, 'risk', report.risk_level)}
           </div>
           <div className="conclusion">
             <h2>{t('detail.legal')}</h2>
