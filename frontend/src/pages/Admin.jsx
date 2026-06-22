@@ -11,8 +11,11 @@ const EMPTY_COMPLEX = {
   name: '', slug: '', developer: '', address: '', city: 'Бишкек', region: 'bishkek',
   status: 'building', completion_quarter: '4 кв.', completion_year: 2028,
   price_per_sqm_usd: 0, price_per_sqm_kgs: 0, class_type: 'comfort',
-  floors: 10, apartments_count: 100, verification_score: 0,
-  verification_status: 'unverified', image_url: '', description: '',
+  floors: 10, buildings_count: 1, apartments_count: 100, verification_score: 0,
+  verification_status: 'unverified', image_url: '', catalog_pdf_url: '', features: '',
+  description: '', entrances_count: null,
+  initial_payment_percent: null, barter_extra_usd_sqm: null,
+  barter_min_payment_percent: null, installment_months: null, has_red_book: false,
   latitude: 42.87, longitude: 74.57,
 }
 
@@ -148,6 +151,21 @@ export default function Admin() {
     }
   }
 
+  const uploadCatalog = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      const { url } = await api.adminUpload(file, 'catalog')
+      setForm((f) => ({ ...f, catalog_pdf_url: url }))
+      setMsg(t('admin.catalogUploaded'))
+    } catch (err) {
+      setMsg(translateApiError(err.message, t))
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const uploadPdf = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -267,6 +285,13 @@ export default function Admin() {
                 <label className="full">{t('admin.orUrl')}
                   <input value={form.image_url || ''} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
                 </label>
+                <label className="upload-label">
+                  📕 {t('admin.uploadCatalog')}
+                  <input type="file" accept=".pdf,application/pdf" onChange={uploadCatalog} disabled={uploading} />
+                </label>
+                {form.catalog_pdf_url && (
+                  <p className="muted">PDF: {form.catalog_pdf_url}</p>
+                )}
               </div>
 
               <div className="form-grid">
@@ -281,7 +306,6 @@ export default function Admin() {
                   />
                 </label>
                 <label>{t('admin.formSlug')}<input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} required /></label>
-                <label>{t('admin.formDeveloper')}<input value={form.developer || ''} onChange={(e) => setForm({ ...form, developer: e.target.value })} /></label>
                 <label>{t('admin.formAddress')}<input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} required /></label>
                 <label>
                   {t('admin.formRegion')}
@@ -307,9 +331,41 @@ export default function Admin() {
                     <option value="commissioned">{t('filter.commissioned')}</option>
                   </select>
                 </label>
-                <label>{t('admin.formLat')}<input type="number" step="any" value={form.latitude || ''} onChange={(e) => setForm({ ...form, latitude: +e.target.value })} /></label>
-                <label>{t('admin.formLng')}<input type="number" step="any" value={form.longitude || ''} onChange={(e) => setForm({ ...form, longitude: +e.target.value })} /></label>
+                <label>{t('admin.formFloors')}
+                  <input type="number" min="1" value={form.floors ?? ''} onChange={(e) => setForm({ ...form, floors: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label>{t('admin.formBlocks')}
+                  <input type="number" min="1" value={form.buildings_count ?? ''} onChange={(e) => setForm({ ...form, buildings_count: e.target.value ? +e.target.value : 1 })} />
+                </label>
+                <label>{t('admin.formEntrances')}
+                  <input type="number" min="1" value={form.entrances_count ?? ''} onChange={(e) => setForm({ ...form, entrances_count: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label>{t('admin.formCompletionQ')}
+                  <input value={form.completion_quarter || ''} onChange={(e) => setForm({ ...form, completion_quarter: e.target.value })} placeholder="2 кв." />
+                </label>
+                <label>{t('admin.formCompletionY')}
+                  <input type="number" value={form.completion_year || ''} onChange={(e) => setForm({ ...form, completion_year: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label>{t('admin.formDownPayment')}
+                  <input type="number" min="0" max="100" value={form.initial_payment_percent ?? ''} onChange={(e) => setForm({ ...form, initial_payment_percent: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label>{t('admin.formInstallment')}
+                  <input type="number" min="1" value={form.installment_months ?? ''} onChange={(e) => setForm({ ...form, installment_months: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label>{t('admin.formBarterExtra')}
+                  <input type="number" min="0" value={form.barter_extra_usd_sqm ?? ''} onChange={(e) => setForm({ ...form, barter_extra_usd_sqm: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label>{t('admin.formBarterMin')}
+                  <input type="number" min="0" max="100" value={form.barter_min_payment_percent ?? ''} onChange={(e) => setForm({ ...form, barter_min_payment_percent: e.target.value ? +e.target.value : null })} />
+                </label>
+                <label className="verified-check">
+                  <input type="checkbox" checked={Boolean(form.has_red_book)} onChange={(e) => setForm({ ...form, has_red_book: e.target.checked })} />
+                  <span>📕 {t('admin.formRedBook')}</span>
+                </label>
                 <label className="full">{t('admin.formDescription')}<textarea value={form.description || ''} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></label>
+                <label className="full">{t('catalog.featuresHint')}
+                  <textarea value={form.features || ''} onChange={(e) => setForm({ ...form, features: e.target.value })} rows={4} placeholder="Парковка&#10;Шумоизоляция" />
+                </label>
               </div>
 
               <div className="admin-rating-box">

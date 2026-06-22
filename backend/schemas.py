@@ -50,6 +50,14 @@ class ComplexOut(BaseModel):
     verification_score: int
     verification_status: str
     image_url: Optional[str] = None
+    catalog_pdf_url: Optional[str] = None
+    features: Optional[str] = None
+    entrances_count: Optional[int] = None
+    initial_payment_percent: Optional[float] = None
+    barter_extra_usd_sqm: Optional[float] = None
+    barter_min_payment_percent: Optional[float] = None
+    installment_months: Optional[int] = None
+    has_red_book: bool = False
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
@@ -77,6 +85,14 @@ class ComplexCreate(BaseModel):
     verification_score: int = 0
     verification_status: str = "partial"
     image_url: Optional[str] = None
+    catalog_pdf_url: Optional[str] = None
+    features: Optional[str] = None
+    entrances_count: Optional[int] = None
+    initial_payment_percent: Optional[float] = None
+    barter_extra_usd_sqm: Optional[float] = None
+    barter_min_payment_percent: Optional[float] = None
+    installment_months: Optional[int] = None
+    has_red_book: bool = False
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
@@ -101,6 +117,14 @@ class ComplexUpdate(BaseModel):
     verification_score: Optional[int] = None
     verification_status: Optional[str] = None
     image_url: Optional[str] = None
+    catalog_pdf_url: Optional[str] = None
+    features: Optional[str] = None
+    entrances_count: Optional[int] = None
+    initial_payment_percent: Optional[float] = None
+    barter_extra_usd_sqm: Optional[float] = None
+    barter_min_payment_percent: Optional[float] = None
+    installment_months: Optional[int] = None
+    has_red_book: Optional[bool] = None
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None

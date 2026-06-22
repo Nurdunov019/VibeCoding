@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { api } from '../api'
+import CatalogCard from '../components/CatalogCard'
 import ComplexCard from '../components/ComplexCard'
 import HeroSlider from '../components/HeroSlider'
 import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
+import { isShowcaseSlug } from '../utils/showcaseSlug'
 
 export default function Home() {
   const { hash } = useLocation()
@@ -49,14 +51,18 @@ export default function Home() {
     setVerifiedOnly(false)
   }
 
-  const slideImages = complexes.map((c) => c.image_url).filter(Boolean)
+  const featured = complexes.filter((c) => isShowcaseSlug(c.slug))
+  const building = complexes.filter((c) => c.status === 'building' && !isShowcaseSlug(c.slug))
+  const commissioned = complexes.filter((c) => c.status === 'commissioned')
+  const slideImages = (featured.length ? featured : complexes).map((c) => c.image_url).filter(Boolean)
 
   return (
     <div className="home-page">
       <HeroSlider images={slideImages}>
-        <div className="hero-compact">
+        <div className="hero-compact hero-compact--borsan">
+          <p className="hero-brand">PROVERKAKG</p>
           <h1>{t('hero.title')}</h1>
-          <p className="hero-compact-sub">{t('hero.sub')}</p>
+          <a href="#complexes" className="btn-hero-cta">{t('catalog.viewObjects')}</a>
         </div>
 
         <section className="filter-compact filter-on-hero">
@@ -87,18 +93,21 @@ export default function Home() {
         </section>
 
         {stats && (
-          <section className="stats-compact stats-on-hero">
-            <div className="stat-item"><strong>{stats.total_complexes}</strong><span>{t('stats.objects')}</span></div>
-            <div className="stat-item"><strong>{stats.verified_count}</strong><span>{t('stats.verified')}</span></div>
-            <div className="stat-item"><strong>{stats.building}</strong><span>{t('stats.building')}</span></div>
-            <div className="stat-item"><strong>{stats.commissioned}</strong><span>{t('stats.commissioned')}</span></div>
+          <section className="digits-band">
+            <p className="digits-eyebrow">{t('catalog.inNumbers')}</p>
+            <div className="digits-grid">
+              <div><strong>{stats.total_complexes}</strong><span>{t('stats.objects')}</span></div>
+              <div><strong>{stats.verified_count}</strong><span>{t('stats.verified')}</span></div>
+              <div><strong>{stats.building}</strong><span>{t('stats.building')}</span></div>
+              <div><strong>{stats.commissioned}</strong><span>{t('stats.commissioned')}</span></div>
+            </div>
           </section>
         )}
       </HeroSlider>
 
       <section id="complexes" className="section-head-simple">
-        <h2>{t('section.list')}</h2>
-        <p className="muted">{complexes.length} {t('section.count')} · {t('section.legalHint')}</p>
+        <h2>{t('catalog.projects')}</h2>
+        <p className="muted">{complexes.length} {t('section.count')} · {t('catalog.openHint')}</p>
       </section>
 
       {loading ? (
@@ -106,9 +115,34 @@ export default function Home() {
       ) : complexes.length === 0 ? (
         <p className="empty">{t('empty.notFound')}</p>
       ) : (
-        <div className="grid cards-grid">
-          {complexes.map((c) => <ComplexCard key={c.slug} complex={c} />)}
-        </div>
+        <>
+          {featured.length > 0 && (
+            <>
+              <h3 className="catalog-section-title">{t('catalog.buildingSection')}</h3>
+              <div className="catalog-grid">
+                {featured.map((c) => <CatalogCard key={c.slug} complex={c} />)}
+              </div>
+            </>
+          )}
+
+          {building.length > 0 && (
+            <>
+              <h3 className="catalog-section-title">{t('catalog.otherBuilding')}</h3>
+              <div className="grid cards-grid">
+                {building.map((c) => <ComplexCard key={c.slug} complex={c} />)}
+              </div>
+            </>
+          )}
+
+          {commissioned.length > 0 && (
+            <>
+              <h3 className="catalog-section-title">{t('catalog.commissionedSection')}</h3>
+              <div className="grid cards-grid">
+                {commissioned.map((c) => <ComplexCard key={c.slug} complex={c} />)}
+              </div>
+            </>
+          )}
+        </>
       )}
     </div>
   )

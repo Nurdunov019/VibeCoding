@@ -1,5 +1,9 @@
 const API = '/api'
 
+function slugPath(slug) {
+  return encodeURIComponent(slug)
+}
+
 async function request(path, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...options.headers }
   const token = localStorage.getItem('token')
@@ -24,17 +28,17 @@ export const api = {
   },
   getStats: () => request('/complexes/stats'),
   getMapMarkers: () => request('/complexes/map'),
-  getComplex: (slug) => request(`/complexes/${slug}`),
+  getComplex: (slug) => request(`/complexes/${slugPath(slug)}`),
   compareComplexes: (slugs) =>
     request('/complexes/compare', { method: 'POST', body: JSON.stringify({ slugs }) }),
-  getDocuments: (slug) => request(`/documents/complex/${slug}`),
-  verifyComplex: (slug) => request(`/documents/verify/${slug}`),
+  getDocuments: (slug) => request(`/documents/complex/${slugPath(slug)}`),
+  verifyComplex: (slug) => request(`/documents/verify/${slugPath(slug)}`),
   requestLegalAccess: (slug, email) =>
-    request(`/legal/request/${slug}`, { method: 'POST', body: JSON.stringify({ email }) }),
+    request(`/legal/request/${slugPath(slug)}`, { method: 'POST', body: JSON.stringify({ email }) }),
   viewLegalReport: (token) => request(`/legal/view/${token}`),
-  getReviews: (slug) => request(`/reviews/${slug}`),
+  getReviews: (slug) => request(`/reviews/${slugPath(slug)}`),
   postReview: (slug, rating, text) =>
-    request(`/reviews/${slug}`, { method: 'POST', body: JSON.stringify({ rating, text }) }),
+    request(`/reviews/${slugPath(slug)}`, { method: 'POST', body: JSON.stringify({ rating, text }) }),
   login: (email, password) =>
     request('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   register: (email, password, full_name) =>

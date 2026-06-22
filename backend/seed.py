@@ -120,6 +120,84 @@ DEMO_COMPLEXES = [
     },
 ]
 
+FEATURED_COMPLEXES = [
+    {
+        "name": 'ЖК "Салкын"',
+        "slug": "salkyn",
+        "developer": "ОсОО «Роял Констракшн»",
+        "address": "ул. Чокана Валиханова",
+        "city": "Бишкек",
+        "region": "bishkek",
+        "status": "building",
+        "completion_quarter": "2 кв.",
+        "completion_year": 2028,
+        "price_per_sqm_usd": 1300,
+        "price_per_sqm_kgs": 113750,
+        "class_type": "business",
+        "floors": 18,
+        "buildings_count": 4,
+        "entrances_count": 6,
+        "apartments_count": None,
+        "verification_score": 55,
+        "verification_status": "partial",
+        "initial_payment_percent": 30,
+        "barter_extra_usd_sqm": 50,
+        "barter_min_payment_percent": 40,
+        "installment_months": 28,
+        "has_red_book": True,
+        "image_url": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop",
+        "description": (
+            "Комплекс бизнес-класса. 18 этажей, 4 блока, 6 подъездов. "
+            "Расположен по адресу ул. Чокана Валиханова (Октябрьский район, г. Бишкек). "
+            "Участок на красной книге — рекомендуется юридическая проверка перед покупкой."
+        ),
+        "features": (
+            "360° шумоизоляция между этажами и между квартирами\n"
+            "Двухуровневая подземная парковка\n"
+            "Гостевая парковка"
+        ),
+        "latitude": 42.85791,
+        "longitude": 74.674336,
+    },
+    {
+        "name": 'ЖК "BROWN"',
+        "slug": "borsan-brown",
+        "developer": "Borsan Construction",
+        "address": "Анкара — Ауэзова (район Тунгуч)",
+        "city": "Бишкек",
+        "region": "bishkek",
+        "status": "building",
+        "completion_quarter": "1 кв.",
+        "completion_year": 2028,
+        "price_per_sqm_usd": 1300,
+        "price_per_sqm_kgs": 113750,
+        "class_type": "business",
+        "floors": 12,
+        "buildings_count": 1,
+        "entrances_count": 4,
+        "apartments_count": 220,
+        "verification_score": 52,
+        "verification_status": "partial",
+        "initial_payment_percent": 30,
+        "installment_months": 30,
+        "has_red_book": True,
+        "image_url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&h=800&fit=crop",
+        "description": (
+            "Жилой комплекс BROWN от застройщика Borsan. "
+            "Индивидуальное отопление (газ), горячая вода — бойлер Ariston. "
+            "Участок на красной книге. Подробнее: borsan.kg"
+        ),
+        "features": (
+            "Индивидуальное отопление (газ)\n"
+            "Горячая вода — бойлер Ariston\n"
+            "Современная архитектура\n"
+            "Развитая инфраструктура района Тунгуч"
+        ),
+        "latitude": 42.8367,
+        "longitude": 74.6234,
+    },
+]
+
 DOCS_TEMPLATE = [
     ("land_title", "Право застройки земельного участка", "valid"),
     ("construction_permit", "Разрешение на строительство", "valid"),
@@ -133,6 +211,52 @@ DEMO_REVIEWS = [
     ("Айгүл Т.", 5, "Жашоо ыңгайлуу, кореилер жакшы. Баардык документтер туура, менеджмент тез жооп берет."),
     ("Нурбек К.", 4, "Жакшы ЖК, бирок парковка аз. Кошуна жакшы, инфраструктура жакында."),
 ]
+
+
+def _add_complex_bundle(db, data, statuses):
+    c = Complex(**data)
+    db.add(c)
+    db.flush()
+    for j, (doc_type, title, _) in enumerate(DOCS_TEMPLATE):
+        st = statuses[j]
+        db.add(Document(
+            complex_id=c.id,
+            doc_type=doc_type,
+            title=title,
+            number=f"KG-{c.slug.upper().replace('-', '')}-{j+1:03d}" if st == "valid" else None,
+            issued_by="Министерство строительства КР" if st == "valid" else None,
+            issued_date="2024-06-15" if st == "valid" else None,
+            status=st,
+            is_public=st == "valid",
+            file_url=SAMPLE_PDF if st == "valid" else None,
+            notes="Участок на красной книге" if doc_type == "land_title" and data.get("has_red_book") else None,
+        ))
+    db.add(LegalReport(
+        complex_id=c.id,
+        title=f"Юридическое заключение — {c.name}",
+        summary="Экспертная оценка законности строительства и рисков для покупателя.",
+        conclusion=(
+            f"По объекту «{c.name}»: участок на красной книге. "
+            "Документация частично подтверждена. Рекомендуется юридическая проверка перед покупкой."
+        ),
+        risk_level="medium",
+        prepared_at="15.01.2026",
+        file_path=SAMPLE_PDF,
+    ))
+    return c
+
+
+def seed_featured_complexes(db):
+    for data in FEATURED_COMPLEXES:
+        existing = db.query(Complex).filter(Complex.slug == data["slug"]).first()
+        if existing:
+            for key, value in data.items():
+                setattr(existing, key, value)
+            continue
+        statuses = ["valid", "valid", "pending", "missing", "valid"]
+        if data.get("has_red_book"):
+            statuses = ["pending", "valid", "pending", "missing", "valid"]
+        _add_complex_bundle(db, data, statuses)
 
 
 def seed_reviews(db):
@@ -218,6 +342,7 @@ def seed_database(db):
                 file_path=SAMPLE_PDF,
             ))
         seed_reviews(db)
+        seed_featured_complexes(db)
         db.commit()
         return
 
@@ -268,4 +393,5 @@ def seed_database(db):
         ))
 
     seed_reviews(db)
+    seed_featured_complexes(db)
     db.commit()

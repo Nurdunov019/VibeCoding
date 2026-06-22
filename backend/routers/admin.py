@@ -29,11 +29,17 @@ async def upload_file(
     _: User = Depends(require_admin),
 ):
     ext = Path(file.filename or "").suffix.lower()
-    allowed = ALLOWED_IMAGE if kind == "image" else ALLOWED_DOC
+    if kind == "image":
+        allowed = ALLOWED_IMAGE
+        subdir = "images"
+    elif kind == "catalog":
+        allowed = ALLOWED_DOC
+        subdir = "catalogs"
+    else:
+        allowed = ALLOWED_DOC
+        subdir = "documents"
     if ext not in allowed:
         raise HTTPException(status_code=400, detail=FILE_TYPE_UNSUPPORTED.format(ext=ext))
-
-    subdir = "images" if kind == "image" else "documents"
     dest_dir = UPLOAD_DIR / subdir
     dest_dir.mkdir(exist_ok=True)
 

@@ -39,6 +39,14 @@ class Complex(Base):
     verification_score = Column(Integer, default=0)  # 0-100
     verification_status = Column(String, default="partial")  # verified, partial, unverified, risk
     image_url = Column(String, nullable=True)
+    catalog_pdf_url = Column(String, nullable=True)
+    features = Column(Text, nullable=True)
+    entrances_count = Column(Integer, nullable=True)
+    initial_payment_percent = Column(Float, nullable=True)
+    barter_extra_usd_sqm = Column(Float, nullable=True)
+    barter_min_payment_percent = Column(Float, nullable=True)
+    installment_months = Column(Integer, nullable=True)
+    has_red_book = Column(Boolean, default=False)
     description = Column(Text, nullable=True)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)

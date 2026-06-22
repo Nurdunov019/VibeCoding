@@ -11,6 +11,7 @@ import LanguageSwitcher from './LanguageSwitcher'
 import RegionPicker from './RegionPicker'
 import MobileNav from './MobileNav'
 import MobileProfileSheet from './MobileProfileSheet'
+import { isShowcasePath } from '../utils/showcaseSlug'
 
 export default function Layout() {
   const { pathname } = useLocation()
@@ -33,8 +34,10 @@ export default function Layout() {
     navigate('/')
   }
 
+  const isShowcasePage = isShowcasePath(pathname)
+
   return (
-    <div className={`app${navHidden ? ' app--nav-hidden' : ''}`}>
+    <div className={`app${navHidden ? ' app--nav-hidden' : ''}${isShowcasePage ? ' app--showcase' : ''}`}>
       <header className="header">
         <div className="container header-top">
           <RegionPicker />
@@ -79,7 +82,7 @@ export default function Layout() {
 
       <CompareBar navHidden={navHidden} />
 
-      <main className="main container">
+      <main className={`main${isShowcasePage ? ' main--immersive' : ' container'}`}>
         <Outlet />
       </main>
 

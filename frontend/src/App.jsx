@@ -6,6 +6,7 @@ import { FavoritesProvider } from './context/FavoritesContext'
 import { AuthModalProvider } from './context/AuthModalContext'
 import { LocaleProvider } from './context/LocaleContext'
 import { RegionProvider } from './context/RegionContext'
+import ScrollToTop from './components/ScrollToTop'
 import Layout from './components/Layout'
 import PageLoader from './components/PageLoader'
 import Home from './pages/Home'
@@ -22,6 +23,7 @@ const Admin = lazy(() => import('./pages/Admin'))
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <LocaleProvider>
       <RegionProvider>
       <AuthModalProvider>

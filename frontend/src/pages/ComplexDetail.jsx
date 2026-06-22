@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
+import ShowcaseComplexDetail from '../components/ShowcaseComplexDetail'
 import LocationSection from '../components/LocationSection'
 import PdfViewer from '../components/PdfViewer'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
+import { canonicalShowcaseSlug, isShowcaseSlug } from '../utils/showcaseSlug'
 import { statusLabel, translateApiError } from '../utils/translate'
 
 const BASE_TABS = ['overview', 'location', 'building', 'documents', 'verify', 'legal']
@@ -14,7 +16,9 @@ const BASE_TABS = ['overview', 'location', 'building', 'documents', 'verify', 'l
 import StarPicker from '../components/StarPicker'
 
 export default function ComplexDetail() {
-  const { slug } = useParams()
+  const { slug: rawSlug } = useParams()
+  const navigate = useNavigate()
+  const slug = isShowcaseSlug(rawSlug) ? canonicalShowcaseSlug(rawSlug) : rawSlug
   const [searchParams] = useSearchParams()
   const { t } = useLocale()
   const { user } = useAuth()
@@ -44,6 +48,12 @@ export default function ComplexDetail() {
     if (!isCommissioned) return
     api.getReviews(slug).then(setReviewsData).catch(console.error)
   }
+
+  useEffect(() => {
+    if (isShowcaseSlug(rawSlug) && rawSlug !== canonicalShowcaseSlug(rawSlug)) {
+      navigate(`/complex/${canonicalShowcaseSlug(rawSlug)}`, { replace: true })
+    }
+  }, [rawSlug, navigate])
 
   useEffect(() => {
     setLoading(true)
@@ -107,6 +117,22 @@ export default function ComplexDetail() {
 
   if (loading) return <p className="empty">{t('empty.loading')}</p>
   if (!complex) return <p className="empty">{t('empty.notFound')}</p>
+
+  const isShowcase = isShowcaseSlug(slug) || Boolean(complex.catalog_pdf_url)
+
+  if (isShowcase) {
+    return (
+      <ShowcaseComplexDetail
+        slug={slug}
+        complex={complex}
+        documents={documents}
+        verification={verification}
+        reviewsData={reviewsData}
+        isCommissioned={isCommissioned}
+        onReviewSaved={loadReviews}
+      />
+    )
+  }
 
   return (
     <div className="detail">

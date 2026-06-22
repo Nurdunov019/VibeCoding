@@ -19,9 +19,21 @@ def migrate_db():
     if not insp.has_table("complexes"):
         return
     cols = {c["name"] for c in insp.get_columns("complexes")}
-    if "region" not in cols:
-        with engine.begin() as conn:
-            conn.execute(text("ALTER TABLE complexes ADD COLUMN region VARCHAR DEFAULT 'bishkek'"))
+    migrations = [
+        ("region", "ALTER TABLE complexes ADD COLUMN region VARCHAR DEFAULT 'bishkek'"),
+        ("catalog_pdf_url", "ALTER TABLE complexes ADD COLUMN catalog_pdf_url VARCHAR"),
+        ("features", "ALTER TABLE complexes ADD COLUMN features TEXT"),
+        ("entrances_count", "ALTER TABLE complexes ADD COLUMN entrances_count INTEGER"),
+        ("initial_payment_percent", "ALTER TABLE complexes ADD COLUMN initial_payment_percent FLOAT"),
+        ("barter_extra_usd_sqm", "ALTER TABLE complexes ADD COLUMN barter_extra_usd_sqm FLOAT"),
+        ("barter_min_payment_percent", "ALTER TABLE complexes ADD COLUMN barter_min_payment_percent FLOAT"),
+        ("installment_months", "ALTER TABLE complexes ADD COLUMN installment_months INTEGER"),
+        ("has_red_book", "ALTER TABLE complexes ADD COLUMN has_red_book BOOLEAN DEFAULT 0"),
+    ]
+    for col, sql in migrations:
+        if col not in cols:
+            with engine.begin() as conn:
+                conn.execute(text(sql))
     with engine.begin() as conn:
         conn.execute(text("UPDATE complexes SET region = 'manas' WHERE region = 'jalal-abad'"))
 
