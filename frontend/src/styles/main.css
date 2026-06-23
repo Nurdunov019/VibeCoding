@@ -1207,6 +1207,62 @@ button { cursor: pointer; border: none; }
 .doc-valid, .check-valid { border-left: 4px solid var(--ok); }
 .doc-missing, .check-missing { border-left: 4px solid var(--bad); }
 .doc-expired, .check-expired { border-left: 4px solid var(--warn); }
+.doc-pending, .check-pending { border-left: 4px solid var(--warn); }
+
+.doc-written-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.doc-written-card {
+  padding: 20px 22px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: white;
+  border-left: 4px solid var(--border);
+}
+
+.doc-written-card.doc-valid { border-left-color: var(--ok); }
+.doc-written-card.doc-missing { border-left-color: var(--bad); }
+.doc-written-card.doc-expired,
+.doc-written-card.doc-pending { border-left-color: var(--warn); }
+
+.doc-written-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.doc-written-head h4 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.doc-written-status {
+  font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.doc-written-meta {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.doc-written-text {
+  margin: 0;
+  line-height: 1.65;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.doc-written-pdf { margin-top: 14px; }
 
 .verify-score { display: flex; gap: 24px; align-items: center; margin-bottom: 24px; }
 .score-circle {

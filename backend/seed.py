@@ -207,6 +207,94 @@ DOCS_TEMPLATE = [
     ("ownership_scheme", "Схема оформления прав собственности", "valid"),
 ]
 
+SALKYN_DOCUMENTS = [
+    {
+        "doc_type": "land_title",
+        "title": "Право застройки земельного участка",
+        "status": "pending",
+        "number": None,
+        "issued_by": "Государственный кадастр КР",
+        "issued_date": None,
+        "notes": (
+            "Земельный участок: ул. Чокана Валиханова, Октябрьский район, г. Бишкек. "
+            "📕 Участок на красной книге — перед покупкой рекомендуется юридическая проверка "
+            "права застройки и обременений."
+        ),
+        "file_url": None,
+        "is_public": True,
+    },
+    {
+        "doc_type": "construction_permit",
+        "title": "Разрешение на строительство",
+        "status": "valid",
+        "number": "крц-2 № 09635",
+        "issued_by": "ОсОО «Роял Констракшн»",
+        "issued_date": None,
+        "notes": (
+            "Жилой комплекс бизнес-класса «Салкын»: 4 блока, 18 этажей, 6 подъездов. "
+            "Застройщик зарегистрирован в реестре: крц-2 № 09635. "
+            "Информация из брошюры носит ознакомительный характер; детали — в офисе продаж (royal.kg)."
+        ),
+        "file_url": None,
+        "is_public": True,
+    },
+    {
+        "doc_type": "expertise",
+        "title": "Государственная экспертиза проекта",
+        "status": "pending",
+        "number": None,
+        "issued_by": None,
+        "issued_date": None,
+        "notes": (
+            "Проектная документация многоэтажного комплекса (бизнес-класс) "
+            "проходит государственную экспертизу. Статус уточняется у застройщика."
+        ),
+        "file_url": None,
+        "is_public": True,
+    },
+    {
+        "doc_type": "commissioning",
+        "title": "Акт ввода в эксплуатацию",
+        "status": "missing",
+        "number": None,
+        "issued_by": None,
+        "issued_date": None,
+        "notes": (
+            "Объект в стадии строительства. Планируемый срок сдачи — 2 квартал 2028 года. "
+            "Разрешение на ввод в эксплуатацию оформляется после завершения строительства."
+        ),
+        "file_url": None,
+        "is_public": True,
+    },
+    {
+        "doc_type": "ownership_scheme",
+        "title": "Схема оформления прав собственности",
+        "status": "valid",
+        "number": None,
+        "issued_by": "ОсОО «Роял Констракшн»",
+        "issued_date": None,
+        "notes": (
+            "Оформление права собственности на квартиру — долевая собственность "
+            "с регистрацией в ГРС. Условия договора, рассрочка до 28 месяцев, "
+            "первоначальный взнос 30%. Подробности — в офисе продаж."
+        ),
+        "file_url": None,
+        "is_public": True,
+    },
+]
+
+SALKYN_LEGAL = {
+    "title": "Юридическое заключение — ЖК «Салкын»",
+    "summary": "Предварительная оценка документации на основании данных застройщика и брошюры.",
+    "conclusion": (
+        "Объект бизнес-класса, застройщик ОсОО «Роял Констракшн» (крц-2 № 09635). "
+        "Участок на красной книге. Рекомендуется юридическая проверка перед покупкой."
+    ),
+    "risk_level": "medium",
+    "prepared_at": "2026",
+    "file_path": None,
+}
+
 
 DEMO_REVIEWS = [
     ("Айгүл Т.", 5, "Жашоо ыңгайлуу, кореилер жакшы. Баардык документтер туура, менеджмент тез жооп берет."),
@@ -258,6 +346,34 @@ def seed_featured_complexes(db):
         if data.get("has_red_book"):
             statuses = ["pending", "valid", "pending", "missing", "valid"]
         _add_complex_bundle(db, data, statuses)
+
+
+def seed_salkyn_documents(db):
+    from services.verification import sync_complex_verification
+
+    c = db.query(Complex).filter(Complex.slug == "salkyn").first()
+    if not c:
+        return
+    for spec in SALKYN_DOCUMENTS:
+        matches = db.query(Document).filter(
+            Document.complex_id == c.id,
+            Document.doc_type == spec["doc_type"],
+        ).order_by(Document.id).all()
+        doc = matches[0] if matches else None
+        for extra in matches[1:]:
+            db.delete(extra)
+        if doc:
+            for key, value in spec.items():
+                setattr(doc, key, value)
+        else:
+            db.add(Document(complex_id=c.id, **spec))
+    report = db.query(LegalReport).filter(LegalReport.complex_id == c.id).first()
+    if report:
+        for key, value in SALKYN_LEGAL.items():
+            setattr(report, key, value)
+    else:
+        db.add(LegalReport(complex_id=c.id, **SALKYN_LEGAL))
+    sync_complex_verification(c.id, db)
 
 
 def seed_reviews(db):
@@ -344,6 +460,7 @@ def seed_database(db):
             ))
         seed_reviews(db)
         seed_featured_complexes(db)
+        seed_salkyn_documents(db)
         db.commit()
         return
 
@@ -395,4 +512,5 @@ def seed_database(db):
 
     seed_reviews(db)
     seed_featured_complexes(db)
+    seed_salkyn_documents(db)
     db.commit()

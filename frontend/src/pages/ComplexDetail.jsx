@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import ShowcaseComplexDetail from '../components/ShowcaseComplexDetail'
 import LocationSection from '../components/LocationSection'
-import PdfViewer from '../components/PdfViewer'
+import DocumentWrittenList from '../components/DocumentWrittenList'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useCompare } from '../context/CompareContext'
@@ -215,33 +215,12 @@ export default function ComplexDetail() {
           <div>
             <h2>{t('detail.documents')}</h2>
             <p className="muted">{t('detail.documentsHint')}</p>
-            <div className="doc-list">
-              {documents.map((d) => (
-                <div key={d.id} className={`doc-item doc-${d.status}`}>
-                  <div>
-                    <strong>{statusLabel(t, 'docTypes', d.doc_type) || d.title}</strong>
-                    {d.number && <p className="muted">№ {d.number} • {d.issued_by}</p>}
-                  </div>
-                  <div className="doc-item-actions">
-                    <span>{statusLabel(t, 'docStatus', d.status)}</span>
-                    {d.file_url && d.status === 'valid' && (
-                      <button type="button" className="btn-outline btn-sm" onClick={() => setViewingPdf(d)}>
-                        PDF
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            {viewingPdf && (
-              <div className="pdf-modal">
-                <div className="pdf-modal-header">
-                  <h3>{viewingPdf.title}</h3>
-                  <button type="button" className="btn-ghost" onClick={() => setViewingPdf(null)}>×</button>
-                </div>
-                <PdfViewer url={viewingPdf.file_url} title={viewingPdf.title} />
-              </div>
-            )}
+            <DocumentWrittenList
+              documents={documents}
+              viewingPdf={viewingPdf}
+              onViewPdf={setViewingPdf}
+              onClosePdf={() => setViewingPdf(null)}
+            />
           </div>
         )}
 

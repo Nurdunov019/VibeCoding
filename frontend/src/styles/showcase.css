@@ -443,6 +443,25 @@
   border-color: var(--showcase-border);
 }
 
+.doc-written-list--showcase .doc-written-card {
+  background: var(--showcase-surface);
+  border-color: var(--showcase-border);
+}
+
+.doc-written-list--showcase .doc-written-text {
+  color: var(--showcase-muted);
+}
+
+.doc-written-list--showcase .doc-written-meta {
+  color: var(--showcase-muted);
+  opacity: 0.9;
+}
+
+.doc-written-list--showcase .doc-written-status--valid { color: #6fcf97; }
+.doc-written-list--showcase .doc-written-status--pending { color: #e8a82e; }
+.doc-written-list--showcase .doc-written-status--missing { color: #e07070; }
+.doc-written-list--showcase .doc-written-status--expired { color: #e8a82e; }
+
 /* Immersive layout */
 .app--showcase {
   background: #14100c;

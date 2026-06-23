@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import CatalogBrochureViewer from './CatalogBrochureViewer'
 import CatalogCoverHero from './CatalogCoverHero'
 import ComplexStatsBand from './ComplexStatsBand'
+import DocumentWrittenList from './DocumentWrittenList'
 import PaymentTermsBand from './PaymentTermsBand'
 import LocationSection from './LocationSection'
-import PdfViewer from './PdfViewer'
 import StarPicker from './StarPicker'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
@@ -193,32 +193,14 @@ export default function ShowcaseComplexDetail({
 
       <section id="documents" className="showcase-panel">
         <h3>{t('detail.documents')}</h3>
-        <p className="muted">{t('detail.documentsHint')}</p>
-        <div className="doc-list">
-          {documents.map((d) => (
-            <div key={d.id} className={`doc-item doc-${d.status}`}>
-              <div>
-                <strong>{statusLabel(t, 'docTypes', d.doc_type) || d.title}</strong>
-                {d.number && <p className="muted">№ {d.number} · {d.issued_by}</p>}
-              </div>
-              <div className="doc-item-actions">
-                <span>{statusLabel(t, 'docStatus', d.status)}</span>
-                {d.file_url && d.status === 'valid' && (
-                  <button type="button" className="btn-outline btn-sm" onClick={() => setViewingPdf(d)}>PDF</button>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-        {viewingPdf && (
-          <div className="pdf-modal">
-            <div className="pdf-modal-header">
-              <h3>{viewingPdf.title}</h3>
-              <button type="button" className="btn-ghost" onClick={() => setViewingPdf(null)}>×</button>
-            </div>
-            <PdfViewer url={viewingPdf.file_url} title={viewingPdf.title} />
-          </div>
-        )}
+        <p className="muted">{t('catalog.documentsWrittenHint')}</p>
+        <DocumentWrittenList
+          documents={documents}
+          viewingPdf={viewingPdf}
+          onViewPdf={setViewingPdf}
+          onClosePdf={() => setViewingPdf(null)}
+          variant="showcase"
+        />
       </section>
 
       <section id="legal" className="showcase-panel showcase-panel--last">
