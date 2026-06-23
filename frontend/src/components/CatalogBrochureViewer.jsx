@@ -33,7 +33,7 @@ function CatalogPage({ pdfDoc, pageNum }) {
   const canvasRef = useRef(null)
   const [ready, setReady] = useState(false)
   // First pages must render without waiting for IO — zero-height placeholders never intersect.
-  const [visible, setVisible] = useVisible(wrapRef, pageNum <= 2)
+  const visible = useVisible(wrapRef, pageNum <= 2)
   const [width, setWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 390))
 
   useEffect(() => {
