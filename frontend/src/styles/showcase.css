@@ -430,7 +430,6 @@
 }
 
 .showcase .doc-list,
-.showcase .check-list,
 .showcase .legal-info,
 .showcase .review-form {
   background: var(--showcase-surface);
@@ -438,14 +437,30 @@
   border: 1px solid var(--showcase-border);
 }
 
-.showcase .doc-item,
-.showcase .check-item {
-  border-color: var(--showcase-border);
+.showcase-verify-score {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin: 20px 0 24px;
+}
+
+.showcase-verify-score strong {
+  color: var(--showcase-text);
+  font-size: 1.1rem;
+}
+
+.showcase-verify-score p {
+  margin: 6px 0 0;
+  color: var(--showcase-muted);
 }
 
 .doc-written-list--showcase .doc-written-card {
   background: var(--showcase-surface);
   border-color: var(--showcase-border);
+}
+
+.doc-written-list--showcase .doc-written-head h4 {
+  color: var(--showcase-text);
 }
 
 .doc-written-list--showcase .doc-written-text {

@@ -179,19 +179,27 @@ export default function ShowcaseComplexDetail({
       {verification && (
         <section id="verify" className="showcase-panel">
           <h3>{t('detail.verify')}</h3>
-          <div className="verify-score">
+          <div className="showcase-verify-score">
             <div className="score-circle">{verification.score}%</div>
             <div>
               <strong>{statusLabel(t, 'card', verification.status)}</strong>
               <p>{t('verify.validCount', { valid: verification.valid_documents, total: verification.total_documents })}</p>
             </div>
           </div>
-          <div className="check-list">
+          <div className="doc-written-list doc-written-list--showcase">
             {verification.checks.map((c) => (
-              <div key={c.type} className={`check-item check-${c.status}`}>
-                <strong>{statusLabel(t, 'docTypes', c.type)}</strong>
-                <span>{statusLabel(t, 'docMessages', c.status)}</span>
-              </div>
+              <article key={c.type} className={`doc-written-card doc-${c.status}`}>
+                <div className="doc-written-head">
+                  <h4>{statusLabel(t, 'docTypes', c.type)}</h4>
+                  <span className={`doc-written-status doc-written-status--${c.status}`}>
+                    {statusLabel(t, 'docStatus', c.status)}
+                  </span>
+                </div>
+                {c.number && <p className="doc-written-meta">№ {c.number}</p>}
+                <p className="doc-written-text">
+                  {c.message || statusLabel(t, 'docMessages', c.status)}
+                </p>
+              </article>
             ))}
           </div>
         </section>
