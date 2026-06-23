@@ -2,7 +2,15 @@ import { Link } from 'react-router-dom'
 import { useLocale } from '../context/LocaleContext'
 import { statusLabel } from '../utils/translate'
 
-export default function LegalWrittenSection({ report, accessInfo, email, onEmailChange, onRequest, variant = 'default' }) {
+export default function LegalWrittenSection({
+  report,
+  accessInfo,
+  email,
+  onEmailChange,
+  onRequest,
+  variant = 'default',
+  hideAccessForm = false,
+}) {
   const { t } = useLocale()
   if (!report) return null
 
@@ -33,13 +41,15 @@ export default function LegalWrittenSection({ report, accessInfo, email, onEmail
       </div>
 
       <div className="legal-written-foot">
-        <ul className="legal-written-rules">
-          <li>✓ {t('legal.viewOnly')}</li>
-          <li>✓ {t('legal.watermark')}</li>
-          <li>✕ {t('legal.noDownload')}</li>
-        </ul>
+        {!hideAccessForm && (
+          <ul className="legal-written-rules">
+            <li>✓ {t('legal.viewOnly')}</li>
+            <li>✓ {t('legal.watermark')}</li>
+            <li>✕ {t('legal.noDownload')}</li>
+          </ul>
+        )}
 
-        {!accessInfo ? (
+        {!hideAccessForm && !accessInfo ? (
           <form onSubmit={onRequest} className="legal-form">
             <input
               type="email"
@@ -50,12 +60,12 @@ export default function LegalWrittenSection({ report, accessInfo, email, onEmail
             />
             <button type="submit" className="btn-primary">{t('legal.getAccess')}</button>
           </form>
-        ) : (
+        ) : !hideAccessForm ? (
           <div className="access-granted">
             <p>{t('legal.accessGranted')}</p>
             <Link to={accessInfo.view_url} className="btn-primary">{t('legal.open')}</Link>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   )

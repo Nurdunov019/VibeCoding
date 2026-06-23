@@ -217,7 +217,7 @@ SALKYN_LEGAL = {
     ),
     "risk_level": "medium",
     "prepared_at": "10.09.2025",
-    "file_path": None,
+    "file_path": "/documents/salkyn-legal.docx",
 }
 
 

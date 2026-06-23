@@ -4,6 +4,7 @@ import CatalogBrochureViewer from './CatalogBrochureViewer'
 import CatalogCoverHero from './CatalogCoverHero'
 import ComplexStatsBand from './ComplexStatsBand'
 import DocumentWrittenList from './DocumentWrittenList'
+import LegalDocumentModal from './LegalDocumentModal'
 import LegalWrittenSection from './LegalWrittenSection'
 import PaymentTermsBand from './PaymentTermsBand'
 import LocationSection from './LocationSection'
@@ -15,6 +16,7 @@ import { useLocale } from '../context/LocaleContext'
 import { mediaUrl } from '../utils/mediaUrl'
 import { statusLabel, translateApiError } from '../utils/translate'
 import { api } from '../api'
+import { getLegalDocUrl } from '../data/legalDocuments'
 
 function parseFeatures(text) {
   if (!text?.trim()) return []
@@ -41,9 +43,11 @@ export default function ShowcaseComplexDetail({
   const [reviewText, setReviewText] = useState('')
   const [reviewMsg, setReviewMsg] = useState('')
   const [reviewLoading, setReviewLoading] = useState(false)
+  const [legalModalOpen, setLegalModalOpen] = useState(false)
   const [legalReport, setLegalReport] = useState(null)
 
   const features = parseFeatures(complex.features)
+  const hasBundledLegal = Boolean(getLegalDocUrl(slug))
   const hasCatalog = Boolean(complex.catalog_pdf_url)
   const [pdfFailed, setPdfFailed] = useState(false)
   const showBrochure = hasCatalog && !pdfFailed
@@ -97,6 +101,21 @@ export default function ShowcaseComplexDetail({
         ) : (
           <CatalogCoverHero complex={complex} />
         )}
+        {legalReport && (
+          <button
+            type="button"
+            className="showcase-legal-fab"
+            onClick={() => setLegalModalOpen(true)}
+          >
+            {t('card.legal')}
+          </button>
+        )}
+        <LegalDocumentModal
+          open={legalModalOpen}
+          onClose={() => setLegalModalOpen(false)}
+          slug={slug}
+          report={legalReport}
+        />
         {!showBrochure && (
           <a href="#info" className="showcase-scroll" onClick={scrollToInfo} aria-label={t('catalog.scrollDown')}>
             <span className="showcase-scroll-ring" />
@@ -221,21 +240,19 @@ export default function ShowcaseComplexDetail({
         />
       </section>
 
+      {legalReport && !hasBundledLegal && (
       <section id="legal" className="showcase-panel showcase-panel--last">
         <h3>{t('detail.legal')}</h3>
-        {legalReport ? (
-          <LegalWrittenSection
-            report={legalReport}
-            accessInfo={accessInfo}
-            email={email}
-            onEmailChange={(e) => setEmail(e.target.value)}
-            onRequest={requestLegal}
-            variant="showcase"
-          />
-        ) : (
-          <p className="muted">{t('errors.legalNotAvailable')}</p>
-        )}
+        <LegalWrittenSection
+          report={legalReport}
+          accessInfo={accessInfo}
+          email={email}
+          onEmailChange={(e) => setEmail(e.target.value)}
+          onRequest={requestLegal}
+          variant="showcase"
+        />
       </section>
+      )}
 
       {isCommissioned && (
         <section id="reviews" className="showcase-panel">
