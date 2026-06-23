@@ -26,13 +26,14 @@ def test_health(client):
 def test_list_complexes(client):
     r = client.get("/api/complexes")
     assert r.status_code == 200
-    assert len(r.json()) >= 1
+    slugs = {c["slug"] for c in r.json()}
+    assert slugs == {"salkyn", "borsan-brown"}
 
 
 def test_get_complex(client):
-    r = client.get("/api/complexes/green-side")
+    r = client.get("/api/complexes/salkyn")
     assert r.status_code == 200
-    assert r.json()["slug"] == "green-side"
+    assert r.json()["slug"] == "salkyn"
 
 
 def test_complex_not_found(client):
@@ -41,16 +42,13 @@ def test_complex_not_found(client):
 
 
 def test_reviews_commissioned_only(client):
-    r = client.get("/api/reviews/han-teniri")
+    r = client.get("/api/reviews/salkyn")
     assert r.status_code == 400
 
 
-def test_reviews_commissioned(client):
-    r = client.get("/api/reviews/green-side")
-    assert r.status_code == 200
-    data = r.json()
-    assert "average_rating" in data
-    assert "reviews" in data
+def test_reviews_commissioned_only_brown(client):
+    r = client.get("/api/reviews/borsan-brown")
+    assert r.status_code == 400
 
 
 def test_login_invalid(client):

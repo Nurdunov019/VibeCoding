@@ -48,36 +48,6 @@ const BY_SLUG = {
       { name: 'Эдем-Фарм, Исакеева', lat: 42.859022, lng: 74.681655 },
     ],
   },
-  'han-teniri': {
-    kindergarten: [
-      { name: 'Smart Baby, жеке бакча', walkMin: 5, distanceM: 380 },
-      { name: 'Әсемгүл, №81', walkMin: 8, distanceM: 620 },
-      { name: 'Isma Kids', walkMin: 4, distanceM: 290 },
-    ],
-    shop: [
-      { name: 'Globus, Токтоналиева', walkMin: 3, distanceM: 220 },
-      { name: 'Frunze магазин', walkMin: 6, distanceM: 410 },
-    ],
-    bus: [
-      { name: 'Автобус №12, 25, 30', walkMin: 2, distanceM: 90 },
-      { name: 'Маршрутка №105', walkMin: 4, distanceM: 260 },
-    ],
-    school: [{ name: '№78 лицей', walkMin: 10, distanceM: 710 }],
-    pharmacy: [{ name: 'Аптека Нур', walkMin: 4, distanceM: 250 }],
-  },
-  'green-side': {
-    kindergarten: [
-      { name: 'Балапан, Ахунбаева', walkMin: 2, distanceM: 140 },
-      { name: 'Кеңеш, №45', walkMin: 6, distanceM: 400 },
-    ],
-    shop: [
-      { name: 'Bishkek Park жакын', walkMin: 8, distanceM: 600 },
-      { name: 'Дордой мини', walkMin: 5, distanceM: 320 },
-    ],
-    bus: [{ name: 'Автобус №18, 32', walkMin: 1, distanceM: 80 }],
-    school: [{ name: '№92 мектеп', walkMin: 7, distanceM: 490 }],
-    pharmacy: [{ name: 'Ак Бота аптека', walkMin: 3, distanceM: 190 }],
-  },
 }
 
 const BEARINGS = [35, 110, 200, 290, 55, 160, 250, 340]
