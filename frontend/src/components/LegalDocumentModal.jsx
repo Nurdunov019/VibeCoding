@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import mammoth from 'mammoth'
 import { useLocale } from '../context/LocaleContext'
 import LegalWrittenSection from './LegalWrittenSection'
@@ -61,6 +62,7 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
     document.body.style.right = '0'
     document.body.style.width = '100%'
     document.body.style.overflow = 'hidden'
+    document.documentElement.classList.add('legal-modal-open')
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.position = ''
@@ -69,13 +71,14 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
       document.body.style.right = ''
       document.body.style.width = ''
       document.body.style.overflow = ''
+      document.documentElement.classList.remove('legal-modal-open')
       window.scrollTo(0, scrollY)
     }
   }, [open, onClose])
 
   if (!open) return null
 
-  return (
+  return createPortal(
     <div className="legal-modal-overlay" onClick={onClose} role="presentation">
       <div
         className={`legal-modal${theme === 'paper' ? ' legal-modal--paper' : ''}`}
@@ -108,6 +111,7 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

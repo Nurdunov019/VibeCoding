@@ -70,7 +70,7 @@ FEATURED_COMPLEXES = [
         "verification_status": "partial",
         "initial_payment_percent": 30,
         "installment_months": 30,
-        "has_red_book": True,
+        "has_red_book": False,
         "image_url": "/images/brown.png",
         "description": (
             "Первый жилой комплекс премиум-класса в Тунгуче. 18 этажей, 4 блока, участок 1,025 га. "
