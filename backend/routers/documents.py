@@ -61,7 +61,7 @@ def verify_complex(slug: str, db: Session = Depends(get_db)):
             checks.append({"type": doc_type, "label": label, "status": "expired", "message": "Срок действия истёк"})
         elif doc.status == "valid":
             valid += 1
-            msg = (doc.notes or "Документ действителен").split("\n")[0]
+            msg = doc.notes or "Документ действителен"
             checks.append({"type": doc_type, "label": label, "status": "valid", "message": msg, "number": doc.number})
         else:
             checks.append({"type": doc_type, "label": label, "status": doc.status, "message": doc.notes or "Требует проверки"})

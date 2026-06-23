@@ -187,10 +187,13 @@ export default function ShowcaseComplexDetail({
             </div>
           </div>
           <div className="doc-written-list doc-written-list--showcase">
-            {verification.checks.map((c) => (
+            {verification.checks.map((c) => {
+              const doc = documents.find((d) => d.doc_type === c.type)
+              const heading = doc?.title || statusLabel(t, 'docTypes', c.type)
+              return (
               <article key={c.type} className={`doc-written-card doc-${c.status}`}>
                 <div className="doc-written-head">
-                  <h4>{statusLabel(t, 'docTypes', c.type)}</h4>
+                  <h4>{heading}</h4>
                   <span className={`doc-written-status doc-written-status--${c.status}`}>
                     {statusLabel(t, 'docStatus', c.status)}
                   </span>
@@ -200,7 +203,8 @@ export default function ShowcaseComplexDetail({
                   {c.message || statusLabel(t, 'docMessages', c.status)}
                 </p>
               </article>
-            ))}
+              )
+            })}
           </div>
         </section>
       )}

@@ -17,7 +17,7 @@ export default function DocumentWrittenList({ documents, viewingPdf, onViewPdf, 
           return (
             <article key={d.id} className={`doc-written-card doc-${d.status}`}>
               <div className="doc-written-head">
-                <h4>{statusLabel(t, 'docTypes', d.doc_type) || d.title}</h4>
+                <h4>{d.title || statusLabel(t, 'docTypes', d.doc_type)}</h4>
                 <span className={`doc-written-status doc-written-status--${d.status}`}>
                   {statusLabel(t, 'docStatus', d.status)}
                 </span>
