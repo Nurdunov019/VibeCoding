@@ -43,7 +43,7 @@ export default function LegalView() {
           </div>
           <div className="conclusion">
             <h2>{t('detail.legal')}</h2>
-            <p>{report.conclusion}</p>
+            <div className="conclusion-text">{report.conclusion}</div>
           </div>
           <div className="legal-meta">
             <p>{t('legal.prepared')}: {report.prepared_at}</p>

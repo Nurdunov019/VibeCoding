@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import CatalogBrochureViewer from './CatalogBrochureViewer'
 import CatalogCoverHero from './CatalogCoverHero'
 import ComplexStatsBand from './ComplexStatsBand'
 import DocumentWrittenList from './DocumentWrittenList'
+import LegalWrittenSection from './LegalWrittenSection'
 import PaymentTermsBand from './PaymentTermsBand'
 import LocationSection from './LocationSection'
 import StarPicker from './StarPicker'
@@ -40,6 +41,7 @@ export default function ShowcaseComplexDetail({
   const [reviewText, setReviewText] = useState('')
   const [reviewMsg, setReviewMsg] = useState('')
   const [reviewLoading, setReviewLoading] = useState(false)
+  const [legalReport, setLegalReport] = useState(null)
 
   const features = parseFeatures(complex.features)
   const hasCatalog = Boolean(complex.catalog_pdf_url)
@@ -50,6 +52,10 @@ export default function ShowcaseComplexDetail({
     e.preventDefault()
     document.getElementById('info')?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  useEffect(() => {
+    api.getLegalPreview(slug).then(setLegalReport).catch(() => setLegalReport(null))
+  }, [slug])
 
   const requestLegal = async (e) => {
     e.preventDefault()
@@ -205,25 +211,17 @@ export default function ShowcaseComplexDetail({
 
       <section id="legal" className="showcase-panel showcase-panel--last">
         <h3>{t('detail.legal')}</h3>
-        <div className="legal-info">
-          <p><strong>{t('legal.title')}</strong></p>
-          <ul>
-            <li>✓ {t('legal.viewOnly')}</li>
-            <li>✓ {t('legal.unlimited')}</li>
-            <li>✓ {t('legal.watermark')}</li>
-            <li>✕ {t('legal.noDownload')}</li>
-          </ul>
-        </div>
-        {!accessInfo ? (
-          <form onSubmit={requestLegal} className="legal-form">
-            <input type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <button type="submit" className="btn-primary">{t('legal.getAccess')}</button>
-          </form>
+        {legalReport ? (
+          <LegalWrittenSection
+            report={legalReport}
+            accessInfo={accessInfo}
+            email={email}
+            onEmailChange={(e) => setEmail(e.target.value)}
+            onRequest={requestLegal}
+            variant="showcase"
+          />
         ) : (
-          <div className="access-granted">
-            <p>{t('legal.accessGranted')}</p>
-            <Link to={accessInfo.view_url} className="btn-primary">{t('legal.open')}</Link>
-          </div>
+          <p className="muted">{t('errors.legalNotAvailable')}</p>
         )}
       </section>
 

@@ -225,6 +225,14 @@ class LegalAccessOut(BaseModel):
     message: str
 
 
+class LegalPreview(BaseModel):
+    title: str
+    summary: Optional[str] = None
+    conclusion: str
+    risk_level: str
+    prepared_at: Optional[str] = None
+
+
 class LegalReportView(BaseModel):
     title: str
     summary: Optional[str] = None

@@ -462,6 +462,33 @@
 .doc-written-list--showcase .doc-written-status--missing { color: #e07070; }
 .doc-written-list--showcase .doc-written-status--expired { color: #e8a82e; }
 
+.legal-written--showcase {
+  background: var(--showcase-surface);
+  border-color: var(--showcase-border);
+}
+
+.legal-written--showcase .legal-written-date,
+.legal-written--showcase .legal-written-summary,
+.legal-written--showcase .legal-written-body p {
+  color: var(--showcase-muted);
+}
+
+.legal-written--showcase .legal-written-head h4 {
+  color: var(--showcase-text);
+}
+
+.legal-written--showcase .legal-written-risk {
+  color: #e8a82e;
+}
+
+.legal-written--showcase .legal-written-foot {
+  border-top-color: var(--showcase-border);
+}
+
+.legal-written--showcase .legal-written-rules {
+  color: var(--showcase-muted);
+}
+
 /* Immersive layout */
 .app--showcase {
   background: #14100c;

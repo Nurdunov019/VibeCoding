@@ -36,6 +36,7 @@ export const api = {
   requestLegalAccess: (slug, email) =>
     request(`/legal/request/${slugPath(slug)}`, { method: 'POST', body: JSON.stringify({ email }) }),
   viewLegalReport: (token) => request(`/legal/view/${token}`),
+  getLegalPreview: (slug) => request(`/legal/preview/${slugPath(slug)}`),
   getReviews: (slug) => request(`/reviews/${slugPath(slug)}`),
   postReview: (slug, rating, text) =>
     request(`/reviews/${slugPath(slug)}`, { method: 'POST', body: JSON.stringify({ rating, text }) }),
