@@ -32,7 +32,8 @@ function CatalogPage({ pdfDoc, pageNum }) {
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
   const [ready, setReady] = useState(false)
-  const [visible, setVisible] = useVisible(wrapRef)
+  // First pages must render without waiting for IO — zero-height placeholders never intersect.
+  const [visible, setVisible] = useVisible(wrapRef, pageNum <= 2)
   const [width, setWidth] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 390))
 
   useEffect(() => {
@@ -72,18 +73,19 @@ function CatalogPage({ pdfDoc, pageNum }) {
   )
 }
 
-function useVisible(ref) {
-  const [visible, setVisible] = useState(false)
+function useVisible(ref, initial = false) {
+  const [visible, setVisible] = useState(initial)
   useEffect(() => {
+    if (initial) return undefined
     const el = ref.current
     if (!el) return undefined
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true) },
-      { rootMargin: '300px 0px' },
+      { rootMargin: '400px 0px' },
     )
     obs.observe(el)
     return () => obs.disconnect()
-  }, [ref])
+  }, [ref, initial])
   return visible
 }
 

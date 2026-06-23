@@ -152,6 +152,13 @@
   padding: 0;
   position: relative;
   line-height: 0;
+  min-height: 50vh;
+  background: #0d0a08;
+}
+
+.catalog-scroll-page[data-page="1"] {
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .catalog-scroll-canvas {
@@ -170,12 +177,10 @@
 }
 
 .catalog-scroll-loading {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 120px;
+  min-height: inherit;
   color: var(--showcase-muted, #a89a8a);
   font-size: 14px;
   line-height: 1.4;
@@ -471,6 +476,7 @@
   max-width: none;
   padding: 0;
   margin-top: 0;
+  background: #0d0a08;
 }
 
 .main--immersive.container {
