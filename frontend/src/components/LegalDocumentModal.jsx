@@ -4,7 +4,7 @@ import { useLocale } from '../context/LocaleContext'
 import LegalWrittenSection from './LegalWrittenSection'
 import { getLegalDocUrl } from '../data/legalDocuments'
 
-export default function LegalDocumentModal({ open, onClose, slug, report }) {
+export default function LegalDocumentModal({ open, onClose, slug, report, theme = 'dark' }) {
   const { t } = useLocale()
   const [html, setHtml] = useState('')
   const [loading, setLoading] = useState(false)
@@ -59,7 +59,7 @@ export default function LegalDocumentModal({ open, onClose, slug, report }) {
   return (
     <div className="legal-modal-overlay" onClick={onClose} role="presentation">
       <div
-        className="legal-modal"
+        className={`legal-modal${theme === 'paper' ? ' legal-modal--paper' : ''}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -80,7 +80,7 @@ export default function LegalDocumentModal({ open, onClose, slug, report }) {
           {error && !html && !report && <p className="muted">{error}</p>}
           {html && (
             <div
-              className="legal-modal-doc legal-written legal-written--showcase"
+              className={`legal-modal-doc${theme === 'paper' ? ' legal-modal-doc--paper' : ' legal-written legal-written--showcase'}`}
               dangerouslySetInnerHTML={{ __html: html }}
             />
           )}

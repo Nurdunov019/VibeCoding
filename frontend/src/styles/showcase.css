@@ -135,6 +135,51 @@
   color: var(--showcase-accent);
 }
 
+.legal-modal--paper {
+  background: #fff;
+  border-color: #e8e8e8;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.legal-modal--paper .legal-modal-head {
+  background: #fafafa;
+  border-bottom-color: #ececec;
+}
+
+.legal-modal--paper .legal-modal-head h2 {
+  color: #1f1f1f;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.legal-modal--paper .legal-modal-close {
+  color: #666;
+}
+
+.legal-modal--paper .legal-modal-body {
+  background: #fff;
+  padding: 32px 40px 40px;
+}
+
+.legal-modal-doc--paper {
+  max-width: 720px;
+  margin: 0 auto;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.legal-modal-doc--paper p,
+.legal-modal-doc--paper li {
+  color: #1a1a1a;
+  line-height: 1.65;
+  margin: 0 0 14px;
+  font-size: 15px;
+}
+
+.legal-modal-doc--paper strong {
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
 .showcase-scroll {
   position: absolute;
   bottom: 32px;
@@ -735,7 +780,6 @@
 
 .catalog-card {
   display: block;
-  text-decoration: none;
   color: inherit;
   border-radius: 20px;
   overflow: hidden;
@@ -746,6 +790,14 @@
   min-height: 320px;
   aspect-ratio: 16 / 10;
   background: #2a2218;
+}
+
+.catalog-card-hit {
+  display: block;
+  position: absolute;
+  inset: 0;
+  text-decoration: none;
+  color: inherit;
 }
 
 .catalog-card-media img {
@@ -778,6 +830,41 @@
   bottom: 0;
   padding: 24px;
   color: #fff;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.catalog-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.catalog-card-legal {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  z-index: 4;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(8, 6, 4, 0.55);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+}
+
+.catalog-card-legal:hover {
+  border-color: #c4a574;
+  color: #c4a574;
+  background: rgba(8, 6, 4, 0.85);
 }
 
 .catalog-card-date {
@@ -809,9 +896,7 @@
 }
 
 .catalog-card-cta {
-  position: absolute;
-  right: 24px;
-  bottom: 28px;
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
   border: 1px solid rgba(196, 165, 116, 0.5);

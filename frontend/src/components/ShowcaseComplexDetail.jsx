@@ -115,6 +115,7 @@ export default function ShowcaseComplexDetail({
           onClose={() => setLegalModalOpen(false)}
           slug={slug}
           report={legalReport}
+          theme="paper"
         />
         {!showBrochure && (
           <a href="#info" className="showcase-scroll" onClick={scrollToInfo} aria-label={t('catalog.scrollDown')}>
