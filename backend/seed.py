@@ -34,7 +34,7 @@ FEATURED_COMPLEXES = [
         "barter_min_payment_percent": 40,
         "installment_months": 28,
         "has_red_book": True,
-        "image_url": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&h=800&fit=crop",
+        "image_url": "/images/salkyn.png",
         "catalog_pdf_url": "/catalogs/salkyn.pdf",
         "description": (
             "Комплекс бизнес-класса. 18 этажей, 4 блока, 6 подъездов. "
