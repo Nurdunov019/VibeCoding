@@ -4,6 +4,13 @@ import { useLocale } from '../context/LocaleContext'
 import LegalWrittenSection from './LegalWrittenSection'
 import { getLegalDocUrl } from '../data/legalDocuments'
 
+function cleanLegalHtml(html) {
+  return html
+    .replace(/\sstyle="[^"]*"/gi, '')
+    .replace(/\sstyle='[^']*'/gi, '')
+    .replace(/<table/gi, '<table class="legal-doc-table"')
+}
+
 export default function LegalDocumentModal({ open, onClose, slug, report, theme = 'dark' }) {
   const { t } = useLocale()
   const [html, setHtml] = useState('')
@@ -31,7 +38,7 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
       })
       .then((buffer) => mammoth.convertToHtml({ arrayBuffer: buffer }))
       .then((result) => {
-        if (!cancelled) setHtml(result.value)
+        if (!cancelled) setHtml(cleanLegalHtml(result.value))
       })
       .catch(() => {
         if (!cancelled) setError(t('errors.legalNotAvailable'))
@@ -46,11 +53,23 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
   useEffect(() => {
     if (!open) return undefined
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    const scrollY = window.scrollY
     document.addEventListener('keydown', onKey)
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.left = '0'
+    document.body.style.right = '0'
+    document.body.style.width = '100%'
     document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+      document.body.style.width = ''
       document.body.style.overflow = ''
+      window.scrollTo(0, scrollY)
     }
   }, [open, onClose])
 

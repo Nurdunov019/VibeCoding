@@ -4,6 +4,7 @@ import { api } from '../api'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { complexUrls, verificationBadgeClass } from '../utils/complex'
+import LegalOpenButton from '../components/LegalOpenButton'
 
 export default function Compare() {
   const { slugs, remove, clear } = useCompare()
@@ -118,9 +119,10 @@ export default function Compare() {
                 <td>{t('detail.legal')}</td>
                 {items.map((i) => (
                   <td key={i.complex.slug}>
-                    <Link to={complexUrls(i.complex.slug, i.complex.status).legal} className="btn-legal btn-sm">
-                      {t('card.legal')}
-                    </Link>
+                    <LegalOpenButton
+                      slug={i.complex.slug}
+                      fallbackHref={complexUrls(i.complex.slug, i.complex.status).legal}
+                    />
                   </td>
                 ))}
               </tr>

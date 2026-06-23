@@ -506,13 +506,20 @@ button { cursor: pointer; border: none; }
 .btn-legal {
   flex: 1;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 700;
   text-align: center;
   border: 1.5px solid var(--primary);
   color: var(--primary);
   background: var(--primary-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  line-height: 1.2;
 }
 .btn-legal:hover { background: var(--primary); color: white; }
 
@@ -893,11 +900,25 @@ button { cursor: pointer; border: none; }
 }
 .status-pill.commissioned { background: #d1fae5; color: var(--ok); }
 
-.complex-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.complex-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
 .complex-actions .btn-outline,
-.complex-actions .btn-legal { flex: 1; text-align: center; min-width: 0; }
+.complex-actions .btn-legal {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  justify-content: center;
+}
+.complex-actions-3 {
+  grid-template-columns: 1fr;
+}
 .complex-actions-3 .btn-outline,
-.complex-actions-3 .btn-legal { flex: 1 1 calc(33% - 6px); }
+.complex-actions-3 .btn-legal {
+  width: 100%;
+}
 
 .map-list-item {
   display: flex;
@@ -910,13 +931,14 @@ button { cursor: pointer; border: none; }
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 .map-list-item:hover { border-color: var(--primary); box-shadow: var(--shadow); }
 .map-list-hit {
   display: flex;
   gap: 12px;
   align-items: stretch;
-  padding: 12px 12px 8px;
+  padding: 12px;
   text-decoration: none;
   color: inherit;
   min-width: 0;
@@ -924,24 +946,21 @@ button { cursor: pointer; border: none; }
 .map-list-hit:hover strong { color: var(--primary); }
 .map-list-thumb {
   flex-shrink: 0;
-  width: 96px;
-  align-self: stretch;
-  min-height: 88px;
-  border-radius: 8px;
+  width: 88px;
+  height: 88px;
+  border-radius: 10px;
   overflow: hidden;
   background: #dce6f2;
 }
 .map-list-thumb img {
   width: 100%;
   height: 100%;
-  min-height: 88px;
   object-fit: cover;
   display: block;
 }
 .map-list-thumb-ph {
   width: 100%;
   height: 100%;
-  min-height: 88px;
   display: grid;
   place-items: center;
   font-size: 22px;
@@ -955,37 +974,53 @@ button { cursor: pointer; border: none; }
   gap: 6px;
   justify-content: center;
 }
-.map-list-info strong { display: block; font-size: 14px; line-height: 1.3; }
-.map-list-info .muted { font-size: 12px; display: block; line-height: 1.35; }
-.map-list-info .badge {
+.map-list-info strong {
   display: block;
-  width: 100%;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text);
+}
+.map-list-info .muted {
+  font-size: 12px;
+  display: block;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.map-list-info .badge {
+  display: inline-block;
+  align-self: flex-start;
   max-width: 100%;
-  text-align: center;
-  padding: 6px 8px;
+  padding: 4px 8px;
   box-sizing: border-box;
   font-size: 11px;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 .map-item-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
   padding: 0 12px 12px;
   margin-top: 0;
 }
 .map-item-actions .btn-sm {
-  flex: 1 1 calc(50% - 3px);
+  width: 100%;
   min-width: 0;
-  font-size: 11px;
-  padding: 8px 6px;
+  min-height: 40px;
+  font-size: 12px;
+  padding: 8px 10px;
   text-align: center;
   justify-content: center;
+  border-radius: 10px;
+}
+.map-item-actions.complex-actions-3 {
+  grid-template-columns: 1fr;
 }
 .map-item-actions.complex-actions-3 .btn-sm {
-  flex: 1 1 100%;
+  width: 100%;
 }
 
 /* Developers section */

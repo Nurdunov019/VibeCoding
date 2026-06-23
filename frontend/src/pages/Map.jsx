@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { api } from '../api'
 import ComplexActionLinks from '../components/ComplexActionLinks'
 import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
 import { verificationBadgeClass } from '../utils/complex'
+import { mediaUrl } from '../utils/mediaUrl'
 import 'leaflet/dist/leaflet.css'
 import { TILE_2GIS } from '../utils/mapTiles'
 
@@ -19,6 +20,21 @@ const icon = new L.Icon({
 })
 
 const BISHKEK = [42.8746, 74.5698]
+
+function FitMapBounds({ markers }) {
+  const map = useMap()
+  useEffect(() => {
+    const pts = markers.filter((m) => m.latitude && m.longitude)
+    if (pts.length === 0) return
+    if (pts.length === 1) {
+      map.setView([pts[0].latitude, pts[0].longitude], 15, { animate: false })
+      return
+    }
+    const bounds = L.latLngBounds(pts.map((m) => [m.latitude, m.longitude]))
+    map.fitBounds(bounds, { padding: [48, 48], maxZoom: 14 })
+  }, [markers, map])
+  return null
+}
 
 export default function MapPage() {
   const [markers, setMarkers] = useState([])
@@ -53,7 +69,7 @@ export default function MapPage() {
                 <Link to={`/complex/${m.slug}`} className="map-list-hit">
                   <div className="map-list-thumb">
                     {m.image_url ? (
-                      <img src={m.image_url} alt={m.name} loading="lazy" decoding="async" />
+                      <img src={mediaUrl(m.image_url)} alt={m.name} loading="lazy" decoding="async" />
                     ) : (
                       <div className="map-list-thumb-ph" aria-hidden>🏢</div>
                     )}
@@ -79,6 +95,7 @@ export default function MapPage() {
                 subdomains={TILE_2GIS.subdomains}
                 maxZoom={TILE_2GIS.maxZoom}
               />
+              <FitMapBounds markers={markers} />
               {markers.map((m) => (
                 <Marker key={m.slug} position={[m.latitude, m.longitude]} icon={icon}>
                   <Popup>
@@ -91,8 +108,6 @@ export default function MapPage() {
                     {t('map.check')}: {m.verification_score}%
                     <br />
                     <Link to={`/complex/${m.slug}`}>{t('card.details')} →</Link>
-                    <br />
-                    <Link to={`/complex/${m.slug}?tab=legal`}>{t('card.legal')} →</Link>
                     {m.status === 'commissioned' && (
                       <>
                         <br />
