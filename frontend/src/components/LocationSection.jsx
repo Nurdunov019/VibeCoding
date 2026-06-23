@@ -5,6 +5,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CATEGORY_COLORS, getNearbyPlaces } from '../data/nearbyPlaces'
 import { useLocale } from '../context/LocaleContext'
+import { TILE_2GIS, maps2gisUrl } from '../utils/mapTiles'
 
 const homeIcon = new L.Icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -31,17 +32,15 @@ const CATEGORIES = [
   { id: 'pharmacy', icon: '💊' },
 ]
 
-function MapController({ bounds, flyTo }) {
+function MapController({ center, flyTo }) {
   const map = useMap()
   useEffect(() => {
     if (flyTo) {
       map.flyTo(flyTo, 17, { duration: 0.6 })
       return
     }
-    if (bounds?.length > 1) {
-      map.fitBounds(L.latLngBounds(bounds), { padding: [40, 40], maxZoom: 16 })
-    }
-  }, [bounds, flyTo, map])
+    map.setView(center, 15, { animate: false })
+  }, [center, flyTo, map])
   return null
 }
 
@@ -64,12 +63,6 @@ export default function LocationSection({ complex }) {
   const visible = showAll ? places : places.slice(0, 3)
   const catMeta = CATEGORIES.find((c) => c.id === category)
 
-  const bounds = useMemo(() => {
-    const pts = [[center[0], center[1]]]
-    places.forEach((p) => { if (p.lat && p.lng) pts.push([p.lat, p.lng]) })
-    return pts
-  }, [places, center])
-
   const handleCategory = (id) => {
     setCategory(id)
     setShowAll(false)
@@ -83,8 +76,8 @@ export default function LocationSection({ complex }) {
   }
 
   const mapsUrl = hasCoords
-    ? `https://www.openstreetmap.org/?mlat=${complex.latitude}&mlon=${complex.longitude}#map=16/${complex.latitude}/${complex.longitude}`
-    : `https://www.openstreetmap.org/search?query=${encodeURIComponent(complex.address + ' ' + complex.city)}`
+    ? maps2gisUrl(complex.latitude, complex.longitude)
+    : `https://2gis.kg/bishkek/search/${encodeURIComponent(complex.address + ' ' + complex.city)}`
 
   return (
     <section className="location-section">
@@ -92,8 +85,13 @@ export default function LocationSection({ complex }) {
 
       <div className="location-map-wrap">
         <MapContainer center={center} zoom={15} className="location-map" scrollWheelZoom={false}>
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <MapController bounds={bounds} flyTo={flyTo} />
+          <TileLayer
+            url={TILE_2GIS.url}
+            attribution={TILE_2GIS.attribution}
+            subdomains={TILE_2GIS.subdomains}
+            maxZoom={TILE_2GIS.maxZoom}
+          />
+          <MapController center={center} flyTo={flyTo} />
           <Marker position={center} icon={homeIcon}>
             <Popup><strong>{complex.name}</strong><br />{complex.address}</Popup>
           </Marker>

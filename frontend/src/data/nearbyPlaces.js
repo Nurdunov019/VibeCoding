@@ -25,6 +25,29 @@ const DEFAULT_NEARBY = {
 }
 
 const BY_SLUG = {
+  salkyn: {
+    kindergarten: [
+      { name: 'Детский сад, Алмедин-1 м-н', lat: 42.876494, lng: 74.68792 },
+      { name: 'Баластан №54', lat: 42.870069, lng: 74.697393 },
+    ],
+    shop: [
+      { name: 'АЮ Grand, Чокана Валиханова', lat: 42.858985, lng: 74.678566 },
+      { name: 'Сонун, Исакеева', lat: 42.85889, lng: 74.681373 },
+      { name: 'Арзаны, Исакеева', lat: 42.858459, lng: 74.68135 },
+    ],
+    bus: [
+      { name: 'Автобус аялдамасы, Чокана Валиханова', lat: 42.855883, lng: 74.674346 },
+      { name: 'Аю Гранд Комфорт', lat: 42.861211, lng: 74.675547 },
+      { name: 'Университет «Ала-Тоо»', lat: 42.855745, lng: 74.677734 },
+    ],
+    school: [
+      { name: 'Частная школа «Сейтек»', lat: 42.85628, lng: 74.677192 },
+      { name: 'Средняя школа № 91', lat: 42.859331, lng: 74.657924 },
+    ],
+    pharmacy: [
+      { name: 'Эдем-Фарм, Исакеева', lat: 42.859022, lng: 74.681655 },
+    ],
+  },
   'han-teniri': {
     kindergarten: [
       { name: 'Smart Baby, жеке бакча', walkMin: 5, distanceM: 380 },
@@ -59,6 +82,18 @@ const BY_SLUG = {
 
 const BEARINGS = [35, 110, 200, 290, 55, 160, 250, 340]
 
+function haversineM(lat1, lng1, lat2, lng2) {
+  const R = 6371000
+  const dLat = ((lat2 - lat1) * Math.PI) / 180
+  const dLng = ((lng2 - lng1) * Math.PI) / 180
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2
+  return Math.round(2 * R * Math.asin(Math.sqrt(a)))
+}
+
 function offsetCoords(lat, lng, distanceM, bearingDeg) {
   const R = 6371000
   const brng = (bearingDeg * Math.PI) / 180
@@ -79,6 +114,13 @@ function enrichWithCoords(raw, baseLat, baseLng) {
   const result = {}
   for (const [cat, places] of Object.entries(raw)) {
     result[cat] = places.map((p, i) => {
+      if (p.lat != null && p.lng != null) {
+        const distanceM =
+          p.distanceM ??
+          (baseLat && baseLng ? haversineM(baseLat, baseLng, p.lat, p.lng) : 0)
+        const walkMin = p.walkMin ?? Math.max(1, Math.round(distanceM / 80))
+        return { ...p, distanceM, walkMin }
+      }
       const [lat, lng] = baseLat && baseLng
         ? offsetCoords(baseLat, baseLng, p.distanceM, BEARINGS[i % BEARINGS.length])
         : [null, null]

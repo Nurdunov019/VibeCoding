@@ -8,6 +8,7 @@ import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
 import { verificationBadgeClass } from '../utils/complex'
 import 'leaflet/dist/leaflet.css'
+import { TILE_2GIS } from '../utils/mapTiles'
 
 const icon = new L.Icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -73,8 +74,10 @@ export default function MapPage() {
           <div className="map-container-wrap">
             <MapContainer center={BISHKEK} zoom={12} className="map-container" scrollWheelZoom>
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                url={TILE_2GIS.url}
+                attribution={TILE_2GIS.attribution}
+                subdomains={TILE_2GIS.subdomains}
+                maxZoom={TILE_2GIS.maxZoom}
               />
               {markers.map((m) => (
                 <Marker key={m.slug} position={[m.latitude, m.longitude]} icon={icon}>
