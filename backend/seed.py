@@ -1,5 +1,5 @@
 import os
-from admin_complexes_seed import ADMIN_COMPLEXES
+from admin_complexes_seed import ADMIN_COMPLEXES, LEGACY_DUPLICATE_SLUGS
 from auth import hash_password
 from models import User, Complex, Document, LegalReport
 
@@ -1425,6 +1425,21 @@ def seed_admin_complexes(db):
             ))
 
 
+def remove_duplicate_complexes(db):
+    canonical_by_name = {c["name"]: c["slug"] for c in FEATURED_COMPLEXES}
+    for entry in ADMIN_COMPLEXES:
+        canonical_by_name[entry["name"]] = entry["slug"]
+
+    for slug in LEGACY_DUPLICATE_SLUGS:
+        legacy = db.query(Complex).filter(Complex.slug == slug).first()
+        if legacy:
+            db.delete(legacy)
+
+    for name, canon_slug in canonical_by_name.items():
+        for duplicate in db.query(Complex).filter(Complex.name == name, Complex.slug != canon_slug).all():
+            db.delete(duplicate)
+
+
 def seed_database(db):
     admin = db.query(User).filter(User.email == ADMIN_EMAIL).first()
     if not admin:
@@ -1448,4 +1463,5 @@ def seed_database(db):
     seed_tokio_documents(db)
     seed_green_line_documents(db)
     seed_admin_complexes(db)
+    remove_duplicate_complexes(db)
     db.commit()

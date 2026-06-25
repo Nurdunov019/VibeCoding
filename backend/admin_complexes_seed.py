@@ -1,5 +1,15 @@
 """Admin-added residential complexes — persisted for production deploys."""
 
+LEGACY_DUPLICATE_SLUGS = frozenset({
+    "«Кап Строй Кей Джи»",
+    "Елизавета",
+    "Жаннат Билдинг",
+    "Эласс Строй",
+    "Артвин Девелопмент",
+    "Кап Строй Кей Джи",
+    "Левел Констракшн",
+})
+
 ADMIN_COMPLEXES = [
     {
         "name": "Jannat Tower",
