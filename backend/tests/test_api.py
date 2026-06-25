@@ -27,7 +27,11 @@ def test_list_complexes(client):
     r = client.get("/api/complexes")
     assert r.status_code == 200
     slugs = {c["slug"] for c in r.json()}
-    assert slugs == {"salkyn", "borsan-brown", "eliseiskie-polya", "one-ordo-resort", "siren", "tokio", "green-line"}
+    assert len(slugs) == 14
+    assert {
+        "salkyn", "borsan-brown", "eliseiskie-polya", "one-ordo-resort", "siren", "tokio", "green-line",
+        "jannat-tower", "levan-park", "level-lux", "akkula", "vremena-goda", "gorizont", "tokio-city",
+    } == slugs
 
 
 def test_get_complex(client):

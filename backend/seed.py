@@ -1,4 +1,5 @@
 import os
+from admin_complexes_seed import ADMIN_COMPLEXES
 from auth import hash_password
 from models import User, Complex, Document, LegalReport
 
@@ -1395,6 +1396,35 @@ def seed_green_line_documents(db):
     sync_complex_verification(c.id, db)
 
 
+def seed_admin_complexes(db):
+    for entry in ADMIN_COMPLEXES:
+        data = dict(entry)
+        legal_file = data.pop("legal_file")
+        existing = db.query(Complex).filter(Complex.slug == data["slug"]).first()
+        if existing:
+            for key, value in data.items():
+                setattr(existing, key, value)
+            c = existing
+        else:
+            c = Complex(**data)
+            db.add(c)
+            db.flush()
+
+        report = db.query(LegalReport).filter(LegalReport.complex_id == c.id).first()
+        if report:
+            report.file_path = legal_file
+            report.title = f"Правовое заключение — {c.name}"
+        else:
+            db.add(LegalReport(
+                complex_id=c.id,
+                title=f"Правовое заключение — {c.name}",
+                summary="Юридический файл добавлен администратором.",
+                conclusion=f"Юридический файл загружен администратором для объекта {c.name}.",
+                risk_level="medium",
+                file_path=legal_file,
+            ))
+
+
 def seed_database(db):
     admin = db.query(User).filter(User.email == ADMIN_EMAIL).first()
     if not admin:
@@ -1417,4 +1447,5 @@ def seed_database(db):
     seed_siren_documents(db)
     seed_tokio_documents(db)
     seed_green_line_documents(db)
+    seed_admin_complexes(db)
     db.commit()
