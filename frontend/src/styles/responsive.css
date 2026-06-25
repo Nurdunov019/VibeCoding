@@ -194,10 +194,10 @@
   .header-mobile-actions .lang-select {
     height: var(--header-chip-h);
     min-height: var(--header-chip-h);
-    min-width: var(--header-chip-w);
-    max-width: var(--header-chip-w);
+    min-width: 84px;
+    max-width: 118px;
     font-size: 11px;
-    padding: 0 6px;
+    padding: 0 8px;
   }
   .header-mobile-actions .lang-select {
     padding: 0 20px 0 6px;
@@ -289,8 +289,9 @@
     padding: 0 12px 12px;
     margin-top: 4px;
   }
-  .map-item-actions .btn-sm {
-    flex: 1 1 100%;
+  .map-item-actions .btn-outline,
+  .map-item-actions .btn-legal {
+    min-height: 42px;
     font-size: 12px;
     padding: 10px 8px;
   }
@@ -362,6 +363,20 @@
     max-width: 100%;
   }
   .home-page { margin-top: -28px; }
+
+  .home-contact {
+    padding: 40px max(16px, env(safe-area-inset-left)) 48px max(16px, env(safe-area-inset-right));
+  }
+
+  .home-contact-title {
+    font-size: 1.85rem;
+  }
+
+  .home-contact-field input,
+  .home-contact-select-wrap select,
+  .home-contact-submit {
+    min-height: 52px;
+  }
   .hero-banner-content { padding: 24px 16px 20px; }
   .filter-on-hero { max-width: 100%; }
   .stats-on-hero { max-width: 100%; }
@@ -428,10 +443,11 @@
   .map-list-info {
     padding: 0;
   }
-  .map-item-actions .btn-sm {
-    flex: 1 1 100%;
+  .map-item-actions .btn-outline,
+  .map-item-actions .btn-legal {
+    min-height: 42px;
     font-size: 12px;
-    padding: 9px 10px;
+    padding: 10px 8px;
   }
   .map-container-wrap {
     order: 0;
@@ -530,12 +546,9 @@
     width: 100px;
     min-height: 92px;
   }
-  .map-item-actions .btn-sm {
-    flex: 1 1 calc(50% - 3px);
+  .map-item-actions .btn-outline,
+  .map-item-actions .btn-legal {
     font-size: 12px;
-  }
-  .map-item-actions.complex-actions-3 .btn-sm {
-    flex: 1 1 100%;
   }
   .map-container-wrap {
     height: min(72vh, 600px);
@@ -663,10 +676,21 @@
 
 /* ── Shared laptop+ (≥1024px) ── */
 @media (min-width: 1024px) {
+  .home-contact {
+    padding: 72px 40px 80px;
+  }
+
+  .home-contact-inner {
+    max-width: 520px;
+    margin: 0;
+    margin-left: max(0px, calc((100vw - 1200px) / 2));
+    padding-left: max(24px, env(safe-area-inset-left));
+  }
+
   .region-picker-btn,
   .lang-select {
-    min-width: auto;
-    max-width: none;
+    min-width: 128px;
+    max-width: 180px;
     font-size: 13px;
     padding: 0 12px;
   }
@@ -688,10 +712,6 @@
     overflow-y: auto;
     overflow-x: visible;
     scrollbar-gutter: stable;
-  }
-  .map-list-item {
-    flex-direction: row;
-    padding: 14px;
   }
   .map-container-wrap {
     height: min(72vh, 620px);

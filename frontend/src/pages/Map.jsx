@@ -4,8 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { api } from '../api'
 import ComplexActionLinks from '../components/ComplexActionLinks'
+import { REGIONS } from '../constants/regions'
 import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
+import { regionApiParams } from '../utils/regionFilter'
 import { verificationBadgeClass } from '../utils/complex'
 import { mediaUrl } from '../utils/mediaUrl'
 import 'leaflet/dist/leaflet.css'
@@ -41,14 +43,15 @@ export default function MapPage() {
   const [loading, setLoading] = useState(true)
   const { t } = useLocale()
   const { region } = useRegion()
-  const cityName = t(`regions.${region}`)
+  const regionMeta = REGIONS.find((r) => r.slug === region) || REGIONS[0]
+  const cityName = t(`regions.${regionMeta.key}`)
 
   useEffect(() => {
-    api.getMapMarkers()
-      .then(setMarkers)
+    api.getComplexes(regionApiParams(region))
+      .then((list) => setMarkers(list.filter((m) => m.latitude && m.longitude)))
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [])
+  }, [region])
 
   return (
     <div className="map-page">

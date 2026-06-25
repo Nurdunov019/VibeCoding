@@ -12,11 +12,10 @@ const EMPTY_COMPLEX = {
   status: 'building', completion_quarter: '4 кв.', completion_year: 2028,
   price_per_sqm_usd: 0, price_per_sqm_kgs: 0, class_type: 'comfort',
   floors: '', buildings_count: 1, apartments_count: 100, verification_score: 0,
-  verification_status: 'unverified', image_url: '', catalog_pdf_url: '', features: '',
+  verification_status: 'unverified', image_url: '', features: '',
   legal_doc_url: '',
   description: '', entrances_count: null,
-  initial_payment_percent: null, barter_extra_usd_sqm: null,
-  barter_min_payment_percent: null, installment_months: null, has_red_book: false,
+  initial_payment_percent: null, installment_months: null, has_red_book: false,
   latitude: 42.87, longitude: 74.57,
 }
 
@@ -161,21 +160,6 @@ export default function Admin() {
     }
   }
 
-  const uploadCatalog = async (e) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    try {
-      const { url } = await api.adminUpload(file, 'catalog')
-      setForm((f) => ({ ...f, catalog_pdf_url: url }))
-      setMsg(t('admin.catalogUploaded'))
-    } catch (err) {
-      setMsg(translateApiError(err.message, t))
-    } finally {
-      setUploading(false)
-    }
-  }
-
   const uploadLegal = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -311,13 +295,6 @@ export default function Admin() {
                   <input value={form.image_url || ''} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
                 </label>
                 <label className="upload-label">
-                  📕 {t('admin.uploadCatalog')}
-                  <input type="file" accept=".pdf,application/pdf" onChange={uploadCatalog} disabled={uploading} />
-                </label>
-                {form.catalog_pdf_url && (
-                  <p className="muted">PDF: {form.catalog_pdf_url}</p>
-                )}
-                <label className="upload-label">
                   ⚖️ {t('admin.uploadLegal')}
                   <input type="file" accept=".pdf,.docx,application/pdf" onChange={uploadLegal} disabled={uploading} />
                 </label>
@@ -388,12 +365,6 @@ export default function Admin() {
                 </label>
                 <label>{t('admin.formInstallment')}
                   <input type="number" min="1" value={form.installment_months ?? ''} onChange={(e) => setForm({ ...form, installment_months: e.target.value ? +e.target.value : null })} />
-                </label>
-                <label>{t('admin.formBarterExtra')}
-                  <input type="number" min="0" value={form.barter_extra_usd_sqm ?? ''} onChange={(e) => setForm({ ...form, barter_extra_usd_sqm: e.target.value ? +e.target.value : null })} />
-                </label>
-                <label>{t('admin.formBarterMin')}
-                  <input type="number" min="0" max="100" value={form.barter_min_payment_percent ?? ''} onChange={(e) => setForm({ ...form, barter_min_payment_percent: e.target.value ? +e.target.value : null })} />
                 </label>
                 <label className="verified-check">
                   <input type="checkbox" checked={Boolean(form.has_red_book)} onChange={(e) => setForm({ ...form, has_red_book: e.target.checked })} />

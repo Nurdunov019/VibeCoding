@@ -6,7 +6,6 @@ import LocationSection from '../components/LocationSection'
 import DocumentWrittenList from '../components/DocumentWrittenList'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
-import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { canonicalShowcaseSlug, isShowcaseSlug } from '../utils/showcaseSlug'
 import { statusLabel, translateApiError } from '../utils/translate'
@@ -23,7 +22,6 @@ export default function ComplexDetail() {
   const { t } = useLocale()
   const { user } = useAuth()
   const { openLogin } = useAuthModal()
-  const { toggle, isSelected } = useCompare()
   const [tab, setTab] = useState('overview')
   const [complex, setComplex] = useState(null)
   const [documents, setDocuments] = useState([])
@@ -160,13 +158,6 @@ export default function ComplexDetail() {
           </div>
           <div className="detail-actions">
             <Link to="/map" className="btn-outline btn-sm">{t('map.title')}</Link>
-            <button
-              type="button"
-              className={`btn-compare btn-sm ${isSelected(slug) ? 'active' : ''}`}
-              onClick={() => toggle(slug)}
-            >
-              {isSelected(slug) ? t('card.compared') : `+ ${t('card.compare')}`}
-            </button>
           </div>
         </div>
       </div>

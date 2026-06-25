@@ -9,7 +9,6 @@ import LocationSection from './LocationSection'
 import StarPicker from './StarPicker'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
-import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { mediaUrl } from '../utils/mediaUrl'
 import { statusLabel, translateApiError } from '../utils/translate'
@@ -32,7 +31,6 @@ export default function ShowcaseComplexDetail({
   const { t } = useLocale()
   const { user } = useAuth()
   const { openLogin } = useAuthModal()
-  const { toggle, isSelected } = useCompare()
   const [viewingPdf, setViewingPdf] = useState(null)
   const [reviewRating, setReviewRating] = useState(5)
   const [reviewText, setReviewText] = useState('')
@@ -90,13 +88,6 @@ export default function ShowcaseComplexDetail({
           <Link to="/" className="showcase-back">← {t('section.list')}</Link>
           <div className="showcase-actions">
             <Link to="/map" className="btn-outline btn-sm">{t('map.title')}</Link>
-            <button
-              type="button"
-              className={`btn-compare btn-sm${isSelected(slug) ? ' active' : ''}`}
-              onClick={() => toggle(slug)}
-            >
-              {isSelected(slug) ? t('card.compared') : `+ ${t('card.compare')}`}
-            </button>
           </div>
         </div>
 

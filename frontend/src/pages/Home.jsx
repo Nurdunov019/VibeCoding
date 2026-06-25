@@ -3,12 +3,16 @@ import { useLocation } from 'react-router-dom'
 import { api } from '../api'
 import CatalogCard from '../components/CatalogCard'
 import ComplexCard from '../components/ComplexCard'
+import ContactSection from '../components/ContactSection'
 import HeroSlider from '../components/HeroSlider'
 import { useLocale } from '../context/LocaleContext'
+import { useRegion } from '../context/RegionContext'
+import { regionApiParams } from '../utils/regionFilter'
 
 export default function Home() {
   const { hash } = useLocation()
   const { t } = useLocale()
+  const { region } = useRegion()
   const [complexes, setComplexes] = useState([])
   const [stats, setStats] = useState(null)
   const [search, setSearch] = useState('')
@@ -26,6 +30,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true)
     const params = {
+      ...regionApiParams(region),
       search: search || undefined,
       status: status || undefined,
       class_type: classType || undefined,
@@ -38,7 +43,7 @@ export default function Home() {
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [search, status, classType, verifiedOnly])
+  }, [search, status, classType, verifiedOnly, region])
 
   const resetFilters = () => {
     setSearch('')
@@ -130,6 +135,8 @@ export default function Home() {
           )}
         </>
       )}
+
+      <ContactSection complexes={complexes} />
     </div>
   )
 }

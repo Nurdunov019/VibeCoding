@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
-import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { useMobileNavScroll } from '../hooks/useMobileNavScroll'
 import AuthModal from './AuthModal'
-import CompareBar from './CompareBar'
 import LanguageSwitcher from './LanguageSwitcher'
 import RegionPicker from './RegionPicker'
 import MobileNav from './MobileNav'
@@ -16,7 +14,6 @@ import { isShowcasePath } from '../utils/showcaseSlug'
 export default function Layout() {
   const { pathname } = useLocation()
   const { user, logout, loading } = useAuth()
-  const { slugs } = useCompare()
   const { t } = useLocale()
   const { openLogin, openRegister } = useAuthModal()
   const navigate = useNavigate()
@@ -57,10 +54,6 @@ export default function Layout() {
           <nav className="nav-menu desktop-only">
             <Link to="/" className={pathname === '/' ? 'active' : ''}>{t('nav.complexes')}</Link>
             <Link to="/map" className={pathname === '/map' ? 'active' : ''}>{t('nav.map')}</Link>
-            <Link to="/compare" className={pathname === '/compare' ? 'active' : ''}>
-              {t('nav.compare')}
-              {slugs.length > 0 && <span className="nav-badge">{slugs.length}</span>}
-            </Link>
           </nav>
 
           <div className="header-actions desktop-only">
@@ -80,8 +73,6 @@ export default function Layout() {
         </div>
       </header>
 
-      <CompareBar navHidden={navHidden} />
-
       <main className={`main${isShowcasePage ? ' main--immersive' : ' container'}`}>
         <Outlet />
       </main>
@@ -97,7 +88,6 @@ export default function Layout() {
             <Link to="/">{t('nav.complexes')}</Link>
             <Link to="/map">{t('nav.map')}</Link>
             <Link to="/favorites">{t('features.favorites')}</Link>
-            <Link to="/compare">{t('nav.compare')}</Link>
           </div>
           <div>
             <h4>{t('footer.security')}</h4>
