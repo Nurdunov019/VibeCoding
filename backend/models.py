@@ -33,7 +33,7 @@ class Complex(Base):
     price_per_sqm_usd = Column(Float, nullable=True)
     price_per_sqm_kgs = Column(Float, nullable=True)
     class_type = Column(String, nullable=True)  # economy, comfort, business, premium
-    floors = Column(Integer, nullable=True)
+    floors = Column(String, nullable=True)
     buildings_count = Column(Integer, default=1)
     apartments_count = Column(Integer, nullable=True)
     verification_score = Column(Integer, default=0)  # 0-100

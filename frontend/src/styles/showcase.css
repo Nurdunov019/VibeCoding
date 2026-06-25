@@ -136,6 +136,61 @@ html.legal-modal-open .header {
   padding: 0;
 }
 
+/* Legal PDF — vertical page stack, no browser sidebar */
+.legal-pdf-scroll {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  font-size: 0;
+}
+
+.legal-pdf-page {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  line-height: 0;
+  background: #fff;
+}
+
+.legal-pdf-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.legal-pdf-canvas.ready {
+  opacity: 1;
+}
+
+.legal-pdf-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  color: #888;
+  font-size: 14px;
+  line-height: 1.4;
+  background: #fff;
+}
+
+.legal-pdf-loading--main {
+  min-height: 50vh;
+  padding: 48px;
+}
+
+.legal-modal--paper .legal-modal-body:has(.legal-pdf-scroll) {
+  padding: 16px 12px 24px;
+}
+
 .legal-modal-doc p,
 .legal-modal-doc li {
   color: var(--showcase-text);
@@ -1220,6 +1275,11 @@ html.legal-modal-open .header {
     padding: 16px;
     padding-bottom: max(72px, calc(16px + env(safe-area-inset-bottom)));
     overscroll-behavior: contain;
+  }
+
+  .legal-modal-pdf {
+    min-height: calc(100vh - 170px);
+    border-radius: 8px;
   }
 
   .location-map {

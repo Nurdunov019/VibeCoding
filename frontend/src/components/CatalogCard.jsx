@@ -9,7 +9,8 @@ export default function CatalogCard({ complex }) {
   const { t } = useLocale()
   const completion = formatCompletion(complex, t('catalog.yearShort'))
   const location = formatLocation(complex)
-  const hasLegal = Boolean(getLegalDocUrl(complex.slug))
+  const legalDocUrl = complex.legal_doc_url || getLegalDocUrl(complex.slug)
+  const hasLegal = Boolean(legalDocUrl)
   const complexUrl = `/complex/${complex.slug}`
 
   return (
@@ -35,7 +36,7 @@ export default function CatalogCard({ complex }) {
           </Link>
 
           {hasLegal && (
-            <LegalOpenButton slug={complex.slug} className="catalog-card-legal" />
+            <LegalOpenButton slug={complex.slug} docUrl={legalDocUrl} className="catalog-card-legal" />
           )}
 
           <Link to={complexUrl} className="catalog-card-cta" aria-label={t('card.details')}>

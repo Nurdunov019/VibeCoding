@@ -445,7 +445,6 @@
   .admin-sticky { top: var(--header-h); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .compare-header { flex-wrap: wrap; gap: 12px; }
-  .pdf-frame { height: 480px; }
   .legal-view { padding: 28px; }
   .modal-card { width: min(480px, 100%); }
 }
@@ -626,7 +625,6 @@
   .modal-card { padding: 40px 36px 32px; width: min(480px, 100%); }
   .modal-header h2 { font-size: 26px; }
   .legal-view { max-width: 1000px; padding: 48px; }
-  .pdf-frame { height: 720px; }
 
   .footer-grid { grid-template-columns: repeat(3, 1fr); gap: 32px; }
   .footer h3 { font-size: 22px; }

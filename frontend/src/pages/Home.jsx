@@ -5,8 +5,6 @@ import CatalogCard from '../components/CatalogCard'
 import ComplexCard from '../components/ComplexCard'
 import HeroSlider from '../components/HeroSlider'
 import { useLocale } from '../context/LocaleContext'
-import { useRegion } from '../context/RegionContext'
-import { isShowcaseSlug } from '../utils/showcaseSlug'
 
 export default function Home() {
   const { hash } = useLocation()
@@ -16,7 +14,6 @@ export default function Home() {
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('')
   const [classType, setClassType] = useState('')
-  const { region } = useRegion()
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [loading, setLoading] = useState(true)
 
@@ -32,7 +29,6 @@ export default function Home() {
       search: search || undefined,
       status: status || undefined,
       class_type: classType || undefined,
-      region,
     }
     Promise.all([api.getComplexes(params), api.getStats()])
       .then(([c, s]) => {
@@ -42,7 +38,7 @@ export default function Home() {
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [search, status, classType, region, verifiedOnly])
+  }, [search, status, classType, verifiedOnly])
 
   const resetFilters = () => {
     setSearch('')
@@ -51,10 +47,9 @@ export default function Home() {
     setVerifiedOnly(false)
   }
 
-  const featured = complexes.filter((c) => isShowcaseSlug(c.slug))
-  const building = complexes.filter((c) => c.status === 'building' && !isShowcaseSlug(c.slug))
+  const building = complexes.filter((c) => c.status === 'building')
   const commissioned = complexes.filter((c) => c.status === 'commissioned')
-  const slideImages = (featured.length ? featured : complexes).map((c) => c.image_url).filter(Boolean)
+  const slideImages = (building.length ? building : complexes).map((c) => c.image_url).filter(Boolean)
 
   return (
     <div className="home-page">
@@ -116,20 +111,11 @@ export default function Home() {
         <p className="empty">{t('empty.notFound')}</p>
       ) : (
         <>
-          {featured.length > 0 && (
+          {building.length > 0 && (
             <>
               <h3 className="catalog-section-title">{t('catalog.buildingSection')}</h3>
               <div className="catalog-grid">
-                {featured.map((c) => <CatalogCard key={c.slug} complex={c} />)}
-              </div>
-            </>
-          )}
-
-          {building.length > 0 && (
-            <>
-              <h3 className="catalog-section-title">{t('catalog.otherBuilding')}</h3>
-              <div className="grid cards-grid">
-                {building.map((c) => <ComplexCard key={c.slug} complex={c} />)}
+                {building.map((c) => <CatalogCard key={c.slug} complex={c} />)}
               </div>
             </>
           )}

@@ -28,7 +28,21 @@ async function renderPageFull(pdfPage, canvas, containerWidth) {
   await pdfPage.render({ canvasContext: ctx, viewport }).promise
 }
 
-function CatalogPage({ pdfDoc, pageNum }) {
+const VARIANT_CLASSES = {
+  catalog: {
+    page: 'catalog-scroll-page',
+    canvas: 'catalog-scroll-canvas',
+    loading: 'catalog-scroll-loading',
+  },
+  paper: {
+    page: 'legal-pdf-page',
+    canvas: 'legal-pdf-canvas',
+    loading: 'legal-pdf-loading',
+  },
+}
+
+function CatalogPage({ pdfDoc, pageNum, variant = 'catalog' }) {
+  const classes = VARIANT_CLASSES[variant] || VARIANT_CLASSES.catalog
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
   const [ready, setReady] = useState(false)
@@ -66,9 +80,9 @@ function CatalogPage({ pdfDoc, pageNum }) {
   }, [pdfDoc, pageNum, visible, width])
 
   return (
-    <div ref={wrapRef} className="catalog-scroll-page" data-page={pageNum}>
-      {!ready && <div className="catalog-scroll-loading">{pageNum}</div>}
-      <canvas ref={canvasRef} className={`catalog-scroll-canvas${ready ? ' ready' : ''}`} />
+    <div ref={wrapRef} className={classes.page} data-page={pageNum}>
+      {!ready && <div className={classes.loading}>{pageNum}</div>}
+      <canvas ref={canvasRef} className={`${classes.canvas}${ready ? ' ready' : ''}`} />
     </div>
   )
 }
@@ -89,8 +103,10 @@ function useVisible(ref, initial = false) {
   return visible
 }
 
-export default function CatalogBrochureViewer({ url, title, onError }) {
+export default function CatalogBrochureViewer({ url, title, onError, variant = 'catalog' }) {
   const { t } = useLocale()
+  const scrollClass = variant === 'paper' ? 'legal-pdf-scroll' : 'catalog-scroll'
+  const loadingMainClass = variant === 'paper' ? 'legal-pdf-loading legal-pdf-loading--main' : 'catalog-scroll-loading catalog-scroll-loading--main'
   const [pdfDoc, setPdfDoc] = useState(null)
   const [numPages, setNumPages] = useState(0)
   const [error, setError] = useState('')
@@ -122,13 +138,13 @@ export default function CatalogBrochureViewer({ url, title, onError }) {
   }
 
   if (!pdfDoc) {
-    return <div className="catalog-scroll-loading catalog-scroll-loading--main">{t('empty.loading')}</div>
+    return <div className={loadingMainClass}>{t('empty.loading')}</div>
   }
 
   return (
-    <div className="catalog-scroll" aria-label={title}>
+    <div className={scrollClass} aria-label={title}>
       {Array.from({ length: numPages }, (_, i) => (
-        <CatalogPage key={i + 1} pdfDoc={pdfDoc} pageNum={i + 1} />
+        <CatalogPage key={i + 1} pdfDoc={pdfDoc} pageNum={i + 1} variant={variant} />
       ))}
     </div>
   )

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import mammoth from 'mammoth'
 import { useLocale } from '../context/LocaleContext'
+import CatalogBrochureViewer from './CatalogBrochureViewer'
 import LegalWrittenSection from './LegalWrittenSection'
 import { getLegalDocUrl } from '../data/legalDocuments'
 
@@ -12,27 +13,39 @@ function cleanLegalHtml(html) {
     .replace(/<table/gi, '<table class="legal-doc-table"')
 }
 
-export default function LegalDocumentModal({ open, onClose, slug, report, theme = 'dark' }) {
+export default function LegalDocumentModal({ open, onClose, slug, docUrl, report, theme = 'dark' }) {
   const { t } = useLocale()
   const [html, setHtml] = useState('')
+  const [pdfUrl, setPdfUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const pdfVariant = theme === 'paper' ? 'paper' : 'catalog'
 
   useEffect(() => {
     if (!open) {
       setHtml('')
+      setPdfUrl('')
       setError('')
       return undefined
     }
 
-    const docUrl = getLegalDocUrl(slug)
-    if (!docUrl) return undefined
+    const resolvedDocUrl = docUrl || getLegalDocUrl(slug)
+    if (!resolvedDocUrl) return undefined
+    const lower = resolvedDocUrl.toLowerCase()
 
     let cancelled = false
     setLoading(true)
+    setHtml('')
+    setPdfUrl('')
     setError('')
 
-    fetch(docUrl)
+    if (lower.endsWith('.pdf')) {
+      setPdfUrl(resolvedDocUrl)
+      setLoading(false)
+      return undefined
+    }
+
+    fetch(resolvedDocUrl)
       .then((res) => {
         if (!res.ok) throw new Error('load failed')
         return res.arrayBuffer()
@@ -49,7 +62,7 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
       })
 
     return () => { cancelled = true }
-  }, [open, slug, t])
+  }, [open, slug, docUrl, t])
 
   useEffect(() => {
     if (!open) return undefined
@@ -100,13 +113,20 @@ export default function LegalDocumentModal({ open, onClose, slug, report, theme 
             <LegalWrittenSection report={report} hideAccessForm variant="showcase" />
           )}
           {error && !html && !report && <p className="muted">{error}</p>}
+          {pdfUrl && (
+            <CatalogBrochureViewer
+              url={pdfUrl}
+              title={report?.title || t('card.legal')}
+              variant={pdfVariant}
+            />
+          )}
           {html && (
             <div
               className={`legal-modal-doc${theme === 'paper' ? ' legal-modal-doc--paper' : ' legal-written legal-written--showcase'}`}
               dangerouslySetInnerHTML={{ __html: html }}
             />
           )}
-          {!loading && !html && !error && report && (
+          {!loading && !html && !pdfUrl && !error && report && (
             <LegalWrittenSection report={report} hideAccessForm variant="showcase" />
           )}
         </div>

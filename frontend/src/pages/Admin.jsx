@@ -11,8 +11,9 @@ const EMPTY_COMPLEX = {
   name: '', slug: '', developer: '', address: '', city: 'Бишкек', region: 'bishkek',
   status: 'building', completion_quarter: '4 кв.', completion_year: 2028,
   price_per_sqm_usd: 0, price_per_sqm_kgs: 0, class_type: 'comfort',
-  floors: 10, buildings_count: 1, apartments_count: 100, verification_score: 0,
+  floors: '', buildings_count: 1, apartments_count: 100, verification_score: 0,
   verification_status: 'unverified', image_url: '', catalog_pdf_url: '', features: '',
+  legal_doc_url: '',
   description: '', entrances_count: null,
   initial_payment_percent: null, barter_extra_usd_sqm: null,
   barter_min_payment_percent: null, installment_months: null, has_red_book: false,
@@ -94,15 +95,24 @@ export default function Admin() {
     e.preventDefault()
     setMsg('')
     try {
+      const { legal_doc_url, ...payload } = form
+      let saved
       if (editingId) {
-        const updated = await api.adminUpdateComplex(editingId, form)
-        setForm(updated)
+        saved = await api.adminUpdateComplex(editingId, payload)
+        if (legal_doc_url) {
+          saved = await api.adminSetLegalFile(editingId, legal_doc_url)
+        }
+        setForm(saved)
         setMsg(t('admin.updated'))
       } else {
-        const created = await api.adminCreateComplex(form)
-        setEditingId(created.id)
-        setSelected(created)
-        setForm(created)
+        const created = await api.adminCreateComplex(payload)
+        saved = created
+        if (legal_doc_url) {
+          saved = await api.adminSetLegalFile(created.id, legal_doc_url)
+        }
+        setEditingId(saved.id)
+        setSelected(saved)
+        setForm(saved)
         setMsg(t('admin.created'))
       }
       load()
@@ -159,6 +169,21 @@ export default function Admin() {
       const { url } = await api.adminUpload(file, 'catalog')
       setForm((f) => ({ ...f, catalog_pdf_url: url }))
       setMsg(t('admin.catalogUploaded'))
+    } catch (err) {
+      setMsg(translateApiError(err.message, t))
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const uploadLegal = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    try {
+      const { url } = await api.adminUpload(file, 'legal')
+      setForm((f) => ({ ...f, legal_doc_url: url }))
+      setMsg(t('admin.pdfUploaded'))
     } catch (err) {
       setMsg(translateApiError(err.message, t))
     } finally {
@@ -292,6 +317,13 @@ export default function Admin() {
                 {form.catalog_pdf_url && (
                   <p className="muted">PDF: {form.catalog_pdf_url}</p>
                 )}
+                <label className="upload-label">
+                  ⚖️ {t('admin.uploadLegal')}
+                  <input type="file" accept=".pdf,.docx,application/pdf" onChange={uploadLegal} disabled={uploading} />
+                </label>
+                {form.legal_doc_url && (
+                  <p className="muted">{t('admin.legalDoc')}: {form.legal_doc_url}</p>
+                )}
               </div>
 
               <div className="form-grid">
@@ -332,7 +364,12 @@ export default function Admin() {
                   </select>
                 </label>
                 <label>{t('admin.formFloors')}
-                  <input type="number" min="1" value={form.floors ?? ''} onChange={(e) => setForm({ ...form, floors: e.target.value ? +e.target.value : null })} />
+                  <input
+                    type="text"
+                    value={form.floors ?? ''}
+                    onChange={(e) => setForm({ ...form, floors: e.target.value })}
+                    placeholder={t('admin.formFloorsPlaceholder')}
+                  />
                 </label>
                 <label>{t('admin.formBlocks')}
                   <input type="number" min="1" value={form.buildings_count ?? ''} onChange={(e) => setForm({ ...form, buildings_count: e.target.value ? +e.target.value : 1 })} />

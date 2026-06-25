@@ -7,12 +7,14 @@ import LegalDocumentModal from './LegalDocumentModal'
 
 export default function LegalOpenButton({
   slug,
+  docUrl,
   className = 'btn-legal btn-sm',
   label,
   fallbackHref,
 }) {
   const { t } = useLocale()
-  const hasLegal = Boolean(getLegalDocUrl(slug))
+  const resolvedDocUrl = docUrl || getLegalDocUrl(slug)
+  const hasLegal = Boolean(resolvedDocUrl)
   const [open, setOpen] = useState(false)
   const [report, setReport] = useState(null)
   const text = label || t('card.legal')
@@ -44,6 +46,7 @@ export default function LegalOpenButton({
         open={open}
         onClose={() => setOpen(false)}
         slug={slug}
+        docUrl={resolvedDocUrl}
         report={report}
         theme="paper"
       />

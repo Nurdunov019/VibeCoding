@@ -36,6 +36,11 @@ def migrate_db():
                 conn.execute(text(sql))
     with engine.begin() as conn:
         conn.execute(text("UPDATE complexes SET region = 'manas' WHERE region = 'jalal-abad'"))
+    with engine.begin() as conn:
+        conn.execute(text(
+            "UPDATE complexes SET floors = CAST(floors AS TEXT) "
+            "WHERE floors IS NOT NULL AND typeof(floors) = 'integer'"
+        ))
 
 
 migrate_db()

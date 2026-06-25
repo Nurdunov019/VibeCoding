@@ -82,7 +82,12 @@ export default function MapPage() {
                     </span>
                   </div>
                 </Link>
-                <ComplexActionLinks slug={m.slug} status={m.status} className="map-item-actions" />
+                <ComplexActionLinks
+                  slug={m.slug}
+                  status={m.status}
+                  legalDocUrl={m.legal_doc_url}
+                  className="map-item-actions"
+                />
               </article>
             ))}
           </section>

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
 class Token(BaseModel):
@@ -30,6 +30,13 @@ class UserOut(BaseModel):
         from_attributes = True
 
 
+def _floors_as_text(value):
+    if value is None:
+        return value
+    text = str(value).strip()
+    return text or None
+
+
 class ComplexOut(BaseModel):
     id: int
     name: str
@@ -44,7 +51,7 @@ class ComplexOut(BaseModel):
     price_per_sqm_usd: Optional[float] = None
     price_per_sqm_kgs: Optional[float] = None
     class_type: Optional[str] = None
-    floors: Optional[int] = None
+    floors: Optional[str] = None
     buildings_count: int
     apartments_count: Optional[int] = None
     verification_score: int
@@ -61,6 +68,12 @@ class ComplexOut(BaseModel):
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+    legal_doc_url: Optional[str] = None
+
+    @field_validator("floors", mode="before")
+    @classmethod
+    def normalize_floors(cls, value):
+        return _floors_as_text(value)
 
     class Config:
         from_attributes = True
@@ -79,7 +92,7 @@ class ComplexCreate(BaseModel):
     price_per_sqm_usd: Optional[float] = None
     price_per_sqm_kgs: Optional[float] = None
     class_type: Optional[str] = None
-    floors: Optional[int] = None
+    floors: Optional[str] = None
     buildings_count: int = 1
     apartments_count: Optional[int] = None
     verification_score: int = 0
@@ -97,6 +110,11 @@ class ComplexCreate(BaseModel):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
 
+    @field_validator("floors", mode="before")
+    @classmethod
+    def normalize_floors(cls, value):
+        return _floors_as_text(value)
+
 
 class ComplexUpdate(BaseModel):
     name: Optional[str] = None
@@ -111,7 +129,7 @@ class ComplexUpdate(BaseModel):
     price_per_sqm_usd: Optional[float] = None
     price_per_sqm_kgs: Optional[float] = None
     class_type: Optional[str] = None
-    floors: Optional[int] = None
+    floors: Optional[str] = None
     buildings_count: Optional[int] = None
     apartments_count: Optional[int] = None
     verification_score: Optional[int] = None
@@ -129,6 +147,11 @@ class ComplexUpdate(BaseModel):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
 
+    @field_validator("floors", mode="before")
+    @classmethod
+    def normalize_floors(cls, value):
+        return _floors_as_text(value)
+
 
 class MapMarker(BaseModel):
     id: int
@@ -142,6 +165,7 @@ class MapMarker(BaseModel):
     verification_score: int
     verification_status: str
     image_url: Optional[str] = None
+    legal_doc_url: Optional[str] = None
 
     class Config:
         from_attributes = True

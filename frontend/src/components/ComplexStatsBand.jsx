@@ -4,7 +4,7 @@ import { formatCompletion } from '../utils/formatCompletion'
 export default function ComplexStatsBand({ complex }) {
   const { t } = useLocale()
   const stats = [
-    complex.floors != null && { value: complex.floors, label: t('detail.floors') },
+    complex.floors && { value: complex.floors, label: t('detail.floors'), small: String(complex.floors).length > 6 },
     complex.buildings_count > 1 && {
       value: complex.buildings_count,
       label: t('catalog.blocks'),

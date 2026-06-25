@@ -50,7 +50,7 @@ export default function ComplexCard({ complex }) {
           </div>
           <span className={`status-pill ${complex.status}`}>{statusLabel}</span>
         </div>
-        <ComplexActionLinks slug={complex.slug} status={complex.status} />
+        <ComplexActionLinks slug={complex.slug} status={complex.status} legalDocUrl={complex.legal_doc_url} />
       </div>
     </article>
   )

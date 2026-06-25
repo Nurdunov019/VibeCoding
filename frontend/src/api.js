@@ -51,6 +51,8 @@ export const api = {
     request('/admin/complexes', { method: 'POST', body: JSON.stringify(data) }),
   adminUpdateComplex: (id, data) =>
     request(`/admin/complexes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  adminSetLegalFile: (id, file_path) =>
+    request(`/admin/complexes/${id}/legal-file`, { method: 'PUT', body: JSON.stringify({ file_path }) }),
   adminDeleteComplex: (id) =>
     request(`/admin/complexes/${id}`, { method: 'DELETE' }),
   adminGetDocuments: (complexId) =>
