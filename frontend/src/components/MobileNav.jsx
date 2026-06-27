@@ -47,7 +47,7 @@ function IconProfile() {
   )
 }
 
-export default function MobileNav({ hidden, koshuuOpen, onKoshuu, onNavClick }) {
+export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
   const { pathname, hash } = useLocation()
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -98,9 +98,8 @@ export default function MobileNav({ hidden, koshuuOpen, onKoshuu, onNavClick }) 
 
   return (
     <nav
-      className={`mobile-nav${showAdminTab ? ' mobile-nav-admin' : ''}${hidden ? ' mobile-nav--hidden' : ''}`}
+      className={`mobile-nav${showAdminTab ? ' mobile-nav-admin' : ''}`}
       aria-label={t('mobileNav.label')}
-      aria-hidden={hidden}
     >
       <button type="button" className={itemClass(isHome)} onClick={goHome}>
         <IconHome />

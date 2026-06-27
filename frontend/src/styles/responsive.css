@@ -97,11 +97,7 @@
     padding-top: var(--header-h);
     padding-bottom: calc(68px + env(safe-area-inset-bottom));
     overflow-x: clip;
-    transition: padding-bottom 0.3s cubic-bezier(0.32, 0.72, 0, 1);
     background: var(--bg);
-  }
-  .app--nav-hidden {
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
   }
 
   .header-top {

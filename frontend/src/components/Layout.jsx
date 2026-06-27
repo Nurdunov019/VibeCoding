@@ -3,7 +3,6 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useLocale } from '../context/LocaleContext'
-import { useMobileNavScroll } from '../hooks/useMobileNavScroll'
 import AuthModal from './AuthModal'
 import LanguageSwitcher from './LanguageSwitcher'
 import RegionPicker from './RegionPicker'
@@ -19,7 +18,6 @@ export default function Layout() {
   const navigate = useNavigate()
   const [profileOpen, setProfileOpen] = useState(false)
   const [showcaseHeaderLight, setShowcaseHeaderLight] = useState(false)
-  const { hidden: navHidden } = useMobileNavScroll()
 
   useEffect(() => {
     setProfileOpen(false)
@@ -48,7 +46,7 @@ export default function Layout() {
   }
 
   return (
-    <div className={`app${navHidden ? ' app--nav-hidden' : ''}${isShowcasePage ? ' app--showcase' : ''}`}>
+    <div className={`app${isShowcasePage ? ' app--showcase' : ''}`}>
       <header className={`header${isShowcasePage && showcaseHeaderLight ? ' header--showcase-light' : ''}`}>
         <div className="container header-top">
           <RegionPicker />
@@ -114,7 +112,6 @@ export default function Layout() {
       </footer>
 
       <MobileNav
-        hidden={navHidden}
         koshuuOpen={profileOpen}
         onKoshuu={() => setProfileOpen((v) => !v)}
         onNavClick={closeProfile}

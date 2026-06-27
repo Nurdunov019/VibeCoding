@@ -2431,7 +2431,7 @@ button { cursor: pointer; border: none; }
   z-index: 400;
   pointer-events: auto;
   touch-action: manipulation;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--border);
@@ -2439,12 +2439,6 @@ button { cursor: pointer; border: none; }
   grid-template-columns: repeat(4, 1fr);
   gap: 2px;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-  will-change: transform;
-}
-.mobile-nav--hidden {
-  transform: translateY(calc(100% + env(safe-area-inset-bottom)));
-  pointer-events: none;
 }
 .mobile-nav-admin {
   grid-template-columns: repeat(5, 1fr);

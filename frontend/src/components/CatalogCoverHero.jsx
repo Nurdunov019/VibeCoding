@@ -3,9 +3,9 @@ import { mediaUrl } from '../utils/mediaUrl'
 import { formatCompletion, formatLocation } from '../utils/formatCompletion'
 
 export default function CatalogCoverHero({ complex }) {
-  const { t } = useLocale()
-  const completion = formatCompletion(complex, t('catalog.yearShort'))
-  const location = formatLocation(complex)
+  const { t, lang } = useLocale()
+  const completion = formatCompletion(complex, t('catalog.yearShort'), lang)
+  const location = formatLocation(complex, lang)
 
   return (
     <div className="catalog-cover-hero">

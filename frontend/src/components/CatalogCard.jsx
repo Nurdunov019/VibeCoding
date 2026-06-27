@@ -6,9 +6,9 @@ import { formatCompletion, formatLocation } from '../utils/formatCompletion'
 import LegalOpenButton from './LegalOpenButton'
 
 export default function CatalogCard({ complex }) {
-  const { t } = useLocale()
-  const completion = formatCompletion(complex, t('catalog.yearShort'))
-  const location = formatLocation(complex)
+  const { t, lang } = useLocale()
+  const completion = formatCompletion(complex, t('catalog.yearShort'), lang)
+  const location = formatLocation(complex, lang)
   const legalDocUrl = complex.legal_doc_url || getLegalDocUrl(complex.slug)
   const hasLegal = Boolean(legalDocUrl)
   const complexUrl = `/complex/${complex.slug}`

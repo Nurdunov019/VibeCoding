@@ -1,10 +1,12 @@
 import { useLocale } from '../context/LocaleContext'
 import { formatCompletion } from '../utils/formatCompletion'
+import { translateFloors } from '../utils/translateContent'
 
 export default function ComplexStatsBand({ complex }) {
-  const { t } = useLocale()
+  const { t, lang } = useLocale()
+  const floorValue = complex.floors ? translateFloors(complex.floors, lang) : null
   const stats = [
-    complex.floors && { value: complex.floors, label: t('detail.floors'), small: String(complex.floors).length > 6 },
+    floorValue && { value: floorValue, label: t('detail.floors'), small: String(floorValue).length > 6 },
     complex.buildings_count > 1 && {
       value: complex.buildings_count,
       label: t('catalog.blocks'),
@@ -13,8 +15,8 @@ export default function ComplexStatsBand({ complex }) {
       value: complex.entrances_count,
       label: t('catalog.entrances'),
     },
-    formatCompletion(complex, t('catalog.yearShort')) && {
-      value: formatCompletion(complex, t('catalog.yearShort')),
+    formatCompletion(complex, t('catalog.yearShort'), lang) && {
+      value: formatCompletion(complex, t('catalog.yearShort'), lang),
       label: t('detail.completion'),
       small: true,
     },

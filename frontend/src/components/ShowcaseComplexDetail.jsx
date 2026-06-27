@@ -12,11 +12,15 @@ import { useAuthModal } from '../context/AuthModalContext'
 import { useLocale } from '../context/LocaleContext'
 import { mediaUrl } from '../utils/mediaUrl'
 import { statusLabel, translateApiError } from '../utils/translate'
+import {
+  translateDocNotes,
+  translateDocTitle,
+  translateFeaturesText,
+} from '../utils/translateContent'
 import { api } from '../api'
 
-function parseFeatures(text) {
-  if (!text?.trim()) return []
-  return text.split('\n').map((s) => s.trim()).filter(Boolean)
+function parseFeatures(text, lang) {
+  return translateFeaturesText(text, lang)
 }
 
 export default function ShowcaseComplexDetail({
@@ -28,7 +32,7 @@ export default function ShowcaseComplexDetail({
   isCommissioned,
   onReviewSaved,
 }) {
-  const { t } = useLocale()
+  const { t, lang } = useLocale()
   const { user } = useAuth()
   const { openLogin } = useAuthModal()
   const [viewingPdf, setViewingPdf] = useState(null)
@@ -37,7 +41,7 @@ export default function ShowcaseComplexDetail({
   const [reviewMsg, setReviewMsg] = useState('')
   const [reviewLoading, setReviewLoading] = useState(false)
 
-  const features = parseFeatures(complex.features)
+  const features = parseFeatures(complex.features, lang)
   const hasCatalog = Boolean(complex.catalog_pdf_url)
   const [pdfFailed, setPdfFailed] = useState(false)
   const showBrochure = hasCatalog && !pdfFailed
@@ -124,7 +128,7 @@ export default function ShowcaseComplexDetail({
           </div>
           <div className="showcase-split-text">
             <h3>{t('detail.overview')}</h3>
-            <p>{complex.description}</p>
+            <p>{translateDescription(slug, complex.description, lang)}</p>
             <div className="showcase-meta">
               <div><span>{t('detail.class')}</span><strong>{statusLabel(t, 'filter', complex.class_type)}</strong></div>
               <div><span>{t('detail.apartments')}</span><strong>{complex.apartments_count ?? '—'}</strong></div>
@@ -166,7 +170,10 @@ export default function ShowcaseComplexDetail({
           <div className="doc-written-list doc-written-list--showcase">
             {verification.checks.map((c) => {
               const doc = documents.find((d) => d.doc_type === c.type)
-              const heading = doc?.title || statusLabel(t, 'docTypes', c.type)
+              const heading = doc?.title
+                ? translateDocTitle(doc.title, lang, c.type, t)
+                : statusLabel(t, 'docTypes', c.type)
+              const body = doc?.notes || c.message || statusLabel(t, 'docMessages', c.status)
               return (
               <article key={c.type} className={`doc-written-card doc-${c.status}`}>
                 <div className="doc-written-head">
@@ -177,7 +184,7 @@ export default function ShowcaseComplexDetail({
                 </div>
                 {c.number && <p className="doc-written-meta">№ {c.number}</p>}
                 <p className="doc-written-text">
-                  {c.message || statusLabel(t, 'docMessages', c.status)}
+                  {translateDocNotes(slug, c.type, body, lang)}
                 </p>
               </article>
               )
@@ -195,6 +202,7 @@ export default function ShowcaseComplexDetail({
           onViewPdf={setViewingPdf}
           onClosePdf={() => setViewingPdf(null)}
           variant="showcase"
+          complexSlug={slug}
         />
       </section>
 

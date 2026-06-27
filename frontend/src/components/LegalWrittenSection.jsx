@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useLocale } from '../context/LocaleContext'
 import { statusLabel } from '../utils/translate'
+import { localizeLegalReport, translatePhrase } from '../utils/translateContent'
 
 export default function LegalWrittenSection({
   report,
+  slug,
   accessInfo,
   email,
   onEmailChange,
@@ -11,8 +13,10 @@ export default function LegalWrittenSection({
   variant = 'default',
   hideAccessForm = false,
 }) {
-  const { t } = useLocale()
+  const { t, lang } = useLocale()
   if (!report) return null
+
+  const localized = localizeLegalReport(report, slug, lang)
 
   const rootClass = variant === 'showcase' ? 'legal-written legal-written--showcase' : 'legal-written'
 
@@ -20,22 +24,22 @@ export default function LegalWrittenSection({
     <div className={rootClass}>
       <div className="legal-written-head">
         <div>
-          <p className="legal-written-date">{t('legal.prepared')}: {report.prepared_at}</p>
-          <h4>{report.title}</h4>
+          <p className="legal-written-date">{t('legal.prepared')}: {localized.prepared_at}</p>
+          <h4>{localized.title}</h4>
         </div>
-        <span className={`legal-written-risk risk-${report.risk_level}`}>
-          {t('legal.risk')}: {statusLabel(t, 'risk', report.risk_level)}
+        <span className={`legal-written-risk risk-${localized.risk_level}`}>
+          {t('legal.risk')}: {statusLabel(t, 'risk', localized.risk_level)}
         </span>
       </div>
 
-      {report.summary && <p className="legal-written-summary">{report.summary}</p>}
+      {localized.summary && <p className="legal-written-summary">{localized.summary}</p>}
 
       <div className="legal-written-body">
-        {report.conclusion.split('\n').map((line, i) => (
+        {localized.conclusion.split('\n').map((line, i) => (
           line.trim() ? (
-            /^[А-ЯA-Z][А-ЯA-Z\s\-]+$/.test(line.trim()) && line.trim().length < 60
-              ? <h5 key={i} className="legal-written-section-title">{line.trim()}</h5>
-              : <p key={i}>{line}</p>
+            /^[А-ЯA-ZӨҮҢ][А-ЯA-ZӨҮҢ\s\-«»]+$/u.test(line.trim()) && line.trim().length < 80
+              ? <h5 key={i} className="legal-written-section-title">{translatePhrase(line.trim(), lang)}</h5>
+              : <p key={i}>{translatePhrase(line.trim(), lang)}</p>
           ) : <br key={i} />
         ))}
       </div>

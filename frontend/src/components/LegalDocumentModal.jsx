@@ -110,7 +110,7 @@ export default function LegalDocumentModal({ open, onClose, slug, docUrl, report
         <div className="legal-modal-body">
           {loading && <p className="muted">{t('empty.loading')}</p>}
           {error && !html && report && (
-            <LegalWrittenSection report={report} hideAccessForm variant="showcase" />
+            <LegalWrittenSection report={report} slug={slug} hideAccessForm variant="showcase" />
           )}
           {error && !html && !report && <p className="muted">{error}</p>}
           {pdfUrl && (
@@ -127,7 +127,7 @@ export default function LegalDocumentModal({ open, onClose, slug, docUrl, report
             />
           )}
           {!loading && !html && !pdfUrl && !error && report && (
-            <LegalWrittenSection report={report} hideAccessForm variant="showcase" />
+            <LegalWrittenSection report={report} slug={slug} hideAccessForm variant="showcase" />
           )}
         </div>
       </div>
