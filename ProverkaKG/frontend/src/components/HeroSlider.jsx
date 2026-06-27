@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { mediaUrl } from '../utils/mediaUrl'
 
 const DEFAULT_SLIDES = [
   'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&h=500&fit=crop&q=75',
@@ -27,7 +28,7 @@ export default function HeroSlider({ images = [], children }) {
           <div
             key={src}
             className={`hero-slide ${i === index ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${src})` }}
+            style={{ backgroundImage: `url("${mediaUrl(src)}")` }}
           />
         ))}
       </div>

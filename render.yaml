@@ -1,0 +1,26 @@
+# Render Blueprint — repo root (VibeCoding)
+# Dashboard → Service → Root Directory can stay empty; rootDir below points at ProverkaKG.
+
+services:
+  - type: web
+    name: proverkakg
+    runtime: python
+    rootDir: ProverkaKG
+    region: frankfurt
+    plan: free
+    buildCommand: |
+      pip install -r backend/requirements.txt &&
+      cd frontend && npm ci && npm run build
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        value: "112233"
+      - key: ADMIN_EMAIL
+        value: admin@proverkakg.kg
+      - key: DATABASE_URL
+        value: sqlite:///./proverkakg.db
+      - key: PYTHON_VERSION
+        value: "3.11.0"

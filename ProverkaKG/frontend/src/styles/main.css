@@ -272,8 +272,10 @@ button { cursor: pointer; border: none; }
 .hero-slide {
   position: absolute;
   inset: 0;
+  background-color: #1a2e28;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   opacity: 0;
   transform: scale(1);
   transition: opacity 1.2s ease;

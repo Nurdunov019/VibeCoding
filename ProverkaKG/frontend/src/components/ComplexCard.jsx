@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useFavorites } from '../context/FavoritesContext'
 import { useLocale } from '../context/LocaleContext'
 import ComplexActionLinks from './ComplexActionLinks'
+import { mediaUrl } from '../utils/mediaUrl'
 
 export default function ComplexCard({ complex }) {
   const { t } = useLocale()
@@ -14,7 +15,7 @@ export default function ComplexCard({ complex }) {
     <article className="complex-card elitka-card">
       <Link to={detailUrl} className="complex-image complex-image-link">
         {complex.image_url ? (
-          <img src={complex.image_url} alt={complex.name} loading="lazy" decoding="async" />
+          <img src={mediaUrl(complex.image_url)} alt={complex.name} loading="lazy" decoding="async" />
         ) : (
           <div className="img-ph">ЖК</div>
         )}

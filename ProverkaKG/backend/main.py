@@ -93,6 +93,27 @@ ASSET_CACHE_HEADERS = {"Cache-Control": "public, max-age=86400"}
 
 if FRONTEND_DIR.exists():
 
+    @app.get("/images/{asset_path:path}")
+    def serve_image(asset_path: str):
+        fp = FRONTEND_DIR / "images" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
+
+    @app.get("/catalogs/{asset_path:path}")
+    def serve_catalog(asset_path: str):
+        fp = FRONTEND_DIR / "catalogs" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
+
+    @app.get("/documents/{asset_path:path}")
+    def serve_document(asset_path: str):
+        fp = FRONTEND_DIR / "documents" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
+
     @app.get("/assets/{asset_path:path}")
     def serve_asset(asset_path: str):
         fp = FRONTEND_DIR / "assets" / asset_path
