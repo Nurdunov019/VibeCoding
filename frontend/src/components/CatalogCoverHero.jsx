@@ -10,7 +10,13 @@ export default function CatalogCoverHero({ complex }) {
   return (
     <div className="catalog-cover-hero">
       {complex.image_url ? (
-        <img src={mediaUrl(complex.image_url)} alt={complex.name} className="catalog-cover-img" />
+        <img
+          src={mediaUrl(complex.image_url)}
+          alt={complex.name}
+          className="catalog-cover-img"
+          decoding="async"
+          fetchPriority="high"
+        />
       ) : (
         <div className="catalog-cover-ph" />
       )}

@@ -114,7 +114,12 @@ export default function ShowcaseComplexDetail({
         <section className="showcase-split">
           <div className="showcase-split-media">
             {complex.image_url && (
-              <img src={mediaUrl(complex.image_url)} alt={complex.name} />
+              <img
+                src={mediaUrl(complex.image_url)}
+                alt={complex.name}
+                loading="lazy"
+                decoding="async"
+              />
             )}
           </div>
           <div className="showcase-split-text">

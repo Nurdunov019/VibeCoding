@@ -374,8 +374,13 @@
 
   .home-contact-field input,
   .home-contact-select-wrap select,
-  .home-contact-submit {
+  .home-contact-submit,
+  .contact-object-trigger {
     min-height: 52px;
+  }
+
+  .contact-object-list {
+    max-height: min(46vh, 320px);
   }
   .hero-banner-content { padding: 24px 16px 20px; }
   .filter-on-hero { max-width: 100%; }
@@ -414,47 +419,58 @@
   .tabs button { padding: 9px 16px; font-size: 13px; }
 
   .map-layout {
-    display: grid;
-    grid-template-columns: minmax(320px, 380px) 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
-    min-height: 480px;
-    align-items: start;
+    min-height: 0;
   }
   .map-list {
-    order: 0;
-    max-height: min(70vh, 560px);
-    overflow-y: auto;
-    overflow-x: visible;
-    -webkit-overflow-scrolling: touch;
-    padding-right: 4px;
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+    width: 100%;
   }
   .map-list-item {
-    overflow: visible;
+    overflow: hidden;
+    min-height: 0;
   }
   .map-list-hit {
     flex-direction: row;
-    padding: 14px 14px 8px;
+    align-items: center;
+    padding: 12px;
+    gap: 12px;
   }
   .map-list-thumb {
-    width: 100px;
-    height: auto;
-    min-height: 90px;
+    width: 72px;
+    height: 72px;
+    min-height: 72px;
+    flex-shrink: 0;
+    border-radius: 10px;
+  }
+  .map-list-thumb img,
+  .map-list-thumb-ph {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
   }
   .map-list-info {
     padding: 0;
+    justify-content: center;
   }
-  .map-item-actions .btn-outline,
-  .map-item-actions .btn-legal {
-    min-height: 42px;
-    font-size: 12px;
-    padding: 10px 8px;
+  .map-list-info strong {
+    font-size: 14px;
+    line-height: 1.3;
   }
   .map-container-wrap {
-    order: 0;
-    height: min(70vh, 560px);
-    min-height: 400px;
-    position: sticky;
-    top: calc(var(--header-h) + 16px);
+    order: 2;
+    position: static;
+    height: min(52vh, 420px);
+    min-height: 300px;
   }
 
   .admin-grid { grid-template-columns: 220px 1fr; }
@@ -465,29 +481,21 @@
   .modal-card { width: min(480px, 100%); }
 }
 
-/* ── Small laptop / tablet landscape (768–991px) — full-width card grid ── */
+/* ── Small laptop / tablet landscape (768–991px) — map cards in 2 columns ── */
 @media (min-width: 768px) and (max-width: 991px) {
-  .map-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-height: 0;
-  }
   .map-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
   }
   .map-list-item {
-    height: 100%;
+    height: auto;
   }
   .map-list-hit {
     flex-direction: column;
+    align-items: stretch;
     padding: 0;
-    flex: 1;
+    gap: 0;
   }
   .map-list-thumb {
     width: 100%;
@@ -502,12 +510,6 @@
   }
   .map-list-info {
     padding: 12px 12px 4px;
-    flex: 1;
-  }
-  .map-container-wrap {
-    position: static;
-    height: 420px;
-    min-height: 360px;
   }
 }
 
@@ -544,7 +546,8 @@
   }
   .map-list-thumb {
     width: 100px;
-    min-height: 92px;
+    height: 96px;
+    min-height: 96px;
   }
   .map-item-actions .btn-outline,
   .map-item-actions .btn-legal {

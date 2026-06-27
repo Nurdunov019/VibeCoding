@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocale } from '../context/LocaleContext'
+import ComplexObjectPicker from './ComplexObjectPicker'
 
 const WHATSAPP_NUMBER = '996550858502'
 
@@ -90,22 +91,12 @@ export default function ContactSection({ complexes = [] }) {
 
           <div className="home-contact-field home-contact-field--select">
             <span className="home-contact-label">{t('contact.objectLabel')}</span>
-            <div className="home-contact-select-wrap">
-              <select
-                value={complexSlug}
-                onChange={(e) => setComplexSlug(e.target.value)}
-                required
-              >
-                {complexes.length === 0 ? (
-                  <option value="">{t('contact.noObjects')}</option>
-                ) : (
-                  complexes.map((c) => (
-                    <option key={c.slug} value={c.slug}>{c.name}</option>
-                  ))
-                )}
-              </select>
-              <span className="home-contact-select-arrow" aria-hidden>▾</span>
-            </div>
+            <ComplexObjectPicker
+              complexes={complexes}
+              value={complexSlug}
+              onChange={setComplexSlug}
+              required
+            />
           </div>
 
           <button type="submit" className="home-contact-submit" disabled={!complexes.length}>

@@ -18,11 +18,27 @@ export default function Layout() {
   const { openLogin, openRegister } = useAuthModal()
   const navigate = useNavigate()
   const [profileOpen, setProfileOpen] = useState(false)
+  const [showcaseHeaderLight, setShowcaseHeaderLight] = useState(false)
   const { hidden: navHidden } = useMobileNavScroll()
 
   useEffect(() => {
     setProfileOpen(false)
   }, [pathname])
+
+  const isShowcasePage = isShowcasePath(pathname)
+
+  useEffect(() => {
+    if (!isShowcasePage) {
+      setShowcaseHeaderLight(false)
+      return undefined
+    }
+    const onScroll = () => {
+      setShowcaseHeaderLight(window.scrollY > window.innerHeight * 0.5)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isShowcasePage, pathname])
 
   const closeProfile = () => setProfileOpen(false)
 
@@ -31,11 +47,9 @@ export default function Layout() {
     navigate('/')
   }
 
-  const isShowcasePage = isShowcasePath(pathname)
-
   return (
     <div className={`app${navHidden ? ' app--nav-hidden' : ''}${isShowcasePage ? ' app--showcase' : ''}`}>
-      <header className="header">
+      <header className={`header${isShowcasePage && showcaseHeaderLight ? ' header--showcase-light' : ''}`}>
         <div className="container header-top">
           <RegionPicker />
 

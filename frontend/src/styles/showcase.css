@@ -1,10 +1,11 @@
 .showcase {
-  --showcase-bg: #14100c;
-  --showcase-surface: #1c1712;
-  --showcase-text: #f5f0e8;
-  --showcase-muted: #a89a8a;
-  --showcase-accent: #c4a574;
-  --showcase-border: rgba(196, 165, 116, 0.2);
+  --showcase-bg: #f7f5f1;
+  --showcase-surface: #ffffff;
+  --showcase-text: #1c1814;
+  --showcase-muted: #6d6560;
+  --showcase-accent: #8b6f42;
+  --showcase-accent-soft: #c4a574;
+  --showcase-border: rgba(28, 24, 20, 0.1);
   color: var(--showcase-text);
   background: var(--showcase-bg);
   margin: -28px calc(-1 * var(--container-pad)) 0;
@@ -24,8 +25,10 @@
 }
 
 .showcase-catalog:not(.showcase-catalog--scroll) {
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100svh;
+  height: 100svh;
+  max-height: 100svh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -260,6 +263,18 @@ html.legal-modal-open .header {
   font-weight: 700;
 }
 
+.showcase .btn-outline {
+  background: #fff;
+  color: var(--showcase-text);
+  border-color: var(--showcase-border);
+}
+
+.showcase .btn-outline:hover {
+  border-color: var(--showcase-accent);
+  color: var(--showcase-accent);
+  background: #fff;
+}
+
 .showcase-scroll {
   position: absolute;
   bottom: 32px;
@@ -299,9 +314,11 @@ html.legal-modal-open .header {
 .catalog-cover-hero {
   position: relative;
   flex: 1;
-  min-height: inherit;
+  height: 100%;
+  min-height: 0;
   display: flex;
   align-items: flex-end;
+  contain: layout style paint;
 }
 
 .catalog-cover-img {
@@ -310,6 +327,8 @@ html.legal-modal-open .header {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  transform: translateZ(0);
 }
 
 .catalog-cover-ph {
@@ -321,7 +340,13 @@ html.legal-modal-open .header {
 .catalog-cover-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(13, 10, 8, 0.2) 0%, rgba(13, 10, 8, 0.85) 70%, #14100c 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(13, 10, 8, 0.12) 0%,
+    rgba(13, 10, 8, 0.45) 45%,
+    rgba(13, 10, 8, 0.72) 72%,
+    rgba(247, 245, 241, 0.98) 100%
+  );
 }
 
 .catalog-cover-text {
@@ -337,7 +362,7 @@ html.legal-modal-open .header {
   font-size: 14px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--showcase-accent);
+  color: #e8d4b0;
   margin-bottom: 12px;
 }
 
@@ -348,11 +373,12 @@ html.legal-modal-open .header {
   letter-spacing: -0.02em;
   margin: 0 0 16px;
   text-transform: uppercase;
+  color: #fff;
 }
 
 .catalog-cover-loc,
 .catalog-cover-dev {
-  color: var(--showcase-muted);
+  color: rgba(255, 255, 255, 0.82);
   margin: 0;
   font-size: 1.05rem;
 }
@@ -456,6 +482,15 @@ html.legal-modal-open .header {
 }
 
 /* Info sections */
+.showcase-info {
+  background: var(--showcase-bg);
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 -16px 48px rgba(20, 16, 12, 0.1);
+}
+
 .showcase-info,
 .showcase-split,
 .showcase-features,
@@ -463,7 +498,8 @@ html.legal-modal-open .header {
 .showcase-panel {
   padding: 64px 24px;
   max-width: 1100px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .showcase-info-head {
@@ -578,11 +614,20 @@ html.legal-modal-open .header {
   }
 }
 
+.showcase-split-media {
+  overflow: hidden;
+  border-radius: 16px;
+  background: #ebe6df;
+  aspect-ratio: 4 / 3;
+}
+
 .showcase-split-media img {
   width: 100%;
+  height: 100%;
   border-radius: 16px;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  display: block;
 }
 
 .showcase-split-text h3,
@@ -635,12 +680,13 @@ html.legal-modal-open .header {
 .showcase-feature-card {
   background: var(--showcase-surface);
   border: 1px solid var(--showcase-border);
-  border-radius: 12px;
-  padding: 24px 20px;
+  border-radius: 14px;
+  padding: 20px 18px;
   min-height: 120px;
   display: flex;
   gap: 12px;
   align-items: flex-start;
+  box-shadow: 0 2px 10px rgba(28, 24, 20, 0.04);
 }
 
 .showcase-feature-dot {
@@ -756,22 +802,29 @@ html.legal-modal-open .header {
 
 /* Immersive layout */
 .app--showcase {
-  background: #14100c;
+  background: var(--showcase-bg, #f7f5f1);
 }
 
 .app--showcase .header {
   background: transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: absolute;
   left: 0;
   right: 0;
   z-index: 100;
 }
 
+.app--showcase .region-picker-btn,
+.app--showcase .lang-select {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.38);
+  color: #fff;
+}
+
 .app--showcase .header .logo-text,
 .app--showcase .header .nav-menu a,
 .app--showcase .header .btn-ghost {
-  color: #f5f0e8;
+  color: #fff;
 }
 
 .app--showcase .header .btn-outline {
@@ -795,6 +848,31 @@ html.legal-modal-open .header {
   color: var(--showcase-accent);
 }
 
+.app--showcase .header.header--showcase-light {
+  background: rgba(247, 245, 241, 0.96);
+  border-bottom-color: rgba(28, 24, 20, 0.08);
+  box-shadow: 0 2px 16px rgba(28, 24, 20, 0.06);
+}
+
+.app--showcase .header.header--showcase-light .logo-text,
+.app--showcase .header.header--showcase-light .nav-menu a,
+.app--showcase .header.header--showcase-light .btn-ghost {
+  color: #1c1814;
+}
+
+.app--showcase .header.header--showcase-light .region-picker-btn,
+.app--showcase .header.header--showcase-light .lang-select {
+  background: #fff;
+  border-color: rgba(28, 24, 20, 0.14);
+  color: #1c1814;
+}
+
+.app--showcase .header.header--showcase-light .btn-outline {
+  color: #1c1814;
+  background: #fff;
+  border-color: rgba(28, 24, 20, 0.14);
+}
+
 .app--showcase .footer {
   display: none;
 }
@@ -803,7 +881,7 @@ html.legal-modal-open .header {
   max-width: none;
   padding: 0;
   margin-top: 0;
-  background: #0d0a08;
+  background: var(--showcase-bg, #f7f5f1);
 }
 
 .main--immersive.container {
@@ -834,8 +912,9 @@ html.legal-modal-open .header {
 .showcase-payment-item {
   background: var(--showcase-surface);
   border: 1px solid var(--showcase-border);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 16px 18px;
+  box-shadow: 0 2px 12px rgba(28, 24, 20, 0.05);
 }
 
 .showcase-payment-item span {
@@ -1106,14 +1185,36 @@ html.legal-modal-open .header {
     overflow-x: hidden;
   }
 
+  .app--showcase.app--nav-hidden {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
   .app--showcase .header {
     position: fixed;
-    background: rgba(13, 10, 8, 0.88);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(13, 10, 8, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: none;
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .app--showcase .header.header--showcase-light {
+    background: rgba(247, 245, 241, 0.94);
+    border-bottom-color: rgba(28, 24, 20, 0.08);
+    box-shadow: 0 2px 16px rgba(28, 24, 20, 0.06);
+  }
+
+  .app--showcase .header.header--showcase-light .logo-text {
+    color: #1c1814;
+  }
+
+  .app--showcase .header.header--showcase-light .region-picker-btn,
+  .app--showcase .header.header--showcase-light .lang-select {
+    background: #fff;
+    border-color: rgba(28, 24, 20, 0.14);
+    color: #1c1814;
   }
 
   .app--showcase .header .logo-text {
@@ -1121,7 +1222,33 @@ html.legal-modal-open .header {
   }
 
   .main--immersive {
-    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
+  .showcase-catalog:not(.showcase-catalog--scroll) {
+    min-height: 100svh;
+    height: 100svh;
+    max-height: 100svh;
+  }
+
+  .catalog-cover-text {
+    padding: 32px 20px 88px;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+  }
+
+  .catalog-cover-name {
+    font-size: clamp(2rem, 10vw, 2.75rem);
+  }
+
+  .showcase-info {
+    margin-top: -24px;
+    border-radius: 24px 24px 0 0;
+    padding-top: 28px;
+  }
+
+  .showcase-split-media {
+    display: none;
   }
 
   .catalog-scroll,
@@ -1161,13 +1288,36 @@ html.legal-modal-open .header {
     font-size: 1.45rem;
   }
 
+  .showcase-stats {
+    margin-top: 28px;
+    padding-top: 28px;
+  }
+
   .showcase-stats-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px 16px;
+    gap: 20px 14px;
   }
 
   .showcase-stat-value {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
+  }
+
+  .showcase-stat-label {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .showcase-payment {
+    margin-top: 24px;
+    padding-top: 24px;
+  }
+
+  .showcase-payment-item {
+    padding: 14px 16px;
+  }
+
+  .showcase-payment-item strong {
+    font-size: 1.05rem;
   }
 
   .showcase-meta {

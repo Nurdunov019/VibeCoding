@@ -956,6 +956,7 @@ button { cursor: pointer; border: none; }
   flex-shrink: 0;
   width: 88px;
   height: 88px;
+  min-height: 88px;
   border-radius: 10px;
   overflow: hidden;
   background: #dce6f2;
@@ -2207,6 +2208,140 @@ button { cursor: pointer; border: none; }
 
 .home-contact-field--select {
   margin-top: 4px;
+}
+
+/* Contact — complex object picker */
+.contact-object-picker {
+  position: relative;
+}
+
+.contact-object-trigger,
+.contact-object-option {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 16px;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.contact-object-trigger {
+  padding-right: 40px;
+}
+
+.contact-object-trigger:focus,
+.contact-object-picker--open .contact-object-trigger {
+  border-color: #1a1a1a;
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.08);
+  outline: none;
+}
+
+.contact-object-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #e8eef5;
+  display: grid;
+  place-items: center;
+}
+
+.contact-object-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.contact-object-thumb-ph {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.contact-object-label {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.contact-object-placeholder {
+  flex: 1;
+  color: #8a8a8a;
+}
+
+.contact-object-chevron {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #1a1a1a;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.contact-object-native-req {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.contact-object-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 50;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid rgba(28, 24, 20, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(20, 16, 12, 0.14);
+  max-height: min(52vh, 360px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.contact-object-option {
+  border: 1.5px solid transparent;
+  margin-bottom: 6px;
+  min-height: 52px;
+}
+
+.contact-object-option:last-child {
+  margin-bottom: 0;
+}
+
+.contact-object-option:hover {
+  border-color: rgba(28, 24, 20, 0.12);
+  background: #faf9f7;
+}
+
+.contact-object-option.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.contact-object-option .contact-object-label {
+  font-weight: 600;
 }
 
 .home-contact-select-wrap {
