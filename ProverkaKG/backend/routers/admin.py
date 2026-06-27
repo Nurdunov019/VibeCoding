@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import List
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from auth import require_admin
 from database import get_db
-from models import Complex, Document, User
+from messages import COMPLEX_NOT_FOUND, DOCUMENT_NOT_FOUND, FILE_TOO_LARGE, FILE_TYPE_UNSUPPORTED, SLUG_TAKEN
+from models import Complex, Document, LegalReport, User
 from schemas import ComplexCreate, ComplexOut, ComplexUpdate, DocumentCreate, DocumentOut, DocumentUpdate
 from services.verification import sync_complex_verification
 
@@ -19,6 +21,11 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 
 ALLOWED_IMAGE = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 ALLOWED_DOC = {".pdf"}
+ALLOWED_LEGAL = {".docx", ".pdf"}
+
+
+class LegalFilePayload(BaseModel):
+    file_path: str
 
 
 @router.post("/upload")
@@ -28,11 +35,20 @@ async def upload_file(
     _: User = Depends(require_admin),
 ):
     ext = Path(file.filename or "").suffix.lower()
-    allowed = ALLOWED_IMAGE if kind == "image" else ALLOWED_DOC
+    if kind == "image":
+        allowed = ALLOWED_IMAGE
+        subdir = "images"
+    elif kind == "catalog":
+        allowed = ALLOWED_DOC
+        subdir = "catalogs"
+    elif kind == "legal":
+        allowed = ALLOWED_LEGAL
+        subdir = "documents"
+    else:
+        allowed = ALLOWED_DOC
+        subdir = "documents"
     if ext not in allowed:
-        raise HTTPException(status_code=400, detail=f"Файл түрү колдоого алынбайт: {ext}")
-
-    subdir = "images" if kind == "image" else "documents"
+        raise HTTPException(status_code=400, detail=FILE_TYPE_UNSUPPORTED.format(ext=ext))
     dest_dir = UPLOAD_DIR / subdir
     dest_dir.mkdir(exist_ok=True)
 
@@ -40,7 +56,7 @@ async def upload_file(
     path = dest_dir / filename
     content = await file.read()
     if len(content) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="Файл 10MBдан чоң")
+        raise HTTPException(status_code=400, detail=FILE_TOO_LARGE)
 
     path.write_bytes(content)
     return {"url": f"/uploads/{subdir}/{filename}", "filename": filename}
@@ -51,7 +67,19 @@ def admin_list_complexes(
     db: Session = Depends(get_db),
     _: User = Depends(require_admin),
 ):
-    return db.query(Complex).order_by(Complex.name).all()
+    complexes = db.query(Complex).order_by(Complex.name).all()
+    if not complexes:
+        return complexes
+    by_id = {c.id: c for c in complexes}
+    rows = (
+        db.query(LegalReport.complex_id, LegalReport.file_path)
+        .filter(LegalReport.complex_id.in_(by_id.keys()))
+        .all()
+    )
+    for complex_id, file_path in rows:
+        if file_path:
+            setattr(by_id[complex_id], "legal_doc_url", file_path)
+    return complexes
 
 
 @router.post("/complexes", response_model=ComplexOut)
@@ -61,7 +89,7 @@ def create_complex(
     _: User = Depends(require_admin),
 ):
     if db.query(Complex).filter(Complex.slug == data.slug).first():
-        raise HTTPException(status_code=400, detail="Slug ээлеген")
+        raise HTTPException(status_code=400, detail=SLUG_TAKEN)
     c = Complex(**data.model_dump())
     db.add(c)
     db.commit()
@@ -78,11 +106,48 @@ def update_complex(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(c, key, value)
     db.commit()
     db.refresh(c)
+    report = db.query(LegalReport).filter(LegalReport.complex_id == c.id).first()
+    if report and report.file_path:
+        setattr(c, "legal_doc_url", report.file_path)
+    return c
+
+
+@router.put("/complexes/{complex_id}/legal-file", response_model=ComplexOut)
+def upsert_legal_file(
+    complex_id: int,
+    data: LegalFilePayload,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    c = db.query(Complex).filter(Complex.id == complex_id).first()
+    if not c:
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
+
+    report = db.query(LegalReport).filter(LegalReport.complex_id == c.id).first()
+    if report:
+        report.file_path = data.file_path
+        if not report.title:
+            report.title = f"Правовое заключение — {c.name}"
+        if not report.conclusion:
+            report.conclusion = f"Юридический файл загружен администратором для объекта {c.name}."
+    else:
+        report = LegalReport(
+            complex_id=c.id,
+            title=f"Правовое заключение — {c.name}",
+            summary="Юридический файл добавлен администратором.",
+            conclusion=f"Юридический файл загружен администратором для объекта {c.name}.",
+            risk_level="medium",
+            file_path=data.file_path,
+        )
+        db.add(report)
+    db.commit()
+    db.refresh(c)
+    setattr(c, "legal_doc_url", data.file_path)
     return c
 
 
@@ -94,7 +159,7 @@ def delete_complex(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     db.delete(c)
     db.commit()
     return {"ok": True}
@@ -108,7 +173,7 @@ def recalculate_rating(
 ):
     c = sync_complex_verification(complex_id, db)
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     return c
 
 
@@ -120,7 +185,7 @@ def admin_complex_documents(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     return db.query(Document).filter(Document.complex_id == complex_id).order_by(Document.doc_type).all()
 
 
@@ -133,7 +198,7 @@ def create_document(
 ):
     c = db.query(Complex).filter(Complex.id == complex_id).first()
     if not c:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     doc = Document(complex_id=complex_id, **data.model_dump())
     db.add(doc)
     db.commit()
@@ -151,7 +216,7 @@ def update_document(
 ):
     doc = db.query(Document).filter(Document.id == doc_id).first()
     if not doc:
-        raise HTTPException(status_code=404, detail="Документ табылган жок")
+        raise HTTPException(status_code=404, detail=DOCUMENT_NOT_FOUND)
     for key, value in data.model_dump(exclude_unset=True).items():
         setattr(doc, key, value)
     db.commit()
@@ -168,7 +233,7 @@ def delete_document(
 ):
     doc = db.query(Document).filter(Document.id == doc_id).first()
     if not doc:
-        raise HTTPException(status_code=404, detail="Документ табылган жок")
+        raise HTTPException(status_code=404, detail=DOCUMENT_NOT_FOUND)
     complex_id = doc.complex_id
     db.delete(doc)
     db.commit()

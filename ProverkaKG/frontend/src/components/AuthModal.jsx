@@ -3,12 +3,24 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useLocale } from '../context/LocaleContext'
+import { translateApiError } from '../utils/translate'
+
+function useDesktopFocus() {
+  const [allow, setAllow] = useState(false)
+  useEffect(() => {
+    setAllow(window.matchMedia('(hover: hover) and (pointer: fine)').matches)
+  }, [])
+  return allow
+}
+
+const SUPPORT_EMAIL = 'admin@proverkakg.kg'
 
 export default function AuthModal() {
   const { mode, close, openLogin, openRegister, isOpen } = useAuthModal()
   const { login, register } = useAuth()
   const { t } = useLocale()
   const navigate = useNavigate()
+  const allowAutoFocus = useDesktopFocus()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,6 +28,7 @@ export default function AuthModal() {
   const [showPass, setShowPass] = useState(false)
   const [error, setError] = useState('')
   const [emailTaken, setEmailTaken] = useState(false)
+  const [forgotHint, setForgotHint] = useState(false)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -29,6 +42,7 @@ export default function AuthModal() {
       setPassword('')
       setFullName('')
       setShowPass(false)
+      setForgotHint(false)
     }
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
@@ -38,6 +52,28 @@ export default function AuthModal() {
     if (isOpen) window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [isOpen, close])
+
+  useEffect(() => {
+    if (!isOpen) {
+      document.documentElement.style.removeProperty('--keyboard-offset')
+      return undefined
+    }
+    const vv = window.visualViewport
+    if (!vv) return undefined
+
+    const sync = () => {
+      const offset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop)
+      document.documentElement.style.setProperty('--keyboard-offset', `${offset}px`)
+    }
+    sync()
+    vv.addEventListener('resize', sync)
+    vv.addEventListener('scroll', sync)
+    return () => {
+      vv.removeEventListener('resize', sync)
+      vv.removeEventListener('scroll', sync)
+      document.documentElement.style.removeProperty('--keyboard-offset')
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -50,7 +86,7 @@ export default function AuthModal() {
       close()
       if (user.is_admin) navigate('/admin')
     } catch (err) {
-      setError(err.message)
+      setError(translateApiError(err.message, t))
     } finally {
       setLoading(false)
     }
@@ -70,7 +106,7 @@ export default function AuthModal() {
         setError(t('auth.emailTaken'))
       } else {
         setEmailTaken(false)
-        setError(msg)
+        setError(translateApiError(msg, t))
       }
     } finally {
       setLoading(false)
@@ -80,18 +116,48 @@ export default function AuthModal() {
   const switchToLogin = () => {
     setError('')
     setEmailTaken(false)
+    setForgotHint(false)
     openLogin()
   }
 
+  const handleForgotPassword = () => {
+    setError('')
+    setForgotHint(true)
+    const subject = encodeURIComponent(t('auth.forgotMailSubject'))
+    const body = encodeURIComponent(t('auth.forgotMailBody', { email: email || '' }))
+    window.location.href = `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`
+  }
+
+  const forgotMailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(t('auth.forgotMailSubject'))}&body=${encodeURIComponent(t('auth.forgotMailBody', { email: email || '' }))}`
+
+  const EyeIcon = ({ open }) => (
+    open ? (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <path d="M3 3l18 18M10.5 10.7A3 3 0 0012 15a3 3 0 002.3-4.3M7.4 7.5C8.8 6.5 10.3 6 12 6c5 0 9 6 9 6a15.6 15.6 0 01-3.2 3.8M5 9.5C3.6 10.6 2.5 12 2 12s3.5 6 10 6c1.2 0 2.3-.2 3.3-.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    ) : (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z" stroke="currentColor" strokeWidth="1.6" />
+        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.6" />
+      </svg>
+    )
+  )
+
   return (
     <div className="modal-overlay" onClick={close} role="presentation">
-      <div className="modal-card" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+      <div className="modal-card auth-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <button type="button" className="modal-close" onClick={close} aria-label="Close">×</button>
 
         <div className="modal-header">
-          <span className="modal-logo">✓</span>
           <h2>{mode === 'login' ? t('auth.login') : t('auth.register')}</h2>
         </div>
+
+        {forgotHint && mode === 'login' && (
+          <div className="auth-info">
+            {t('auth.forgotHint')}{' '}
+            <a href={forgotMailto} className="modal-link">{SUPPORT_EMAIL}</a>
+          </div>
+        )}
 
         {error && (
           <div className="auth-error">
@@ -105,44 +171,91 @@ export default function AuthModal() {
         )}
 
         {mode === 'login' ? (
-          <form onSubmit={handleLogin} className="modal-form">
+          <form onSubmit={handleLogin} className="modal-form" autoComplete="on">
             <label>
               {t('auth.email')}
-              <input type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
+              <input
+                type="email"
+                name="email"
+                inputMode="email"
+                autoComplete="username"
+                placeholder={t('auth.emailPlaceholder')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoFocus={allowAutoFocus}
+              />
             </label>
-            <label>
+            <label className="modal-field">
               {t('auth.password')}
               <div className="password-wrap">
-                <input type={showPass ? 'text' : 'password'} placeholder={t('auth.passwordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1}>
-                  {showPass ? '🙈' : '👁'}
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  name="password"
+                  autoComplete="current-password"
+                  placeholder={t('auth.passwordPlaceholder')}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1} aria-label="Toggle password">
+                  <EyeIcon open={showPass} />
                 </button>
               </div>
+              <button type="button" className="modal-forgot-link" onClick={handleForgotPassword}>
+                {t('auth.forgotPassword')}
+              </button>
             </label>
-            <button type="submit" className="btn-accent btn-block" disabled={loading}>
+            <button type="submit" className="btn-accent btn-block modal-submit" disabled={loading}>
               {loading ? '...' : t('auth.login')}
             </button>
           </form>
         ) : (
-          <form onSubmit={handleRegister} className="modal-form">
+          <form onSubmit={handleRegister} className="modal-form" autoComplete="on">
             <label>
               {t('auth.fullName')}
-              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required autoFocus />
+              <input
+                type="text"
+                name="name"
+                autoComplete="name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                autoFocus={allowAutoFocus}
+              />
             </label>
             <label>
               {t('auth.email')}
-              <input type="email" placeholder={t('auth.emailPlaceholder')} value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input
+                type="email"
+                name="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder={t('auth.emailPlaceholder')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </label>
             <label>
               {t('auth.password')}
               <div className="password-wrap">
-                <input type={showPass ? 'text' : 'password'} placeholder={t('auth.passwordPlaceholder')} value={password} onChange={(e) => setPassword(e.target.value)} minLength={6} required />
-                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1}>
-                  {showPass ? '🙈' : '👁'}
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  name="new-password"
+                  autoComplete="new-password"
+                  placeholder={t('auth.passwordPlaceholder')}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={6}
+                  required
+                />
+                <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)} tabIndex={-1} aria-label="Toggle password">
+                  <EyeIcon open={showPass} />
                 </button>
               </div>
             </label>
-            <button type="submit" className="btn-accent btn-block" disabled={loading}>
+            <button type="submit" className="btn-accent btn-block modal-submit" disabled={loading}>
               {loading ? '...' : t('auth.register')}
             </button>
           </form>
@@ -151,20 +264,16 @@ export default function AuthModal() {
         <p className="modal-footer">
           {mode === 'login' ? (
             <>
-              {t('auth.noAccount')}{' '}
+              <span className="modal-footer-text">{t('auth.noAccount')}</span>{' '}
               <button type="button" className="modal-link" onClick={openRegister}>{t('auth.register')}</button>
             </>
           ) : (
             <>
-              {t('auth.hasAccount')}{' '}
+              <span className="modal-footer-text">{t('auth.hasAccount')}</span>{' '}
               <button type="button" className="modal-link" onClick={openLogin}>{t('auth.login')}</button>
             </>
           )}
         </p>
-
-        {mode === 'login' && (
-          <p className="auth-demo muted">admin@proverkakg.kg / admin123</p>
-        )}
       </div>
     </div>
   )

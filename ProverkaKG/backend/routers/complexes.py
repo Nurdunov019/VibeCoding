@@ -3,10 +3,26 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from database import get_db
-from models import Complex, Document
+from messages import COMPLEX_NOT_FOUND, COMPLEX_NOT_FOUND_SLUG
+from models import Complex, Document, LegalReport
 from schemas import ComplexOut, CompareItem, CompareRequest, MapMarker
 
 router = APIRouter(prefix="/api/complexes", tags=["complexes"])
+
+
+def _attach_legal_doc_urls(db: Session, complexes: List[Complex]) -> List[Complex]:
+    if not complexes:
+        return complexes
+    by_id = {c.id: c for c in complexes}
+    rows = (
+        db.query(LegalReport.complex_id, LegalReport.file_path)
+        .filter(LegalReport.complex_id.in_(by_id.keys()))
+        .all()
+    )
+    for complex_id, file_path in rows:
+        if file_path:
+            setattr(by_id[complex_id], "legal_doc_url", file_path)
+    return complexes
 
 
 @router.get("", response_model=List[ComplexOut])
@@ -29,7 +45,8 @@ def list_complexes(
         q = q.filter(Complex.class_type == class_type)
     if search:
         q = q.filter(Complex.name.contains(search) | Complex.developer.contains(search))
-    return q.order_by(Complex.verification_score.desc(), Complex.name).all()
+    complexes = q.order_by(Complex.verification_score.desc(), Complex.name).all()
+    return _attach_legal_doc_urls(db, complexes)
 
 
 @router.get("/stats")
@@ -55,7 +72,7 @@ def map_markers(db: Session = Depends(get_db)):
         Complex.latitude.isnot(None),
         Complex.longitude.isnot(None),
     ).all()
-    return complexes
+    return _attach_legal_doc_urls(db, complexes)
 
 
 @router.post("/compare", response_model=List[CompareItem])
@@ -64,7 +81,8 @@ def compare_complexes(data: CompareRequest, db: Session = Depends(get_db)):
     for slug in data.slugs:
         c = db.query(Complex).filter(Complex.slug == slug).first()
         if not c:
-            raise HTTPException(status_code=404, detail=f"Объект «{slug}» табылган жок")
+            raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND_SLUG.format(slug=slug))
+        _attach_legal_doc_urls(db, [c])
         docs = db.query(Document).filter(Document.complex_id == c.id).all()
         valid = sum(1 for d in docs if d.status == "valid")
         missing = sum(1 for d in docs if d.status == "missing")
@@ -81,5 +99,6 @@ def compare_complexes(data: CompareRequest, db: Session = Depends(get_db)):
 def get_complex(slug: str, db: Session = Depends(get_db)):
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
+    _attach_legal_doc_urls(db, [complex_])
     return complex_

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database import get_db
+from messages import COMPLEX_NOT_FOUND
 from models import Complex, Document
 from schemas import DocumentOut, VerificationResult
 
@@ -31,7 +32,7 @@ DOC_LABELS = {
 def complex_documents(slug: str, db: Session = Depends(get_db)):
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
     return db.query(Document).filter(Document.complex_id == complex_.id).order_by(Document.doc_type).all()
 
 
@@ -39,7 +40,7 @@ def complex_documents(slug: str, db: Session = Depends(get_db)):
 def verify_complex(slug: str, db: Session = Depends(get_db)):
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
 
     docs = db.query(Document).filter(Document.complex_id == complex_.id).all()
     by_type = {d.doc_type: d for d in docs}
@@ -60,7 +61,8 @@ def verify_complex(slug: str, db: Session = Depends(get_db)):
             checks.append({"type": doc_type, "label": label, "status": "expired", "message": "Срок действия истёк"})
         elif doc.status == "valid":
             valid += 1
-            checks.append({"type": doc_type, "label": label, "status": "valid", "message": "Документ действителен", "number": doc.number})
+            msg = doc.notes or "Документ действителен"
+            checks.append({"type": doc_type, "label": label, "status": "valid", "message": msg, "number": doc.number})
         else:
             checks.append({"type": doc_type, "label": label, "status": doc.status, "message": doc.notes or "Требует проверки"})
 

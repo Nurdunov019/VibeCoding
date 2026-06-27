@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
 class Token(BaseModel):
@@ -30,6 +30,13 @@ class UserOut(BaseModel):
         from_attributes = True
 
 
+def _floors_as_text(value):
+    if value is None:
+        return value
+    text = str(value).strip()
+    return text or None
+
+
 class ComplexOut(BaseModel):
     id: int
     name: str
@@ -44,15 +51,29 @@ class ComplexOut(BaseModel):
     price_per_sqm_usd: Optional[float] = None
     price_per_sqm_kgs: Optional[float] = None
     class_type: Optional[str] = None
-    floors: Optional[int] = None
+    floors: Optional[str] = None
     buildings_count: int
     apartments_count: Optional[int] = None
     verification_score: int
     verification_status: str
     image_url: Optional[str] = None
+    catalog_pdf_url: Optional[str] = None
+    features: Optional[str] = None
+    entrances_count: Optional[int] = None
+    initial_payment_percent: Optional[float] = None
+    barter_extra_usd_sqm: Optional[float] = None
+    barter_min_payment_percent: Optional[float] = None
+    installment_months: Optional[int] = None
+    has_red_book: bool = False
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+    legal_doc_url: Optional[str] = None
+
+    @field_validator("floors", mode="before")
+    @classmethod
+    def normalize_floors(cls, value):
+        return _floors_as_text(value)
 
     class Config:
         from_attributes = True
@@ -71,15 +92,28 @@ class ComplexCreate(BaseModel):
     price_per_sqm_usd: Optional[float] = None
     price_per_sqm_kgs: Optional[float] = None
     class_type: Optional[str] = None
-    floors: Optional[int] = None
+    floors: Optional[str] = None
     buildings_count: int = 1
     apartments_count: Optional[int] = None
     verification_score: int = 0
     verification_status: str = "partial"
     image_url: Optional[str] = None
+    catalog_pdf_url: Optional[str] = None
+    features: Optional[str] = None
+    entrances_count: Optional[int] = None
+    initial_payment_percent: Optional[float] = None
+    barter_extra_usd_sqm: Optional[float] = None
+    barter_min_payment_percent: Optional[float] = None
+    installment_months: Optional[int] = None
+    has_red_book: bool = False
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+
+    @field_validator("floors", mode="before")
+    @classmethod
+    def normalize_floors(cls, value):
+        return _floors_as_text(value)
 
 
 class ComplexUpdate(BaseModel):
@@ -95,15 +129,28 @@ class ComplexUpdate(BaseModel):
     price_per_sqm_usd: Optional[float] = None
     price_per_sqm_kgs: Optional[float] = None
     class_type: Optional[str] = None
-    floors: Optional[int] = None
+    floors: Optional[str] = None
     buildings_count: Optional[int] = None
     apartments_count: Optional[int] = None
     verification_score: Optional[int] = None
     verification_status: Optional[str] = None
     image_url: Optional[str] = None
+    catalog_pdf_url: Optional[str] = None
+    features: Optional[str] = None
+    entrances_count: Optional[int] = None
+    initial_payment_percent: Optional[float] = None
+    barter_extra_usd_sqm: Optional[float] = None
+    barter_min_payment_percent: Optional[float] = None
+    installment_months: Optional[int] = None
+    has_red_book: Optional[bool] = None
     description: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+
+    @field_validator("floors", mode="before")
+    @classmethod
+    def normalize_floors(cls, value):
+        return _floors_as_text(value)
 
 
 class MapMarker(BaseModel):
@@ -111,12 +158,14 @@ class MapMarker(BaseModel):
     name: str
     slug: str
     address: str
+    status: str = "building"
     latitude: float
     longitude: float
     price_per_sqm_usd: Optional[float] = None
     verification_score: int
     verification_status: str
     image_url: Optional[str] = None
+    legal_doc_url: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -191,7 +240,6 @@ class VerificationResult(BaseModel):
 
 class RequestLegalAccess(BaseModel):
     email: EmailStr
-    days: int = Field(default=3, ge=1, le=4)
 
 
 class LegalAccessOut(BaseModel):
@@ -199,6 +247,14 @@ class LegalAccessOut(BaseModel):
     expires_at: datetime
     view_url: str
     message: str
+
+
+class LegalPreview(BaseModel):
+    title: str
+    summary: Optional[str] = None
+    conclusion: str
+    risk_level: str
+    prepared_at: Optional[str] = None
 
 
 class LegalReportView(BaseModel):
@@ -212,3 +268,25 @@ class LegalReportView(BaseModel):
     views_left: int
     watermark: str
     pdf_url: Optional[str] = None
+
+
+class ReviewCreate(BaseModel):
+    rating: int = Field(ge=1, le=5)
+    text: str = Field(min_length=10, max_length=2000)
+
+
+class ReviewOut(BaseModel):
+    id: int
+    rating: int
+    text: str
+    author_name: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ReviewSummary(BaseModel):
+    average_rating: float
+    count: int
+    reviews: List[ReviewOut]

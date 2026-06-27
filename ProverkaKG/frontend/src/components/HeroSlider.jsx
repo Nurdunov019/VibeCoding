@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 
 const DEFAULT_SLIDES = [
-  'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&h=700&fit=crop',
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=700&fit=crop',
-  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&h=700&fit=crop',
-  'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1600&h=700&fit=crop',
-  'https://images.unsplash.com/photo-1460317442991-0ec209397118?w=1600&h=700&fit=crop',
+  'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=900&h=500&fit=crop&q=75',
+  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&h=500&fit=crop&q=75',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&h=500&fit=crop&q=75',
 ]
 
 const INTERVAL_MS = 5000

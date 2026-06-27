@@ -1,46 +1,70 @@
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from database import get_db
+from messages import COMPLEX_NOT_FOUND, LEGAL_ACCESS_NOT_FOUND, LEGAL_NOT_AVAILABLE
 from models import Complex, LegalReport, ReportAccess
-from schemas import RequestLegalAccess, LegalAccessOut, LegalReportView
+from schemas import LegalAccessOut, LegalPreview, LegalReportView, RequestLegalAccess
 
 router = APIRouter(prefix="/api/legal", tags=["legal"])
 
-ACCESS_DAYS_DEFAULT = 3
+UNLIMITED_EXPIRES = datetime(2099, 12, 31, 23, 59, 59)
+
+
+@router.get("/preview/{slug}", response_model=LegalPreview)
+def preview_report(slug: str, db: Session = Depends(get_db)):
+    complex_ = db.query(Complex).filter(Complex.slug == slug).first()
+    if not complex_:
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
+    report = db.query(LegalReport).filter(LegalReport.complex_id == complex_.id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail=LEGAL_NOT_AVAILABLE)
+    return LegalPreview(
+        title=report.title,
+        summary=report.summary,
+        conclusion=report.conclusion,
+        risk_level=report.risk_level,
+        prepared_at=report.prepared_at,
+    )
 
 
 @router.post("/request/{slug}", response_model=LegalAccessOut)
 def request_access(slug: str, data: RequestLegalAccess, db: Session = Depends(get_db)):
     complex_ = db.query(Complex).filter(Complex.slug == slug).first()
     if not complex_:
-        raise HTTPException(status_code=404, detail="Объект табылган жок")
+        raise HTTPException(status_code=404, detail=COMPLEX_NOT_FOUND)
 
     report = db.query(LegalReport).filter(LegalReport.complex_id == complex_.id).first()
     if not report:
-        raise HTTPException(status_code=404, detail="Юридическое заключение пока недоступно")
+        raise HTTPException(status_code=404, detail=LEGAL_NOT_AVAILABLE)
 
-    days = min(data.days, 4)
-    token = secrets.token_urlsafe(32)
-    expires = datetime.utcnow() + timedelta(days=days)
-
-    grant = ReportAccess(
-        report_id=report.id,
-        user_email=data.email,
-        access_token=token,
-        expires_at=expires,
+    existing = (
+        db.query(ReportAccess)
+        .filter(ReportAccess.report_id == report.id, ReportAccess.user_email == data.email)
+        .first()
     )
-    db.add(grant)
-    db.commit()
+    if existing:
+        token = existing.access_token
+    else:
+        token = secrets.token_urlsafe(32)
+        grant = ReportAccess(
+            report_id=report.id,
+            user_email=data.email,
+            access_token=token,
+            expires_at=UNLIMITED_EXPIRES,
+            max_views=999999,
+        )
+        db.add(grant)
+        db.commit()
 
     return LegalAccessOut(
         access_token=token,
-        expires_at=expires,
+        expires_at=UNLIMITED_EXPIRES,
         view_url=f"/legal/view/{token}",
-        message=f"Доступ открыт на {days} дней. Скачивание отключено — только просмотр на платформе.",
+        message="Доступ открыт без ограничения по времени. Скачивание отключено — только просмотр на платформе.",
     )
 
 
@@ -48,13 +72,7 @@ def request_access(slug: str, data: RequestLegalAccess, db: Session = Depends(ge
 def view_report(token: str, db: Session = Depends(get_db)):
     grant = db.query(ReportAccess).filter(ReportAccess.access_token == token).first()
     if not grant:
-        raise HTTPException(status_code=404, detail="Доступ не найден")
-
-    if datetime.utcnow() > grant.expires_at:
-        raise HTTPException(status_code=403, detail="Срок доступа истёк (3–4 дня). Запросите доступ снова.")
-
-    if grant.views_count >= grant.max_views:
-        raise HTTPException(status_code=403, detail="Лимит просмотров исчерпан")
+        raise HTTPException(status_code=404, detail=LEGAL_ACCESS_NOT_FOUND)
 
     report = grant.report
     complex_ = report.complex
@@ -70,7 +88,7 @@ def view_report(token: str, db: Session = Depends(get_db)):
         prepared_at=report.prepared_at,
         complex_name=complex_.name,
         expires_at=grant.expires_at,
-        views_left=max(0, grant.max_views - grant.views_count),
+        views_left=999999,
         watermark=f"ProverkaKG • {grant.user_email} • {datetime.utcnow().strftime('%d.%m.%Y %H:%M')}",
         pdf_url=report.file_path,
     )

@@ -1,19 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { readJsonStorage, writeStorage } from '../utils/safeStorage'
 
 const FavoritesContext = createContext(null)
 const STORAGE_KEY = 'proverkakg_favorites'
 
 export function FavoritesProvider({ children }) {
-  const [favorites, setFavorites] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-    } catch {
-      return []
-    }
-  })
+  const [favorites, setFavorites] = useState(() => readJsonStorage(STORAGE_KEY, []))
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites))
+    writeStorage(STORAGE_KEY, JSON.stringify(favorites))
   }, [favorites])
 
   const toggle = (slug) => {

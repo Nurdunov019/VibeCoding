@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 
-export default function CompareBar() {
+export default function CompareBar({ navHidden = false }) {
   const { slugs, clear, max } = useCompare()
   const { t } = useLocale()
   if (slugs.length === 0) return null
 
   return (
-    <div className="compare-bar">
+    <div className={`compare-bar${navHidden ? ' compare-bar--nav-hidden' : ''}`}>
       <div className="container compare-bar-inner">
         <span>{t('compareBar.label')}: <strong>{slugs.length}</strong> {t('compareBar.of')} {max}</span>
         <div className="compare-bar-actions">

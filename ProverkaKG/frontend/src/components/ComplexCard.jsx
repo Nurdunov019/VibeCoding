@@ -1,32 +1,20 @@
 import { Link } from 'react-router-dom'
-import { useCompare } from '../context/CompareContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { useLocale } from '../context/LocaleContext'
-
-const STATUS_KEYS = {
-  verified: 'card.verified',
-  partial: 'card.partial',
-  unverified: 'card.unverified',
-  risk: 'card.risk',
-}
+import ComplexActionLinks from './ComplexActionLinks'
 
 export default function ComplexCard({ complex }) {
   const { t } = useLocale()
-  const { toggle, isSelected, slugs, max } = useCompare()
   const { toggle: toggleFav, isFavorite } = useFavorites()
-  const stKey = STATUS_KEYS[complex.verification_status] || STATUS_KEYS.unverified
   const statusLabel = complex.status === 'commissioned' ? t('card.commissioned') : t('card.building')
-  const selected = isSelected(complex.slug)
-  const full = slugs.length >= max && !selected
   const fav = isFavorite(complex.slug)
-
   const detailUrl = `/complex/${complex.slug}`
 
   return (
     <article className="complex-card elitka-card">
       <Link to={detailUrl} className="complex-image complex-image-link">
         {complex.image_url ? (
-          <img src={complex.image_url} alt={complex.name} />
+          <img src={complex.image_url} alt={complex.name} loading="lazy" decoding="async" />
         ) : (
           <div className="img-ph">ЖК</div>
         )}
@@ -62,17 +50,7 @@ export default function ComplexCard({ complex }) {
           </div>
           <span className={`status-pill ${complex.status}`}>{statusLabel}</span>
         </div>
-        <div className="complex-actions">
-          <Link to={detailUrl} className="btn-outline btn-sm">{t('card.details')}</Link>
-          <button
-            type="button"
-            className={`btn-compare btn-sm ${selected ? 'active' : ''}`}
-            onClick={() => toggle(complex.slug)}
-            disabled={full}
-          >
-            {selected ? t('card.compared') : `+ ${t('card.compare')}`}
-          </button>
-        </div>
+        <ComplexActionLinks slug={complex.slug} status={complex.status} legalDocUrl={complex.legal_doc_url} />
       </div>
     </article>
   )

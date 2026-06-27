@@ -1,28 +1,39 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { api } from '../api'
+import CatalogCard from '../components/CatalogCard'
 import ComplexCard from '../components/ComplexCard'
+import ContactSection from '../components/ContactSection'
 import HeroSlider from '../components/HeroSlider'
 import { useLocale } from '../context/LocaleContext'
-import { REGIONS } from '../constants/regions'
+import { useRegion } from '../context/RegionContext'
+import { regionApiParams } from '../utils/regionFilter'
 
 export default function Home() {
+  const { hash } = useLocation()
   const { t } = useLocale()
+  const { region } = useRegion()
   const [complexes, setComplexes] = useState([])
   const [stats, setStats] = useState(null)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('')
   const [classType, setClassType] = useState('')
-  const [region, setRegion] = useState('')
   const [verifiedOnly, setVerifiedOnly] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (hash === '#complexes') {
+      document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [hash])
+
+  useEffect(() => {
     setLoading(true)
     const params = {
+      ...regionApiParams(region),
       search: search || undefined,
       status: status || undefined,
       class_type: classType || undefined,
-      region: region || undefined,
     }
     Promise.all([api.getComplexes(params), api.getStats()])
       .then(([c, s]) => {
@@ -32,34 +43,29 @@ export default function Home() {
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [search, status, classType, region, verifiedOnly])
+  }, [search, status, classType, verifiedOnly, region])
 
   const resetFilters = () => {
     setSearch('')
     setStatus('')
     setClassType('')
-    setRegion('')
     setVerifiedOnly(false)
   }
 
-  const slideImages = complexes.map((c) => c.image_url).filter(Boolean)
+  const building = complexes.filter((c) => c.status === 'building')
+  const commissioned = complexes.filter((c) => c.status === 'commissioned')
+  const slideImages = (building.length ? building : complexes).map((c) => c.image_url).filter(Boolean)
 
   return (
     <div className="home-page">
       <HeroSlider images={slideImages}>
-        <div className="hero-compact">
+        <div className="hero-compact hero-compact--borsan">
+          <p className="hero-brand">PROVERKAKG</p>
           <h1>{t('hero.title')}</h1>
-          <p className="hero-compact-sub">{t('hero.sub')}</p>
+          <a href="#complexes" className="btn-hero-cta">{t('catalog.viewObjects')}</a>
         </div>
 
         <section className="filter-compact filter-on-hero">
-          <select className="filter-region-top" value={region} onChange={(e) => setRegion(e.target.value)}>
-            {REGIONS.map((r) => (
-              <option key={r.slug || 'all'} value={r.slug}>
-                {t(`regions.${r.key}`)}
-              </option>
-            ))}
-          </select>
           <input
             placeholder={t('filter.search')}
             value={search}
@@ -81,24 +87,27 @@ export default function Home() {
             <input type="checkbox" checked={verifiedOnly} onChange={(e) => setVerifiedOnly(e.target.checked)} />
             <span>{t('filter.verified')}</span>
           </label>
-          {(search || status || classType || region || verifiedOnly) && (
+          {(search || status || classType || verifiedOnly) && (
             <button type="button" className="btn-reset btn-reset-hero" onClick={resetFilters}>{t('filter.reset')}</button>
           )}
         </section>
 
         {stats && (
-          <section className="stats-compact stats-on-hero">
-            <div className="stat-item"><strong>{stats.total_complexes}</strong><span>{t('stats.objects')}</span></div>
-            <div className="stat-item"><strong>{stats.verified_count}</strong><span>{t('stats.verified')}</span></div>
-            <div className="stat-item"><strong>{stats.building}</strong><span>{t('stats.building')}</span></div>
-            <div className="stat-item"><strong>{stats.commissioned}</strong><span>{t('stats.commissioned')}</span></div>
+          <section className="digits-band">
+            <p className="digits-eyebrow">{t('catalog.inNumbers')}</p>
+            <div className="digits-grid">
+              <div><strong>{stats.total_complexes}</strong><span>{t('stats.objects')}</span></div>
+              <div><strong>{stats.verified_count}</strong><span>{t('stats.verified')}</span></div>
+              <div><strong>{stats.building}</strong><span>{t('stats.building')}</span></div>
+              <div><strong>{stats.commissioned}</strong><span>{t('stats.commissioned')}</span></div>
+            </div>
           </section>
         )}
       </HeroSlider>
 
-      <section className="section-head-simple">
-        <h2>{t('section.list')}</h2>
-        <p className="muted">{complexes.length} {t('section.count')} · {t('section.compareHint')}</p>
+      <section id="complexes" className="section-head-simple">
+        <h2>{t('catalog.projects')}</h2>
+        <p className="muted">{complexes.length} {t('section.count')} · {t('catalog.openHint')}</p>
       </section>
 
       {loading ? (
@@ -106,10 +115,28 @@ export default function Home() {
       ) : complexes.length === 0 ? (
         <p className="empty">{t('empty.notFound')}</p>
       ) : (
-        <div className="grid cards-grid">
-          {complexes.map((c) => <ComplexCard key={c.slug} complex={c} />)}
-        </div>
+        <>
+          {building.length > 0 && (
+            <>
+              <h3 className="catalog-section-title">{t('catalog.buildingSection')}</h3>
+              <div className="catalog-grid">
+                {building.map((c) => <CatalogCard key={c.slug} complex={c} />)}
+              </div>
+            </>
+          )}
+
+          {commissioned.length > 0 && (
+            <>
+              <h3 className="catalog-section-title">{t('catalog.commissionedSection')}</h3>
+              <div className="grid cards-grid">
+                {commissioned.map((c) => <ComplexCard key={c.slug} complex={c} />)}
+              </div>
+            </>
+          )}
+        </>
       )}
+
+      <ContactSection complexes={complexes} />
     </div>
   )
 }

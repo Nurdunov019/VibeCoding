@@ -1,11 +1,12 @@
+export const ALL_REGIONS_SLUG = 'all'
+
 export const REGIONS = [
-  { slug: '', key: 'all' },
+  { slug: ALL_REGIONS_SLUG, key: 'all' },
   { slug: 'bishkek', key: 'bishkek' },
-  { slug: 'chuy', key: 'chuy' },
   { slug: 'osh', key: 'osh' },
   { slug: 'manas', key: 'manas' },
-  { slug: 'naryn', key: 'naryn' },
   { slug: 'issyk-kul', key: 'issykKul' },
+  { slug: 'naryn', key: 'naryn' },
   { slug: 'talas', key: 'talas' },
   { slug: 'batken', key: 'batken' },
 ]

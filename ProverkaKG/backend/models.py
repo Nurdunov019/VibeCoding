@@ -33,12 +33,20 @@ class Complex(Base):
     price_per_sqm_usd = Column(Float, nullable=True)
     price_per_sqm_kgs = Column(Float, nullable=True)
     class_type = Column(String, nullable=True)  # economy, comfort, business, premium
-    floors = Column(Integer, nullable=True)
+    floors = Column(String, nullable=True)
     buildings_count = Column(Integer, default=1)
     apartments_count = Column(Integer, nullable=True)
     verification_score = Column(Integer, default=0)  # 0-100
     verification_status = Column(String, default="partial")  # verified, partial, unverified, risk
     image_url = Column(String, nullable=True)
+    catalog_pdf_url = Column(String, nullable=True)
+    features = Column(Text, nullable=True)
+    entrances_count = Column(Integer, nullable=True)
+    initial_payment_percent = Column(Float, nullable=True)
+    barter_extra_usd_sqm = Column(Float, nullable=True)
+    barter_min_payment_percent = Column(Float, nullable=True)
+    installment_months = Column(Integer, nullable=True)
+    has_red_book = Column(Boolean, default=False)
     description = Column(Text, nullable=True)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
@@ -46,6 +54,7 @@ class Complex(Base):
 
     documents = relationship("Document", back_populates="complex", cascade="all, delete-orphan")
     legal_reports = relationship("LegalReport", back_populates="complex", cascade="all, delete-orphan")
+    reviews = relationship("Review", back_populates="complex", cascade="all, delete-orphan")
 
 
 class Document(Base):
@@ -98,3 +107,17 @@ class ReportAccess(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     report = relationship("LegalReport", back_populates="access_grants")
+
+
+class Review(Base):
+    __tablename__ = "reviews"
+
+    id = Column(Integer, primary_key=True)
+    complex_id = Column(Integer, ForeignKey("complexes.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    rating = Column(Integer, nullable=False)  # 1-5
+    text = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    complex = relationship("Complex", back_populates="reviews")
+    user = relationship("User")

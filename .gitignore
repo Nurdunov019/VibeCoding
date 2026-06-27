@@ -2,12 +2,12 @@
 __pycache__/
 *.py[cod]
 *.db
-backend/venv/
+venv/
 .env
 
 # Node
 node_modules/
-frontend/dist/
+dist/
 
 # IDE
 .idea/

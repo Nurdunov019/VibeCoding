@@ -1,75 +1,61 @@
-# ProverkaKG — Платформа проверки объектов недвижимости
+# ProverkaKG — ПроверКа.кг
 
-Единый ресурс для покупателей и инвесторов: проверка новостроек, разрешительные документы, юридические заключения.
+Платформа проверки новостроек Кыргызстана: документы, разрешения, юридические заключения.
 
-> Аналог [elitka.kg](https://elitka.kg) по UX, но фокус на **проверке объектов**, а не на рекламе застройщиков.
+## 🌐 Сайт (живой)
+
+**GitHub ссылкасы — бул код гана, сайт эмес.** Башкаларга жөнөтүү үчүн төмөнкү шилтемени колдонуңуз:
+
+👉 **https://proverkakg.onrender.com**
+
+| Шилтеме | Эмне |
+|---------|------|
+| https://github.com/Nurdunov019/ProverKa.kg | Код (разработчиктер үчүн) |
+| https://proverkakg.onrender.com | Сайт (баардык үчүн) |
 
 ## Возможности
 
-- **Каталог ЖК** — фильтры, статистика, карточки в стиле elitka.kg
-- **Карта** — объекты на OpenStreetMap с попапами
-- **Сравнение** — до 4 ЖК в таблице
-- **PDF просмотр** — документы и юр. заключения (без скачивания)
-- **Авторизация** — регистрация и вход
+- **Каталог ЖК** — фильтры, статистика, карточки
+- **Шаар тандагыч** — Бишкек, Ош, Манас, Ысык-Көл, Нарын, Талас, Баткен
+- **Юр. заключение** — безлимитный просмотр на платформе
+- **Отзывы жителей** — только на сданных ЖК
+- **Карта** — объекты на OpenStreetMap
+- **Сравнение** — до 4 ЖК
+- **PDF просмотр** — документы без скачивания
 - **Админ панель** — CRUD для ЖК и документов
-- **Deploy** — Render Blueprint (`render.yaml`)
+- **Адаптив** — телефон, планшет, ноутбук, ТВ
 
 ## Запуск локально
 
 ```bash
+cp .env.example .env   # SECRET_KEY жана ADMIN_PASSWORD өзгөртүңүз
 ./start.sh
 ```
 
-Или вручную:
+Сайт: http://localhost:3002
 
-### Backend
+## Тесты
+
 ```bash
 cd backend
-python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload --port 8002
+pytest tests/ -v
 ```
-
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Сайт: http://localhost:3002 (API proxy → :8002)
-
-## Демо
-
-- 4 жилых комплекса с разным статусом проверки
-- Админ: `admin@proverkakg.kg` / `admin123`
-
-## API
-
-| Метод | URL | Описание |
-|-------|-----|----------|
-| GET | /api/complexes | Список объектов |
-| GET | /api/complexes/map | Маркеры для карты |
-| POST | /api/complexes/compare | Сравнение (2–4 slug) |
-| GET | /api/complexes/{slug} | Карточка объекта |
-| GET | /api/documents/complex/{slug} | Документы |
-| GET | /api/documents/verify/{slug} | Проверка |
-| POST | /api/legal/request/{slug} | Доступ к юр. заключению |
-| POST | /api/auth/login | Вход |
-| POST | /api/auth/register | Регистрация |
-| GET | /api/admin/complexes | Админ: список ЖК |
-| POST | /api/admin/complexes | Админ: создать ЖК |
 
 ## Deploy на Render
 
-1. Push репозиторий на GitHub
-2. Render Dashboard → **New Blueprint Instance**
-3. Выберите репозиторий — `render.yaml` в папке `ProverkaKG`
-4. `SECRET_KEY` генерируется автоматически
-5. Disk (1 GB) сохраняет SQLite между деплоями
+1. [render.com](https://render.com) → **New** → **Blueprint**
+2. Репозиторий: **Nurdunov019/ProverKa.kg**
+3. **Apply** — `render.yaml` автоматтык иштейт
+4. Dashboard → Environment: `SECRET_KEY`, `ADMIN_PASSWORD` коюңуз
 
-```bash
-# Production build локально
-./build.sh
-cd backend && uvicorn main:app --host 0.0.0.0 --port 8002
-```
+Код өзгөргөндө GitHub push → Render автоматтык жаңырат.
+
+### Production checklist
+
+- [ ] `SECRET_KEY` — уникальный случайный ключ (не dev-default)
+- [ ] `ADMIN_PASSWORD` — сильный пароль (не `admin123`)
+- [ ] `ADMIN_EMAIL` — рабочий email администратора
+- [ ] SQLite на free tier — данные сбрасываются при redeploy; для продакшена рассмотрите Render Postgres
+- [ ] Загрузки (`/uploads`) — эфемерны на Render; для постоянного хранения нужен диск или S3
+- [ ] `pytest tests/` проходит локально перед push

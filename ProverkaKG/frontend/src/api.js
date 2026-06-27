@@ -1,8 +1,14 @@
+import { readStorage } from './utils/safeStorage'
+
 const API = '/api'
+
+function slugPath(slug) {
+  return encodeURIComponent(slug)
+}
 
 async function request(path, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...options.headers }
-  const token = localStorage.getItem('token')
+  const token = readStorage('token')
   if (token) headers.Authorization = `Bearer ${token}`
 
   const res = await fetch(`${API}${path}`, { ...options, headers })
@@ -24,14 +30,18 @@ export const api = {
   },
   getStats: () => request('/complexes/stats'),
   getMapMarkers: () => request('/complexes/map'),
-  getComplex: (slug) => request(`/complexes/${slug}`),
+  getComplex: (slug) => request(`/complexes/${slugPath(slug)}`),
   compareComplexes: (slugs) =>
     request('/complexes/compare', { method: 'POST', body: JSON.stringify({ slugs }) }),
-  getDocuments: (slug) => request(`/documents/complex/${slug}`),
-  verifyComplex: (slug) => request(`/documents/verify/${slug}`),
-  requestLegalAccess: (slug, email, days = 3) =>
-    request(`/legal/request/${slug}`, { method: 'POST', body: JSON.stringify({ email, days }) }),
+  getDocuments: (slug) => request(`/documents/complex/${slugPath(slug)}`),
+  verifyComplex: (slug) => request(`/documents/verify/${slugPath(slug)}`),
+  requestLegalAccess: (slug, email) =>
+    request(`/legal/request/${slugPath(slug)}`, { method: 'POST', body: JSON.stringify({ email }) }),
   viewLegalReport: (token) => request(`/legal/view/${token}`),
+  getLegalPreview: (slug) => request(`/legal/preview/${slugPath(slug)}`),
+  getReviews: (slug) => request(`/reviews/${slugPath(slug)}`),
+  postReview: (slug, rating, text) =>
+    request(`/reviews/${slugPath(slug)}`, { method: 'POST', body: JSON.stringify({ rating, text }) }),
   login: (email, password) =>
     request('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   register: (email, password, full_name) =>
@@ -43,6 +53,8 @@ export const api = {
     request('/admin/complexes', { method: 'POST', body: JSON.stringify(data) }),
   adminUpdateComplex: (id, data) =>
     request(`/admin/complexes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  adminSetLegalFile: (id, file_path) =>
+    request(`/admin/complexes/${id}/legal-file`, { method: 'PUT', body: JSON.stringify({ file_path }) }),
   adminDeleteComplex: (id) =>
     request(`/admin/complexes/${id}`, { method: 'DELETE' }),
   adminGetDocuments: (complexId) =>
@@ -56,7 +68,7 @@ export const api = {
   adminRecalculate: (complexId) =>
     request(`/admin/complexes/${complexId}/recalculate`, { method: 'POST' }),
   adminUpload: async (file, kind = 'image') => {
-    const token = localStorage.getItem('token')
+    const token = readStorage('token')
     const fd = new FormData()
     fd.append('file', file)
     const res = await fetch(`${API}/admin/upload?kind=${kind}`, {
