@@ -1,14 +1,23 @@
 # Render deploy — ProverkaKG
 
-## Render'де так коюңуз (Python 3)
+## Start Command (гана БИР сап, башка эч нерсе жок!)
 
-| Талаа | Маани |
-|-------|-------|
-| **Root Directory** | *(бош)* |
-| **Build Command** | `./build.sh` |
-| **Start Command** | `cd ProverkaKG/backend && python3 -m uvicorn main:app --host 0.0.0.0 --port $PORT` |
+```
+python3 render_start.py
+```
 
-Start Command'ду скриптсиз түз жазыңыз — `./start-render.sh` Render'де табылбай калышы мүмкүн.
+❌ `start-render.sh` ичиндеги кодду чаптамаңыз  
+❌ `set -euo pipefail` жазбаңыз
+
+## Build Command
+
+```
+./build.sh
+```
+
+## Root Directory
+
+бош калтырыңыз
 
 ## Environment
 
@@ -16,8 +25,8 @@ Start Command'ду скриптсиз түз жазыңыз — `./start-render.
 |-----|-------|
 | `PYTHON_VERSION` | `3.11.0` |
 | `NODE_VERSION` | `20` |
-| `SECRET_KEY` | *(кокусуз узун текст)* |
-| `ADMIN_PASSWORD` | *(сиздин пароль)* |
+| `SECRET_KEY` | узун кокусуз текст |
+| `ADMIN_PASSWORD` | сиздин пароль |
 | `ADMIN_EMAIL` | `admin@proverkakg.kg` |
 | `DATABASE_URL` | `sqlite:///./proverkakg.db` |
 
@@ -26,5 +35,3 @@ Start Command'ду скриптсиз түз жазыңыз — `./start-render.
 ```bash
 curl https://СИЗДИН-URL.onrender.com/api/health
 ```
-
-`"build": "2026-06-27-docker1"`
