@@ -1,47 +1,56 @@
 # Render deploy — ProverkaKG
 
-## Быстрая настройка (proverkakg сервис)
+## ⚠️ МААНИЛҮҮ: Node эмес, Python!
 
-1. [dashboard.render.com](https://dashboard.render.com) → **proverkakg** → **Settings**
-2. **Repository** → `Nurdunov019/VibeCoding` (ветка `main`)
-3. **Root Directory** — оставьте **пустым** (корень репо)
-4. **Runtime** — `Docker` (рекомендуется) **или** `Python` (см. ниже)
-5. **Auto-Deploy** → **On**
-6. **Manual Deploy** → **Deploy latest commit**
+Логдо `Using Node.js version` көрүнсө — сервис **Node** режиминде.  
+`uvicorn: command not found` — ошондуктан чыгат.
 
-## Вариант A — Docker (рекомендуется)
+**Settings** → **Environment** (же **Build & Deploy**) → **Language / Runtime** → **Python 3**
 
-| Поле | Значение |
-|------|----------|
-| Runtime | Docker |
-| Dockerfile Path | `./Dockerfile` |
-| Docker Context | `.` |
+---
 
-## Вариант B — Python
+## Render'де так коюңуз
 
-| Поле | Значение |
-|------|----------|
-| Runtime | Python 3 |
-| Root Directory | *(пусто)* |
-| Build Command | `./build.sh` |
-| Start Command | `cd ProverkaKG/backend && uvicorn main:app --host 0.0.0.0 --port $PORT` |
+**Settings** → **Build & Deploy**:
 
-Environment:
+| Талаа | Маани |
+|-------|-------|
+| **Root Directory** | *(бош)* |
+| **Build Command** | `./build.sh` |
+| **Start Command** | `./start-render.sh` |
+
+❌ Build Command'ка `build.sh` ичиндеги кодду чаптамаңыз — гана `./build.sh` жазыңыз!
+
+**Environment**:
 
 | Key | Value |
 |-----|-------|
 | `PYTHON_VERSION` | `3.11.0` |
 | `NODE_VERSION` | `20` |
-| `SECRET_KEY` | *(случайный)* |
-| `ADMIN_PASSWORD` | *(сильный пароль)* |
+| `SECRET_KEY` | *(кокусуз узун текст)* |
+| `ADMIN_PASSWORD` | *(сиздин пароль)* |
 | `ADMIN_EMAIL` | `admin@proverkakg.kg` |
 | `DATABASE_URL` | `sqlite:///./proverkakg.db` |
 
-## Проверка после deploy
+**Manual Deploy** → **Deploy latest commit**
 
+---
+
+## Ийгиликтүү deploy
+
+Build логдо көрүнүшү керек:
+- `Python deps OK`
+- `✓ built in` (Vite)
+- `Using Python version` (Node эмес!)
+
+Текшерүү:
 ```bash
 curl https://proverkakg.onrender.com/api/health
 ```
+`"build": "2026-06-27-docker1"`
 
-В ответе должно быть `"build": "..."` с сегодняшней датой.  
-В HTML страницы `index-*.js` — новый hash (не `index-Bt7z472d.js`).
+---
+
+## Docker (милдеттүү эмес)
+
+Жаңы Web Service түзгөндө гана көрүнөт. Python жетиштүү.

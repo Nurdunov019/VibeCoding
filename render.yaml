@@ -1,14 +1,12 @@
-# Render Blueprint — VibeCoding repo root
-# Dashboard: New Blueprint → connect Nurdunov019/VibeCoding → Apply
-
+# Render Blueprint — Python (VibeCoding repo root)
 services:
   - type: web
     name: proverkakg
-    runtime: docker
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
+    runtime: python
     region: frankfurt
     plan: free
+    buildCommand: ./build.sh
+    startCommand: ./start-render.sh
     healthCheckPath: /api/health
     envVars:
       - key: SECRET_KEY
@@ -19,3 +17,7 @@ services:
         value: admin@proverkakg.kg
       - key: DATABASE_URL
         value: sqlite:///./proverkakg.db
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: NODE_VERSION
+        value: "20"

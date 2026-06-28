@@ -4,7 +4,8 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "=== ProverkaKG production build ==="
 cd "$ROOT/backend"
-python3 -m pip install -r requirements.txt -q
+python3 -m pip install -r requirements.txt
+python3 -c "import uvicorn; import fastapi; print('Python deps OK')"
 
 cd "$ROOT/frontend"
 npm ci
