@@ -4,7 +4,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "=== ProverkaKG production build ==="
 cd "$ROOT/backend"
-pip install -r requirements.txt -q
+python3 -m pip install -r requirements.txt -q
 
 cd "$ROOT/frontend"
 npm ci

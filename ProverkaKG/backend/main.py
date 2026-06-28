@@ -45,6 +45,8 @@ def migrate_db():
 
 migrate_db()
 
+BUILD_ID = "2026-06-27-docker1"
+
 app = FastAPI(title="ProverkaKG API", version="1.0.0", description="Платформа проверки объектов недвижимости")
 
 app.add_middleware(
@@ -78,7 +80,7 @@ def on_startup():
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "service": "ProverkaKG"}
+    return {"status": "ok", "service": "ProverkaKG", "build": BUILD_ID}
 
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend" / "dist"

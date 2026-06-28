@@ -10,7 +10,7 @@
 
 | Шилтеме | Эмне |
 |---------|------|
-| https://github.com/Nurdunov019/ProverKa.kg | Код (разработчиктер үчүн) |
+| https://github.com/Nurdunov019/VibeCoding | Код (GitHub — Render ушул репого туташуу керек) |
 | https://proverkakg.onrender.com | Сайт (баардык үчүн) |
 
 ## Возможности
@@ -44,12 +44,12 @@ pytest tests/ -v
 
 ## Deploy на Render
 
-1. [render.com](https://render.com) → **New** → **Blueprint**
-2. Репозиторий: **Nurdunov019/ProverKa.kg**
-3. **Apply** — `render.yaml` автоматтык иштейт
-4. Dashboard → Environment: `SECRET_KEY`, `ADMIN_PASSWORD` коюңуз
+Толук көрсөтмө: [RENDER.md](../RENDER.md) (репо түбүндө).
 
-Код өзгөргөндө GitHub push → Render автоматтык жаңырат.
+Кыскача:
+1. Render → **proverkakg** → Repository: `Nurdunov019/VibeCoding`
+2. Runtime: **Docker** (Dockerfile `./Dockerfile`)
+3. **Manual Deploy** → **Deploy latest commit**
 
 ### Production checklist
 

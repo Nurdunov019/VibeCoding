@@ -22,12 +22,12 @@ if [ ! -d "node_modules" ]; then
   npm install
 fi
 
-echo "Frontend: http://localhost:3000"
+echo "Frontend: http://localhost:3002"
 npm run dev &
 FRONT_PID=$!
 
 echo ""
-echo "✓ Сайт: http://localhost:3000"
+echo "✓ Сайт: http://localhost:3002"
 echo "✓ API:  http://localhost:8002/docs"
 echo "Токтотуу: kill $BACK_PID $FRONT_PID"
 

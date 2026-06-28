@@ -1,15 +1,11 @@
-# ProverkaKG — Render Blueprint
-# Deploy: Dashboard → Blueprints → New Blueprint Instance → select this repo
-
+# ProverkaKG — Render Blueprint (если Root Directory = ProverkaKG)
 services:
   - type: web
     name: proverkakg
     runtime: python
     region: frankfurt
     plan: free
-    buildCommand: |
-      pip install -r backend/requirements.txt &&
-      cd frontend && npm ci && npm run build
+    buildCommand: ./build.sh
     startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
@@ -23,3 +19,5 @@ services:
         value: sqlite:///./proverkakg.db
       - key: PYTHON_VERSION
         value: "3.11.0"
+      - key: NODE_VERSION
+        value: "20"

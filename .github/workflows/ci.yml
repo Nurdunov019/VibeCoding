@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ProverkaKG/frontend/package-lock.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Production build
+        run: chmod +x build.sh ProverkaKG/build.sh && ./build.sh
+
+      - name: Backend tests
+        run: |
+          pip install -r ProverkaKG/backend/requirements.txt
+          cd ProverkaKG/backend && pytest tests/ -q

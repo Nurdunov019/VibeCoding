@@ -1,0 +1,11 @@
+**/.venv
+**/venv
+**/__pycache__
+**/*.pyc
+**/.env
+**/node_modules
+**/.git
+**/.DS_Store
+ProverkaKG/backend/uploads
+ProverkaKG/frontend/dist
+ProverkaKG/backend/*.db
