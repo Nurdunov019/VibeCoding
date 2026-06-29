@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 
 function IconHome() {
@@ -38,6 +39,15 @@ function IconAdmin() {
   )
 }
 
+function IconCompare() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M8 4h12M8 10h8M8 16h12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M4 4v4M4 10v4M4 16v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 function IconProfile() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -51,6 +61,7 @@ export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { startPicking } = useCompare()
   const { t } = useLocale()
 
   const showAdminTab = !!user?.is_admin
@@ -58,6 +69,7 @@ export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
   const isHome = pathname === '/'
   const isObjects = pathname.startsWith('/complex')
   const isMap = pathname === '/map'
+  const isCompare = pathname === '/compare'
   const isAdmin = pathname.startsWith('/admin')
 
   const itemClass = (active) => `mobile-nav-item${active ? ' active' : ''}`
@@ -86,6 +98,12 @@ export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
     navigate('/map')
   }
 
+  const goCompare = () => {
+    beforeNav()
+    startPicking()
+    navigate('/compare')
+  }
+
   const goAdmin = () => {
     beforeNav()
     navigate('/admin')
@@ -111,6 +129,10 @@ export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
       <button type="button" className={itemClass(isMap)} onClick={goMap}>
         <IconMap />
         <span>{t('mobileNav.map')}</span>
+      </button>
+      <button type="button" className={itemClass(isCompare)} onClick={goCompare}>
+        <IconCompare />
+        <span>{t('mobileNav.compare')}</span>
       </button>
       {showAdminTab && (
         <button type="button" className={itemClass(isAdmin)} onClick={goAdmin}>

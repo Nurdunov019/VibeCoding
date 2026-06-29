@@ -37,7 +37,7 @@ export const translations = {
       naryn: 'Нарын', talas: 'Талас', batken: 'Баткен',
     },
     whatsapp: { label: 'WhatsApp' },
-    mobileNav: { label: 'Негизги меню', home: 'Башкы', objects: 'Объекттер', map: 'Карта', profile: 'Профиль' },
+    mobileNav: { label: 'Негизги меню', home: 'Башкы', objects: 'Объекттер', map: 'Карта', compare: 'Салыштыруу', profile: 'Профиль' },
     map: {
       title: 'Картадан издөө', sub: 'ЖК {city} — текшерүү статусу жана баасы',
       loading: 'Карта жүктөлүүдө...', noCoords: 'Координаталары бар объекттер жок', check: 'Текшерүү',
@@ -108,6 +108,7 @@ export const translations = {
       submit: 'ӨТҮНҮЧ КАЛТЫРУУ',
       success: 'Рахмат! WhatsApp аркылуу байланышабыз.',
       noObjects: 'Объекттер жок',
+      pickerClose: 'Жабуу',
     },
     compareBar: {
       label: 'Салыштыруу', of: 'ичинен', min: 'Дагы {n} тандаңыз (минимум 2)', wait: '2 ЖК тандаңыз',
@@ -228,7 +229,7 @@ export const translations = {
       naryn: 'Нарын', talas: 'Талас', batken: 'Баткен',
     },
     whatsapp: { label: 'WhatsApp' },
-    mobileNav: { label: 'Главное меню', home: 'Главная', objects: 'Объекты', map: 'Карта', profile: 'Профиль' },
+    mobileNav: { label: 'Главное меню', home: 'Главная', objects: 'Объекты', map: 'Карта', compare: 'Сравнение', profile: 'Профиль' },
     map: {
       title: 'Поиск на карте', sub: 'ЖК в {city} — статус проверки и цена',
       loading: 'Загрузка карты...', noCoords: 'Нет объектов с координатами', check: 'Проверка',
@@ -299,6 +300,7 @@ export const translations = {
       submit: 'ОСТАВИТЬ ЗАЯВКУ',
       success: 'Спасибо! Мы свяжемся с вами в WhatsApp.',
       noObjects: 'Нет объектов',
+      pickerClose: 'Закрыть',
     },
     compareBar: {
       label: 'Сравнение', of: 'из', min: 'Выберите ещё {n} (минимум 2)', wait: 'Выберите 2 ЖК',
@@ -419,7 +421,7 @@ export const translations = {
       naryn: 'Naryn', talas: 'Talas', batken: 'Batken',
     },
     whatsapp: { label: 'WhatsApp' },
-    mobileNav: { label: 'Main menu', home: 'Home', objects: 'Objects', map: 'Map', profile: 'Profile' },
+    mobileNav: { label: 'Main menu', home: 'Home', objects: 'Objects', map: 'Map', compare: 'Compare', profile: 'Profile' },
     map: {
       title: 'Search on map', sub: 'Complexes in {city} — verification status and price',
       loading: 'Loading map...', noCoords: 'No complexes with coordinates', check: 'Verification',
@@ -490,6 +492,7 @@ export const translations = {
       submit: 'SUBMIT REQUEST',
       success: 'Thank you! We will contact you on WhatsApp.',
       noObjects: 'No complexes',
+      pickerClose: 'Close',
     },
     compareBar: {
       label: 'Compare', of: 'of', min: 'Select {n} more (min 2)', wait: 'Select 2 complexes',

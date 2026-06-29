@@ -77,7 +77,14 @@ export default function ComplexObjectPicker({ complexes, value, onChange, requir
       )}
 
       {open && (
-        <ul className="contact-object-list" role="listbox">
+        <>
+          <button
+            type="button"
+            className="contact-picker-backdrop"
+            aria-label={t('contact.pickerClose')}
+            onClick={() => setOpen(false)}
+          />
+          <ul className="contact-object-list" role="listbox">
           {complexes.map((c) => (
             <li key={c.slug} role="option" aria-selected={value === c.slug}>
               <button
@@ -99,7 +106,8 @@ export default function ComplexObjectPicker({ complexes, value, onChange, requir
               </button>
             </li>
           ))}
-        </ul>
+          </ul>
+        </>
       )}
     </div>
   )
