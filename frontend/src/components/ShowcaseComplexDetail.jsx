@@ -44,8 +44,6 @@ export default function ShowcaseComplexDetail({
 
   const features = parseFeatures(complex.features, lang)
   const hasCatalog = Boolean(complex.catalog_pdf_url)
-  const [pdfFailed, setPdfFailed] = useState(false)
-  const showBrochure = hasCatalog && !pdfFailed
 
   const scrollToInfo = (e) => {
     e.preventDefault()
@@ -75,17 +73,11 @@ export default function ShowcaseComplexDetail({
 
   return (
     <div className="showcase">
-      <section id="catalog" className={`showcase-catalog${showBrochure ? ' showcase-catalog--scroll' : ''}`}>
-        {showBrochure ? (
-          <CatalogBrochureViewer url={complex.catalog_pdf_url} title={complex.name} onError={() => setPdfFailed(true)} />
-        ) : (
-          <CatalogCoverHero complex={complex} />
-        )}
-        {!showBrochure && (
-          <a href="#info" className="showcase-scroll" onClick={scrollToInfo} aria-label={t('catalog.scrollDown')}>
-            <span className="showcase-scroll-ring" />
-          </a>
-        )}
+      <section id="catalog" className="showcase-catalog">
+        <CatalogCoverHero complex={complex} />
+        <a href="#info" className="showcase-scroll" onClick={scrollToInfo} aria-label={t('catalog.scrollDown')}>
+          <span className="showcase-scroll-ring" />
+        </a>
       </section>
 
       <section id="info" className="showcase-info">
@@ -197,6 +189,11 @@ export default function ShowcaseComplexDetail({
       <section id="documents" className={`showcase-panel${!isCommissioned ? ' showcase-panel--last' : ''}`}>
         <h3>{t('detail.documents')}</h3>
         <p className="muted">{t('catalog.documentsWrittenHint')}</p>
+        {hasCatalog && (
+          <div className="showcase-brochure">
+            <CatalogBrochureViewer url={complex.catalog_pdf_url} title={complex.name} />
+          </div>
+        )}
         <DocumentWrittenList
           documents={documents}
           viewingPdf={viewingPdf}

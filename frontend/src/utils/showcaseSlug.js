@@ -33,6 +33,5 @@ export function isShowcaseSlug(slug) {
 }
 
 export function isShowcasePath(pathname) {
-  const slug = pathname.replace(/^\/complex\//, '')
-  return pathname.startsWith('/complex/') && isShowcaseSlug(slug)
+  return /^\/complex\/[^/]+/.test(pathname)
 }
