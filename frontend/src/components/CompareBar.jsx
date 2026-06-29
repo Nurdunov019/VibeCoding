@@ -1,11 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 
 export default function CompareBar({ navHidden = false }) {
+  const { pathname } = useLocation()
   const { slugs, clear, max, min, canCompare, remaining } = useCompare()
   const { t } = useLocale()
-  if (slugs.length === 0) return null
+
+  if (slugs.length === 0 || pathname === '/compare') return null
 
   return (
     <div className={`compare-bar${navHidden ? ' compare-bar--nav-hidden' : ''}`}>
@@ -26,7 +28,7 @@ export default function CompareBar({ navHidden = false }) {
               {t('compareBar.go')} ({slugs.length})
             </Link>
           ) : (
-            <span className="muted compare-bar-wait">{t('compareBar.wait')}</span>
+            <Link to="/compare" className="btn-accent btn-sm">{t('compareBar.pick')}</Link>
           )}
           <button type="button" className="btn-ghost btn-sm" onClick={clear}>{t('compareBar.clear')}</button>
         </div>

@@ -651,6 +651,20 @@
   .admin-sticky { top: var(--header-h); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .compare-header { flex-wrap: wrap; gap: 12px; }
+
+  .compare-page {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .compare-picker-item {
+    min-height: 72px;
+    padding: 14px;
+  }
+
+  .compare-picker-add {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
   .legal-view { padding: 28px; }
   .modal-card { width: min(480px, 100%); }
 }
