@@ -11,7 +11,20 @@ from models import User, Complex, Document, LegalReport
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@proverkakg.kg")
 ADMIN_PASSWORD = "112233"
 
+# Admin panel / uploads may customize these — do not reset on every deploy restart.
+PRESERVE_IF_SET_FIELDS = frozenset({"image_url", "catalog_pdf_url"})
+
 SAMPLE_PDF = "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf"
+
+
+def _apply_complex_seed(existing: Complex, data: dict) -> None:
+    """Update complex from seed data without clobbering admin-customized media URLs."""
+    for key, value in data.items():
+        if key in PRESERVE_IF_SET_FIELDS:
+            current = getattr(existing, key, None)
+            if current:
+                continue
+        setattr(existing, key, value)
 
 FEATURED_COMPLEXES = [
     {
@@ -1199,8 +1212,7 @@ def seed_featured_complexes(db):
     for data in FEATURED_COMPLEXES:
         existing = db.query(Complex).filter(Complex.slug == data["slug"]).first()
         if existing:
-            for key, value in data.items():
-                setattr(existing, key, value)
+            _apply_complex_seed(existing, data)
             continue
         statuses = ["valid", "valid", "pending", "missing", "valid"]
         if data.get("has_red_book"):
@@ -1409,8 +1421,7 @@ def seed_admin_complexes(db):
         legal_file = data.pop("legal_file")
         existing = db.query(Complex).filter(Complex.slug == data["slug"]).first()
         if existing:
-            for key, value in data.items():
-                setattr(existing, key, value)
+            _apply_complex_seed(existing, data)
             c = existing
         else:
             c = Complex(**data)

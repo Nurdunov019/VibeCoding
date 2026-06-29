@@ -64,3 +64,24 @@ def test_admin_login(client):
     r = client.post("/api/auth/login", json={"email": "admin@proverkakg.kg", "password": "112233"})
     assert r.status_code == 200
     assert "access_token" in r.json()
+
+
+def test_seed_preserves_custom_image_url(client):
+    from database import SessionLocal
+    from models import Complex
+    from seed import seed_database
+
+    db = SessionLocal()
+    try:
+        siren = db.query(Complex).filter(Complex.slug == "siren").first()
+        assert siren is not None
+        custom = "/uploads/images/siren-custom-test.jpg"
+        siren.image_url = custom
+        db.commit()
+
+        seed_database(db)
+
+        db.refresh(siren)
+        assert siren.image_url == custom
+    finally:
+        db.close()
