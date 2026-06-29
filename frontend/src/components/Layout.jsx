@@ -6,8 +6,10 @@ import { useLocale } from '../context/LocaleContext'
 import AuthModal from './AuthModal'
 import LanguageSwitcher from './LanguageSwitcher'
 import RegionPicker from './RegionPicker'
+import CompareBar from './CompareBar'
 import MobileNav from './MobileNav'
 import MobileProfileSheet from './MobileProfileSheet'
+import { useMobileNavScroll } from '../hooks/useMobileNavScroll'
 import { isShowcasePath } from '../utils/showcaseSlug'
 
 export default function Layout() {
@@ -18,6 +20,7 @@ export default function Layout() {
   const navigate = useNavigate()
   const [profileOpen, setProfileOpen] = useState(false)
   const [showcaseHeaderLight, setShowcaseHeaderLight] = useState(false)
+  const { hidden: navHidden } = useMobileNavScroll()
 
   useEffect(() => {
     setProfileOpen(false)
@@ -79,6 +82,7 @@ export default function Layout() {
           <nav className="nav-menu desktop-only">
             <Link to="/" className={pathname === '/' ? 'active' : ''}>{t('nav.complexes')}</Link>
             <Link to="/map" className={pathname === '/map' ? 'active' : ''}>{t('nav.map')}</Link>
+            <Link to="/compare" className={pathname === '/compare' ? 'active' : ''}>{t('nav.compare')}</Link>
           </nav>
 
           <div className="header-actions desktop-only">
@@ -97,6 +101,8 @@ export default function Layout() {
           </div>
         </div>
       </header>
+
+      <CompareBar navHidden={navHidden} />
 
       <main className={`main${isShowcasePage ? ' main--immersive' : ' container'}`}>
         <Outlet />

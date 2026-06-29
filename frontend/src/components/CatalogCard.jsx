@@ -3,6 +3,7 @@ import { useLocale } from '../context/LocaleContext'
 import { getLegalDocUrl } from '../data/legalDocuments'
 import { mediaUrl } from '../utils/mediaUrl'
 import { formatCompletion, formatLocation } from '../utils/formatCompletion'
+import CompareToggle from './CompareToggle'
 import LegalOpenButton from './LegalOpenButton'
 
 export default function CatalogCard({ complex }) {
@@ -38,6 +39,8 @@ export default function CatalogCard({ complex }) {
           {hasLegal && (
             <LegalOpenButton slug={complex.slug} docUrl={legalDocUrl} className="catalog-card-legal" />
           )}
+
+          <CompareToggle slug={complex.slug} className="btn-compare btn-sm catalog-card-compare" />
 
           <Link to={complexUrl} className="catalog-card-cta" aria-label={t('card.details')}>
             →

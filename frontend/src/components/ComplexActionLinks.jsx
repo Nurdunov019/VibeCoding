@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useLocale } from '../context/LocaleContext'
 import { complexUrls } from '../utils/complex'
+import CompareToggle from './CompareToggle'
 import LegalOpenButton from './LegalOpenButton'
 
 export default function ComplexActionLinks({ slug, status, legalDocUrl, className = 'complex-actions' }) {
@@ -15,6 +16,7 @@ export default function ComplexActionLinks({ slug, status, legalDocUrl, classNam
       {commissioned && (
         <Link to={urls.reviews} className="btn-outline btn-sm">{t('card.reviews')}</Link>
       )}
+      <CompareToggle slug={slug} />
     </div>
   )
 }

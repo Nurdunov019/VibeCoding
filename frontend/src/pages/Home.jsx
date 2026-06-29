@@ -107,7 +107,7 @@ export default function Home() {
 
       <section id="complexes" className="section-head-simple">
         <h2>{t('catalog.projects')}</h2>
-        <p className="muted">{complexes.length} {t('section.count')} · {t('catalog.openHint')}</p>
+        <p className="muted">{complexes.length} {t('section.count')} · {t('catalog.openHint')} · {t('section.compareHint')}</p>
       </section>
 
       {loading ? (

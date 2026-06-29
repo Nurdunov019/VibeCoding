@@ -916,7 +916,8 @@ button { cursor: pointer; border: none; }
   gap: 8px;
 }
 .complex-actions .btn-outline,
-.complex-actions .btn-legal {
+.complex-actions .btn-legal,
+.complex-actions .btn-compare {
   width: 100%;
   min-width: 0;
   min-height: 40px;
@@ -926,7 +927,8 @@ button { cursor: pointer; border: none; }
   grid-template-columns: 1fr;
 }
 .complex-actions-3 .btn-outline,
-.complex-actions-3 .btn-legal {
+.complex-actions-3 .btn-legal,
+.complex-actions-3 .btn-compare {
   width: 100%;
 }
 

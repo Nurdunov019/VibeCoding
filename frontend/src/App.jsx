@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { CompareProvider } from './context/CompareContext'
 import { FavoritesProvider } from './context/FavoritesContext'
 import { AuthModalProvider } from './context/AuthModalContext'
 import { LocaleProvider } from './context/LocaleContext'
@@ -18,6 +19,7 @@ const Login = lazyWithRetry(() => import('./pages/Login'))
 const Register = lazyWithRetry(() => import('./pages/Register'))
 const MapPage = lazyWithRetry(() => import('./pages/Map'))
 const Favorites = lazyWithRetry(() => import('./pages/Favorites'))
+const Compare = lazyWithRetry(() => import('./pages/Compare'))
 const Admin = lazyWithRetry(() => import('./pages/Admin'))
 
 export default function App() {
@@ -29,6 +31,7 @@ export default function App() {
       <AuthModalProvider>
       <AuthProvider>
         <FavoritesProvider>
+        <CompareProvider>
           <ErrorBoundary>
           <Routes>
             <Route element={<Layout />}>
@@ -36,7 +39,7 @@ export default function App() {
               <Route path="/complex/:slug" element={<ComplexDetail />} />
               <Route path="/legal/view/:token" element={<Suspense fallback={<PageLoader />}><LegalView /></Suspense>} />
               <Route path="/map" element={<Suspense fallback={<PageLoader />}><MapPage /></Suspense>} />
-              <Route path="/compare" element={<Navigate to="/" replace />} />
+              <Route path="/compare" element={<Suspense fallback={<PageLoader />}><Compare /></Suspense>} />
               <Route path="/favorites" element={<Suspense fallback={<PageLoader />}><Favorites /></Suspense>} />
               <Route path="/login" element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
               <Route path="/register" element={<Suspense fallback={<PageLoader />}><Register /></Suspense>} />
@@ -44,6 +47,7 @@ export default function App() {
             </Route>
           </Routes>
           </ErrorBoundary>
+        </CompareProvider>
         </FavoritesProvider>
       </AuthProvider>
       </AuthModalProvider>
