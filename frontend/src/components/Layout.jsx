@@ -30,12 +30,25 @@ export default function Layout() {
       setShowcaseHeaderLight(false)
       return undefined
     }
-    const onScroll = () => {
-      setShowcaseHeaderLight(window.scrollY > window.innerHeight * 0.5)
+    let observer
+    const attach = () => {
+      const info = document.getElementById('info')
+      if (!info) return false
+      observer = new IntersectionObserver(
+        ([entry]) => setShowcaseHeaderLight(entry.isIntersecting),
+        { threshold: 0, rootMargin: '-56px 0px 0px 0px' },
+      )
+      observer.observe(info)
+      return true
     }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    if (!attach()) {
+      const frame = requestAnimationFrame(() => attach())
+      return () => {
+        cancelAnimationFrame(frame)
+        observer?.disconnect()
+      }
+    }
+    return () => observer?.disconnect()
   }, [isShowcasePage, pathname])
 
   const closeProfile = () => setProfileOpen(false)

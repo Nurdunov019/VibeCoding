@@ -58,12 +58,19 @@ export default function MobileProfileSheet({ open, onClose }) {
             <span>{t('profile.language')}</span>
             <LanguageSwitcher />
           </div>
-          {user && (
-            <button type="button" className="profile-menu-item danger" onClick={handleLogout}>
+        </nav>
+
+        <div className="profile-sheet-footer">
+          {user ? (
+            <button type="button" className="profile-menu-item danger profile-sheet-exit" onClick={handleLogout}>
               {t('auth.logout')}
             </button>
+          ) : (
+            <button type="button" className="profile-menu-item profile-sheet-exit" onClick={onClose}>
+              {t('profile.close')}
+            </button>
           )}
-        </nav>
+        </div>
       </div>
     </div>
   )

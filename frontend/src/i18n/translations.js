@@ -72,7 +72,7 @@ export const translations = {
       formComplexStatus: 'Объект статусу', formLat: 'Широта', formLng: 'Долгота', formDescription: 'Сүрөттөмө',
       formDocType: 'Түрү', formDocTitle: 'Аталышы', formDocNumber: 'Номер', formDocStatus: 'Статус',
     },
-    profile: { title: 'Профиль', guest: 'Аккаунт жок — кириңиз же катталыңыз', language: 'Тил' },
+    profile: { title: 'Профиль', guest: 'Аккаунт жок — кириңиз же катталыңыз', language: 'Тил', close: 'Жабуу' },
     stats: { objects: 'объект', building: 'курулуп жатат', commissioned: 'берилген', avgPrice: 'орточо баа/м²', verified: 'текшерилген' },
     section: { list: 'Текшерилген объекттер', popular: 'Бишкекте эң популярдуу жаңы үйлөр', howTo: 'Кантип кошулат?', count: 'объект', compareHint: '4кө чейин салыштыруу', legalHint: 'Юр. жыйынтык жана пикирлер — сдан объекттерде' },
     catalog: {
@@ -257,7 +257,7 @@ export const translations = {
       formComplexStatus: 'Статус объекта', formLat: 'Широта', formLng: 'Долгота', formDescription: 'Описание',
       formDocType: 'Тип', formDocTitle: 'Название', formDocNumber: 'Номер', formDocStatus: 'Статус',
     },
-    profile: { title: 'Профиль', guest: 'Нет аккаунта — войдите или зарегистрируйтесь', language: 'Язык' },
+    profile: { title: 'Профиль', guest: 'Нет аккаунта — войдите или зарегистрируйтесь', language: 'Язык', close: 'Закрыть' },
     stats: { objects: 'объектов', building: 'строятся', commissioned: 'сданы', avgPrice: 'ср. цена/м²', verified: 'проверены' },
     section: { list: 'Проверенные объекты', popular: 'Самые популярные новостройки в городе Бишкек', howTo: 'Как сюда попасть?', count: 'объектов', compareHint: 'выберите до 4 для сравнения', legalHint: 'Юр. заключение и отзывы — на сданных объектах' },
     catalog: {
@@ -442,7 +442,7 @@ export const translations = {
       formComplexStatus: 'Complex status', formLat: 'Latitude', formLng: 'Longitude', formDescription: 'Description',
       formDocType: 'Type', formDocTitle: 'Title', formDocNumber: 'Number', formDocStatus: 'Status',
     },
-    profile: { title: 'Profile', guest: 'No account — log in or sign up', language: 'Language' },
+    profile: { title: 'Profile', guest: 'No account — log in or sign up', language: 'Language', close: 'Close' },
     stats: { objects: 'complexes', building: 'building', commissioned: 'completed', avgPrice: 'avg price/m²', verified: 'verified' },
     section: { list: 'Verified complexes', popular: 'Most popular new builds in Bishkek', howTo: 'How to get listed?', count: 'results', compareHint: 'select up to 4 to compare', legalHint: 'Legal reports and reviews — on completed complexes' },
     catalog: {

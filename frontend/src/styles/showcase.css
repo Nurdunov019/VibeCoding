@@ -1195,6 +1195,7 @@ html.legal-modal-open .header {
   .app--showcase {
     padding-top: 0;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
   }
 
   .app--showcase.app--nav-hidden {
@@ -1209,7 +1210,7 @@ html.legal-modal-open .header {
     box-shadow: none;
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
-    transition: background 0.25s ease, border-color 0.25s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
   }
 
   .app--showcase .header.header--showcase-light {
@@ -1238,9 +1239,18 @@ html.legal-modal-open .header {
   }
 
   .showcase-catalog:not(.showcase-catalog--scroll) {
-    min-height: 100svh;
-    height: 100svh;
-    max-height: 100svh;
+    min-height: 100lvh;
+    height: 100lvh;
+    max-height: 100lvh;
+  }
+
+  .catalog-cover-hero {
+    contain: none;
+  }
+
+  .catalog-cover-img {
+    transform: none;
+    will-change: auto;
   }
 
   .catalog-cover-text {

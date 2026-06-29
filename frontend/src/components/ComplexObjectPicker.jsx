@@ -9,7 +9,11 @@ export default function ComplexObjectPicker({ complexes, value, onChange, requir
   const selected = complexes.find((c) => c.slug === value)
 
   useEffect(() => {
-    if (!open) return undefined
+    if (!open) {
+      document.body.classList.remove('contact-picker-open')
+      return undefined
+    }
+    document.body.classList.add('contact-picker-open')
     const close = (e) => {
       if (rootRef.current?.contains(e.target)) return
       setOpen(false)
@@ -18,9 +22,13 @@ export default function ComplexObjectPicker({ complexes, value, onChange, requir
       if (e.key === 'Escape') setOpen(false)
     }
     document.addEventListener('mousedown', close)
-    document.addEventListener('touchstart', close, { passive: true })
     document.addEventListener('keydown', onKey)
+    const touchTimer = window.setTimeout(() => {
+      document.addEventListener('touchstart', close, { passive: true })
+    }, 100)
     return () => {
+      document.body.classList.remove('contact-picker-open')
+      window.clearTimeout(touchTimer)
       document.removeEventListener('mousedown', close)
       document.removeEventListener('touchstart', close)
       document.removeEventListener('keydown', onKey)
@@ -32,7 +40,10 @@ export default function ComplexObjectPicker({ complexes, value, onChange, requir
       <button
         type="button"
         className="contact-object-trigger"
-        onClick={() => setOpen((v) => !v)}
+        onClick={(e) => {
+          e.stopPropagation()
+          setOpen((v) => !v)
+        }}
         aria-expanded={open}
         aria-haspopup="listbox"
       >

@@ -513,6 +513,7 @@
 
   .contact-object-list {
     max-height: min(46vh, 320px);
+    box-shadow: 0 16px 48px rgba(20, 16, 12, 0.22);
   }
   .hero-banner-content { padding: 24px 16px 20px; }
   .filter-on-hero { max-width: 100%; }
