@@ -419,8 +419,54 @@
     gap: 16px;
   }
   .location-map {
-    height: min(52vw, 280px);
-    min-height: 220px;
+    height: min(56vw, 300px);
+    min-height: 240px;
+  }
+
+  .location-categories {
+    margin-left: calc(-1 * max(16px, env(safe-area-inset-left)));
+    margin-right: calc(-1 * max(16px, env(safe-area-inset-right)));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .location-categories::-webkit-scrollbar { display: none; }
+
+  .loc-cat {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  .location-item {
+    min-height: 52px;
+    padding: 14px 12px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .location-map-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: max(12px, env(safe-area-inset-left));
+  }
+
+  .location-address strong {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .showcase-location h3 {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  .location-section h2 {
+    font-size: 1.15rem;
   }
 }
 

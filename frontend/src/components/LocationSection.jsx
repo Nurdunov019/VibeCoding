@@ -49,6 +49,12 @@ export default function LocationSection({ complex }) {
   const hasCoords = complex.latitude && complex.longitude
   const center = hasCoords ? [complex.latitude, complex.longitude] : [42.8746, 74.5698]
 
+  const showCity = Boolean(
+    complex.city
+    && complex.city.trim()
+    && !(complex.address || '').toLowerCase().includes(complex.city.trim().toLowerCase()),
+  )
+
   const nearby = useMemo(
     () => getNearbyPlaces(complex.slug, complex.latitude, complex.longitude),
     [complex.slug, complex.latitude, complex.longitude]
@@ -81,8 +87,6 @@ export default function LocationSection({ complex }) {
 
   return (
     <section className="location-section">
-      <h2>{t('location.title')}</h2>
-
       <div className="location-map-wrap">
         <MapContainer center={center} zoom={15} className="location-map" scrollWheelZoom={false}>
           <TileLayer
@@ -116,7 +120,7 @@ export default function LocationSection({ complex }) {
 
       <div className="location-address">
         <strong>{complex.address}</strong>
-        <span>{complex.city}</span>
+        {showCity && <span>{complex.city}</span>}
       </div>
 
       <div className="location-categories">

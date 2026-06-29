@@ -708,6 +708,10 @@ html.legal-modal-open .header {
   border-top: 1px solid var(--showcase-border);
 }
 
+.showcase-location .location-section {
+  padding: 0;
+}
+
 .showcase-location .location-map {
   border-radius: 16px;
   overflow: hidden;
