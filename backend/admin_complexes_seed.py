@@ -233,3 +233,147 @@ ADMIN_COMPLEXES = [
         "legal_file": "/documents/tokio-city-legal.docx",
     },
 ]
+
+
+def build_admin_complex_documents(entry: dict) -> list[dict]:
+    """Standard verification documents for admin-added complexes."""
+    name = entry["name"]
+    address = entry["address"]
+    has_red = entry.get("has_red_book", False)
+    legal_file = entry.get("legal_file")
+    description = entry.get("description", "")
+    features = entry.get("features", "")
+
+    land_status = "pending" if has_red else "valid"
+    permit_status = "valid"
+    expertise_status = "pending"
+    commissioning_status = "missing"
+    ownership_status = "pending"
+
+    land_notes = (
+        f"Объект «{name}», адрес: {address}. "
+        + (
+            "Земельный участок на «красной книге» — требуется дополнительная проверка "
+            "правоустанавливающих документов и договоров с собственником участка."
+            if has_red
+            else "Право застройки подтверждено. Рекомендуется сверить выписку ЕГРПНИ перед сделкой."
+        )
+    )
+
+    permit_notes = (
+        f"Архитектурно-градостроительное заключение по объекту «{name}». "
+        f"{description} "
+        "Объект включён в перечень строящихся. Сейсмоустойчивость — 8 баллов."
+    )
+
+    expertise_notes = (
+        f"По объекту «{name}» положительное заключение госэкспертизы выдано на I этап "
+        "(архитектурные и конструктивные решения). "
+        "Заключение по II этапу (инженерные коммуникации) на момент проверки отсутствует — "
+        "застройщику необходимо предоставить."
+    )
+
+    commissioning_notes = (
+        f"Объект «{name}» находится в стадии строительства "
+        f"(сдача: {entry.get('completion_quarter', '')} {entry.get('completion_year', '')}). "
+        "Разрешение на ввод в эксплуатацию оформляется после завершения строительства."
+    )
+
+    ownership_notes = (
+        f"По объекту «{name}» применяется схема предварительного договора купли-продажи / ДДУ. "
+        f"{features[:200]}{'…' if len(features) > 200 else ''} "
+        "Перед сделкой рекомендуется проверить условия договора и правовую связку с земельным участком."
+    )
+
+    docs = [
+        {
+            "doc_type": "land_title",
+            "title": "Госакт о праве частной собственности на земельный участок",
+            "status": land_status,
+            "number": None,
+            "issued_by": "ГУ «Кадастр»" if land_status == "valid" else None,
+            "issued_date": None,
+            "notes": land_notes,
+            "file_url": legal_file if land_status == "valid" and legal_file else None,
+            "is_public": True,
+        },
+        {
+            "doc_type": "construction_permit",
+            "title": "Архитектурно-градостроительное заключение",
+            "status": permit_status,
+            "number": None,
+            "issued_by": "МП «Бишкекглавархитектура»",
+            "issued_date": None,
+            "notes": permit_notes,
+            "file_url": None,
+            "is_public": True,
+        },
+        {
+            "doc_type": "expertise",
+            "title": "Заключение государственной экспертизы проектно-технических решений",
+            "status": expertise_status,
+            "number": None,
+            "issued_by": "Государственная экспертиза",
+            "issued_date": None,
+            "notes": expertise_notes,
+            "file_url": None,
+            "is_public": True,
+        },
+        {
+            "doc_type": "commissioning",
+            "title": "Разрешение на ввод в эксплуатацию",
+            "status": commissioning_status,
+            "number": None,
+            "issued_by": None,
+            "issued_date": None,
+            "notes": commissioning_notes,
+            "file_url": None,
+            "is_public": True,
+        },
+        {
+            "doc_type": "ownership_scheme",
+            "title": "Схема оформления прав собственности",
+            "status": ownership_status,
+            "number": None,
+            "issued_by": entry.get("developer") or "Застройщик",
+            "issued_date": None,
+            "notes": ownership_notes,
+            "file_url": legal_file if legal_file and legal_file.endswith(".pdf") else None,
+            "is_public": True,
+        },
+    ]
+    return docs
+
+
+def build_admin_legal_report(entry: dict) -> dict:
+    name = entry["name"]
+    return {
+        "title": f"Правовое заключение — {name}",
+        "summary": (
+            f"Экспертная оценка законности строительства объекта «{name}» "
+            f"({entry['address']}). Документ содержит сведения о разрешительной документации, "
+            "земельном участке и правовых рисках для покупателя."
+        ),
+        "conclusion": (
+            f"ОБЪЕКТ\n{name}, {entry['address']}\n"
+            f"{entry.get('description', '')}\n\n"
+            f"ХАРАКТЕРИСТИКИ\n{entry.get('features', '')}\n\n"
+            + (
+                "ЗЕМЕЛЬНЫЙ УЧАСТОК\nУчасток на «красной книге» — требуется проверка "
+                "правоустанавливающих документов.\n\n"
+                if entry.get("has_red_book")
+                else ""
+            )
+            + "РАЗРЕШИТЕЛЬНАЯ ДОКУМЕНТАЦИЯ\n"
+            "АГЗ получено. Госэкспертиза I этапа — положительно. "
+            "II этап (инженерные коммуникации) — отсутствует.\n\n"
+            "РИСКИ И РЕКОМЕНДАЦИИ\n"
+            "• Проверить договор с застройщиком перед сделкой\n"
+            "• Уточнить статус земельного участка\n"
+            "• Запросить заключение госэкспертизы II этапа\n\n"
+            "Перед покупкой рекомендуется дополнительная юридическая проверка."
+        ),
+        "risk_level": "medium" if entry.get("has_red_book") else "low",
+        "prepared_at": "15.01.2026",
+        "file_path": entry.get("legal_file"),
+    }

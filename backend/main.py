@@ -45,7 +45,7 @@ def migrate_db():
 
 migrate_db()
 
-BUILD_ID = "2026-06-29-mapthumb"
+BUILD_ID = "2026-06-29-documents"
 
 app = FastAPI(title="ProverkaKG API", version="1.0.0", description="Платформа проверки объектов недвижимости")
 

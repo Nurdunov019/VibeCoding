@@ -1,5 +1,10 @@
 import os
-from admin_complexes_seed import ADMIN_COMPLEXES, LEGACY_DUPLICATE_SLUGS
+from admin_complexes_seed import (
+    ADMIN_COMPLEXES,
+    LEGACY_DUPLICATE_SLUGS,
+    build_admin_complex_documents,
+    build_admin_legal_report,
+)
 from auth import hash_password
 from models import User, Complex, Document, LegalReport
 
@@ -1397,6 +1402,8 @@ def seed_green_line_documents(db):
 
 
 def seed_admin_complexes(db):
+    from services.verification import sync_complex_verification
+
     for entry in ADMIN_COMPLEXES:
         data = dict(entry)
         legal_file = data.pop("legal_file")
@@ -1410,19 +1417,29 @@ def seed_admin_complexes(db):
             db.add(c)
             db.flush()
 
+        legal_data = build_admin_legal_report({**entry, "legal_file": legal_file})
         report = db.query(LegalReport).filter(LegalReport.complex_id == c.id).first()
         if report:
-            report.file_path = legal_file
-            report.title = f"Правовое заключение — {c.name}"
+            for key, value in legal_data.items():
+                setattr(report, key, value)
         else:
-            db.add(LegalReport(
-                complex_id=c.id,
-                title=f"Правовое заключение — {c.name}",
-                summary="Юридический файл добавлен администратором.",
-                conclusion=f"Юридический файл загружен администратором для объекта {c.name}.",
-                risk_level="medium",
-                file_path=legal_file,
-            ))
+            db.add(LegalReport(complex_id=c.id, **legal_data))
+
+        for spec in build_admin_complex_documents({**entry, "legal_file": legal_file}):
+            matches = db.query(Document).filter(
+                Document.complex_id == c.id,
+                Document.doc_type == spec["doc_type"],
+            ).order_by(Document.id).all()
+            doc = matches[0] if matches else None
+            for extra in matches[1:]:
+                db.delete(extra)
+            if doc:
+                for key, value in spec.items():
+                    setattr(doc, key, value)
+            else:
+                db.add(Document(complex_id=c.id, **spec))
+
+        sync_complex_verification(c.id, db)
 
 
 def remove_duplicate_complexes(db):
