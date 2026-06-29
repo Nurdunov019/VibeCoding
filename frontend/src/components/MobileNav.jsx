@@ -48,15 +48,15 @@ function IconProfile() {
 }
 
 export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
-  const { pathname, hash } = useLocation()
+  const { pathname } = useLocation()
   const navigate = useNavigate()
   const { user } = useAuth()
   const { t } = useLocale()
 
   const showAdminTab = !!user?.is_admin
 
-  const isHome = pathname === '/' && hash !== '#complexes'
-  const isObjects = pathname.startsWith('/complex') || (pathname === '/' && hash === '#complexes')
+  const isHome = pathname === '/'
+  const isObjects = pathname.startsWith('/complex')
   const isMap = pathname === '/map'
   const isAdmin = pathname.startsWith('/admin')
 
@@ -76,9 +76,8 @@ export default function MobileNav({ koshuuOpen, onKoshuu, onNavClick }) {
     beforeNav()
     if (pathname === '/') {
       document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      if (hash !== '#complexes') navigate('/#complexes', { replace: true })
     } else {
-      navigate('/#complexes')
+      navigate('/', { state: { scrollToComplexes: true } })
     }
   }
 

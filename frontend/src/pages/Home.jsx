@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import CatalogCard from '../components/CatalogCard'
 import ComplexCard from '../components/ComplexCard'
 import ContactSection from '../components/ContactSection'
 import HeroSlider from '../components/HeroSlider'
+import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { useRegion } from '../context/RegionContext'
 import { regionApiParams } from '../utils/regionFilter'
 
 export default function Home() {
-  const { hash } = useLocation()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { picking, startPicking } = useCompare()
   const { t } = useLocale()
   const { region } = useRegion()
   const [complexes, setComplexes] = useState([])
@@ -22,10 +25,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (hash === '#complexes') {
+    if (location.state?.comparePicking) startPicking()
+    if (!location.state?.scrollToComplexes) return undefined
+    const frame = requestAnimationFrame(() => {
       document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  }, [hash])
+      navigate(location.pathname, { replace: true, state: {} })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [location.state, location.pathname, navigate, startPicking])
 
   useEffect(() => {
     setLoading(true)
@@ -62,7 +69,16 @@ export default function Home() {
         <div className="hero-compact hero-compact--borsan">
           <p className="hero-brand">PROVERKAKG</p>
           <h1>{t('hero.title')}</h1>
-          <a href="#complexes" className="btn-hero-cta">{t('catalog.viewObjects')}</a>
+          <a
+            href="#complexes"
+            className="btn-hero-cta"
+            onClick={(e) => {
+              e.preventDefault()
+              document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }}
+          >
+            {t('catalog.viewObjects')}
+          </a>
         </div>
 
         <section className="filter-compact filter-on-hero">
@@ -107,7 +123,10 @@ export default function Home() {
 
       <section id="complexes" className="section-head-simple">
         <h2>{t('catalog.projects')}</h2>
-        <p className="muted">{complexes.length} {t('section.count')} · {t('catalog.openHint')} · {t('section.compareHint')}</p>
+        <p className="muted">
+          {complexes.length} {t('section.count')} · {t('catalog.openHint')}
+          {picking && <> · {t('section.compareHint')}</>}
+        </p>
       </section>
 
       {loading ? (

@@ -1093,6 +1093,10 @@ html.legal-modal-open .header {
   opacity: 0.45;
 }
 
+.catalog-card-footer--compact {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
 .catalog-card-date {
   font-size: 13px;
   letter-spacing: 0.1em;
@@ -1405,6 +1409,20 @@ html.legal-modal-open .header {
     grid-row: 2;
     font-size: 0.72rem;
     padding: 9px 12px;
+  }
+
+  .catalog-card-footer--compact {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .catalog-card-footer--compact .catalog-card-legal {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .catalog-card-footer--compact .catalog-card-cta {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .catalog-card-compare {

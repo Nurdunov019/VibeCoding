@@ -2,10 +2,12 @@ import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 
 export default function CompareToggle({ slug, className = 'btn-compare btn-sm' }) {
-  const { toggle, isSelected, max, slugs } = useCompare()
+  const { toggle, isSelected, max, slugs, picking } = useCompare()
   const { t } = useLocale()
   const selected = isSelected(slug)
   const atMax = slugs.length >= max && !selected
+
+  if (!picking && !selected) return null
 
   return (
     <button

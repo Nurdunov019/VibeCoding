@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useCompare } from '../context/CompareContext'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useLocale } from '../context/LocaleContext'
@@ -18,6 +19,7 @@ export default function Layout() {
   const { t } = useLocale()
   const { openLogin, openRegister } = useAuthModal()
   const navigate = useNavigate()
+  const { startPicking } = useCompare()
   const [profileOpen, setProfileOpen] = useState(false)
   const [showcaseHeaderLight, setShowcaseHeaderLight] = useState(false)
   const { hidden: navHidden } = useMobileNavScroll()
@@ -82,7 +84,13 @@ export default function Layout() {
           <nav className="nav-menu desktop-only">
             <Link to="/" className={pathname === '/' ? 'active' : ''}>{t('nav.complexes')}</Link>
             <Link to="/map" className={pathname === '/map' ? 'active' : ''}>{t('nav.map')}</Link>
-            <Link to="/compare" className={pathname === '/compare' ? 'active' : ''}>{t('nav.compare')}</Link>
+            <Link
+              to="/compare"
+              className={pathname === '/compare' ? 'active' : ''}
+              onClick={startPicking}
+            >
+              {t('nav.compare')}
+            </Link>
           </nav>
 
           <div className="header-actions desktop-only">

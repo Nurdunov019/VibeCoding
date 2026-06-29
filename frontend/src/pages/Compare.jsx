@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
@@ -7,11 +7,21 @@ import { complexUrls, verificationBadgeClass } from '../utils/complex'
 import LegalOpenButton from '../components/LegalOpenButton'
 
 export default function Compare() {
-  const { slugs, remove, clear, max, remaining } = useCompare()
+  const { slugs, remove, clear, max, remaining, startPicking } = useCompare()
   const { t } = useLocale()
+  const navigate = useNavigate()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    startPicking()
+  }, [startPicking])
+
+  const goPickObjects = () => {
+    startPicking()
+    navigate('/', { state: { scrollToComplexes: true, comparePicking: true } })
+  }
 
   useEffect(() => {
     if (slugs.length < 2) {
@@ -31,7 +41,7 @@ export default function Compare() {
       <div className="compare-page">
         <h1>{t('compare.title')}</h1>
         <p className="empty">{t('compare.minHint')}</p>
-        <Link to="/" className="btn-primary">{t('compare.toObjects')}</Link>
+        <button type="button" className="btn-primary" onClick={goPickObjects}>{t('compare.toObjects')}</button>
       </div>
     )
   }
@@ -44,7 +54,7 @@ export default function Compare() {
           <p className="compare-sub muted">
             {t('compare.countHint', { n: slugs.length, max })}
             {remaining > 0 && (
-              <> · <Link to="/#complexes">{t('compare.addMore', { n: remaining })}</Link></>
+              <> · <button type="button" className="compare-add-link" onClick={goPickObjects}>{t('compare.addMore', { n: remaining })}</button></>
             )}
           </p>
         </div>

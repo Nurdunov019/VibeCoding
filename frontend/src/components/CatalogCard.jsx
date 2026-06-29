@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { getLegalDocUrl } from '../data/legalDocuments'
 import { mediaUrl } from '../utils/mediaUrl'
@@ -8,11 +9,13 @@ import LegalOpenButton from './LegalOpenButton'
 
 export default function CatalogCard({ complex }) {
   const { t, lang } = useLocale()
+  const { picking, isSelected } = useCompare()
   const completion = formatCompletion(complex, t('catalog.yearShort'), lang)
   const location = formatLocation(complex, lang)
   const legalDocUrl = complex.legal_doc_url || getLegalDocUrl(complex.slug)
   const hasLegal = Boolean(legalDocUrl)
   const complexUrl = `/complex/${complex.slug}`
+  const showCompare = picking || isSelected(complex.slug)
 
   return (
     <article className="catalog-card">
@@ -26,7 +29,7 @@ export default function CatalogCard({ complex }) {
           <div className="catalog-card-overlay" />
         </Link>
 
-        <div className="catalog-card-footer">
+        <div className={`catalog-card-footer${showCompare ? '' : ' catalog-card-footer--compact'}`}>
           <Link to={complexUrl} className="catalog-card-text">
             {completion && <p className="catalog-card-date">{completion}</p>}
             <h3 className="catalog-card-name">{complex.name}</h3>

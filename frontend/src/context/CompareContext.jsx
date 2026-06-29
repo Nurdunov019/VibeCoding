@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 const CompareContext = createContext(null)
 const STORAGE_KEY = 'proverkakg_compare'
@@ -13,12 +13,17 @@ export function CompareProvider({ children }) {
       return []
     }
   })
+  const [picking, setPicking] = useState(false)
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(slugs))
   }, [slugs])
 
+  const startPicking = useCallback(() => setPicking(true), [])
+  const stopPicking = useCallback(() => setPicking(false), [])
+
   const toggle = (slug) => {
+    setPicking(true)
     setSlugs((prev) => {
       if (prev.includes(slug)) return prev.filter((s) => s !== slug)
       if (prev.length >= MAX) return prev
@@ -27,11 +32,18 @@ export function CompareProvider({ children }) {
   }
 
   const remove = (slug) => setSlugs((prev) => prev.filter((s) => s !== slug))
-  const clear = () => setSlugs([])
+
+  const clear = () => {
+    setSlugs([])
+    setPicking(false)
+  }
 
   return (
     <CompareContext.Provider value={{
       slugs,
+      picking,
+      startPicking,
+      stopPicking,
       toggle,
       remove,
       clear,
