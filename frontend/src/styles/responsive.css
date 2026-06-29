@@ -178,10 +178,17 @@
   .home-page .hero-banner {
     min-height: 0;
     margin-bottom: 8px;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0;
   }
 
   .home-page .hero-banner-content {
     padding-bottom: 36px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
 
   .home-page .hero-compact {
