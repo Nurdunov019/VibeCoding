@@ -14,6 +14,11 @@ export function formatLocation(complex, lang = 'ru') {
   const address = complex.address?.trim()
   const cityLabel = city && lang !== 'ru' ? translatePhrase(city, lang) : city
   const addressLabel = address ? translatePhrase(address, lang) : ''
-  if (cityLabel && addressLabel) return `${cityLabel}, ${addressLabel}`
+  if (addressLabel && cityLabel) {
+    if (addressLabel.toLowerCase().includes(cityLabel.toLowerCase())) {
+      return addressLabel
+    }
+    return `${cityLabel}, ${addressLabel}`
+  }
   return addressLabel || cityLabel || ''
 }
