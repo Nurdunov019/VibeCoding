@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { api } from '../api'
+import { readStorage, removeStorage, writeStorage } from '../utils/safeStorage'
 
 const AuthContext = createContext(null)
 
@@ -8,20 +9,20 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = readStorage('token')
     if (!token) {
       setLoading(false)
       return
     }
     api.me()
       .then(setUser)
-      .catch(() => localStorage.removeItem('token'))
+      .catch(() => removeStorage('token'))
       .finally(() => setLoading(false))
   }, [])
 
   const login = async (email, password) => {
     const { access_token } = await api.login(email, password)
-    localStorage.setItem('token', access_token)
+    writeStorage('token', access_token)
     const me = await api.me()
     setUser(me)
     return me
@@ -33,7 +34,7 @@ export function AuthProvider({ children }) {
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
+    removeStorage('token')
     setUser(null)
   }
 

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { translations } from '../i18n/translations'
+import { readStorage, writeStorage } from '../utils/safeStorage'
 
 const LocaleContext = createContext(null)
 const STORAGE_KEY = 'proverkakg_lang'
@@ -9,10 +10,10 @@ function get(obj, path) {
 }
 
 export function LocaleProvider({ children }) {
-  const [lang, setLang] = useState(() => localStorage.getItem(STORAGE_KEY) || 'ky')
+  const [lang, setLang] = useState(() => readStorage(STORAGE_KEY, 'ky'))
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, lang)
+    writeStorage(STORAGE_KEY, lang)
     document.documentElement.lang = lang === 'ky' ? 'ky' : lang
   }, [lang])
 

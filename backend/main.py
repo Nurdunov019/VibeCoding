@@ -45,6 +45,8 @@ def migrate_db():
 
 migrate_db()
 
+BUILD_ID = "2026-06-28-proverka"
+
 app = FastAPI(title="ProverkaKG API", version="1.0.0", description="Платформа проверки объектов недвижимости")
 
 app.add_middleware(
@@ -78,7 +80,7 @@ def on_startup():
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "service": "ProverkaKG"}
+    return {"status": "ok", "service": "ProverkaKG", "build": BUILD_ID}
 
 
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend" / "dist"
@@ -88,10 +90,31 @@ NO_CACHE_HEADERS = {
     "Pragma": "no-cache",
     "Expires": "0",
 }
-ASSET_CACHE_HEADERS = {"Cache-Control": "public, max-age=31536000, immutable"}
+ASSET_CACHE_HEADERS = {"Cache-Control": "public, max-age=86400"}
 
 
 if FRONTEND_DIR.exists():
+
+    @app.get("/images/{asset_path:path}")
+    def serve_image(asset_path: str):
+        fp = FRONTEND_DIR / "images" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
+
+    @app.get("/catalogs/{asset_path:path}")
+    def serve_catalog(asset_path: str):
+        fp = FRONTEND_DIR / "catalogs" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
+
+    @app.get("/documents/{asset_path:path}")
+    def serve_document(asset_path: str):
+        fp = FRONTEND_DIR / "documents" / asset_path
+        if not fp.is_file():
+            raise HTTPException(status_code=404)
+        return FileResponse(fp, headers=ASSET_CACHE_HEADERS)
 
     @app.get("/assets/{asset_path:path}")
     def serve_asset(asset_path: str):

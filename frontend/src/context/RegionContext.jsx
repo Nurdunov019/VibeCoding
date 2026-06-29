@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { readStorage, writeStorage } from '../utils/safeStorage'
 
 const RegionContext = createContext(null)
 const STORAGE_KEY = 'proverkakg_region_v2'
@@ -6,16 +7,16 @@ const STORAGE_KEY = 'proverkakg_region_v2'
 export function RegionProvider({ children }) {
   const [region, setRegionState] = useState(() => {
     if (typeof window === 'undefined') return 'all'
-    return localStorage.getItem(STORAGE_KEY) || 'all'
+    return readStorage(STORAGE_KEY, 'all')
   })
 
   const setRegion = (value) => {
     setRegionState(value)
-    localStorage.setItem(STORAGE_KEY, value)
+    writeStorage(STORAGE_KEY, value)
   }
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, region)
+    writeStorage(STORAGE_KEY, region)
   }, [region])
 
   return (

@@ -272,8 +272,10 @@ button { cursor: pointer; border: none; }
 .hero-slide {
   position: absolute;
   inset: 0;
+  background-color: #1a2e28;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   opacity: 0;
   transform: scale(1);
   transition: opacity 1.2s ease;
@@ -2420,6 +2422,29 @@ button { cursor: pointer; border: none; }
 
 .muted { color: var(--muted); }
 .empty { text-align: center; padding: 60px; color: var(--muted); }
+
+.error-boundary {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text);
+}
+
+.error-boundary h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.error-boundary p {
+  margin: 0;
+  max-width: 360px;
+  color: var(--muted);
+}
 
 /* Mobile bottom nav */
 .mobile-nav {

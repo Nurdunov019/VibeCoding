@@ -1,3 +1,5 @@
+import { readStorage } from './utils/safeStorage'
+
 const API = '/api'
 
 function slugPath(slug) {
@@ -6,7 +8,7 @@ function slugPath(slug) {
 
 async function request(path, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...options.headers }
-  const token = localStorage.getItem('token')
+  const token = readStorage('token')
   if (token) headers.Authorization = `Bearer ${token}`
 
   const res = await fetch(`${API}${path}`, { ...options, headers })
@@ -66,7 +68,7 @@ export const api = {
   adminRecalculate: (complexId) =>
     request(`/admin/complexes/${complexId}/recalculate`, { method: 'POST' }),
   adminUpload: async (file, kind = 'image') => {
-    const token = localStorage.getItem('token')
+    const token = readStorage('token')
     const fd = new FormData()
     fd.append('file', file)
     const res = await fetch(`${API}/admin/upload?kind=${kind}`, {
