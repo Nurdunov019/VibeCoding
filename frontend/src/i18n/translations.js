@@ -74,7 +74,7 @@ export const translations = {
     },
     profile: { title: 'Профиль', guest: 'Аккаунт жок — кириңиз же катталыңыз', language: 'Тил', close: 'Жабуу' },
     stats: { objects: 'объект', building: 'курулуп жатат', commissioned: 'берилген', avgPrice: 'орточо баа/м²', verified: 'текшерилген' },
-    section: { list: 'Текшерилген объекттер', popular: 'Бишкекте эң популярдуу жаңы үйлөр', howTo: 'Кантип кошулат?', count: 'объект', compareHint: '4кө чейин салыштыруу', legalHint: 'Юр. жыйынтык жана пикирлер — сдан объекттерде' },
+    section: { list: 'Текшерилген объекттер', popular: 'Бишкекте эң популярдуу жаңы үйлөр', howTo: 'Кантип кошулат?', count: 'объект', compareHint: '2ден 4кө чейин салыштыруу', legalHint: 'Юр. жыйынтык жана пикирлер — сдан объекттерде' },
     catalog: {
       inNumbers: 'Сандарда', infrastructure: 'Инфраструктура', entrances: 'Подъезд',
       perSqm: 'м² үчүн', yearShort: 'ж.', scrollDown: 'Төмөн жылдыруу',
@@ -109,10 +109,16 @@ export const translations = {
       success: 'Рахмат! WhatsApp аркылуу байланышабыз.',
       noObjects: 'Объекттер жок',
     },
-    compareBar: { label: 'Салыштыруу', of: 'ичинен', min: 'Дагы минимум 1 тандаңыз', clear: 'Тазалоо', go: 'Салыштыруу' },
+    compareBar: {
+      label: 'Салыштыруу', of: 'ичинен', min: 'Дагы {n} тандаңыз (минимум 2)', wait: '2 ЖК тандаңыз',
+      clear: 'Тазалоо', go: 'Салыштыруу', ready: 'Салыштырууга даяр', readyAdd: 'Салыштырууга даяр · дагы {n} кошсоңуз болот',
+    },
     compare: {
-      title: 'Объекттерди салыштыруу', minHint: 'Салыштыруу үчүн башкы беттен минимум 2 ЖК тандаңыз',
+      title: 'Объекттерди салыштыруу',
+      minHint: 'Салыштыруу үчүн башкы беттен минимум 2 ЖК тандаңыз (максимум 4)',
       toObjects: 'Объекттерге', clearAll: 'Баарын тазалоо', param: 'Параметр',
+      countHint: '{n} объект салыштырылууда (максимум {max})',
+      addMore: 'дагы {n} кошуу', maxReached: 'Максимум {max} объект',
     },
     favorites: {
       title: 'Тандалгандар',
@@ -259,7 +265,7 @@ export const translations = {
     },
     profile: { title: 'Профиль', guest: 'Нет аккаунта — войдите или зарегистрируйтесь', language: 'Язык', close: 'Закрыть' },
     stats: { objects: 'объектов', building: 'строятся', commissioned: 'сданы', avgPrice: 'ср. цена/м²', verified: 'проверены' },
-    section: { list: 'Проверенные объекты', popular: 'Самые популярные новостройки в городе Бишкек', howTo: 'Как сюда попасть?', count: 'объектов', compareHint: 'выберите до 4 для сравнения', legalHint: 'Юр. заключение и отзывы — на сданных объектах' },
+    section: { list: 'Проверенные объекты', popular: 'Самые популярные новостройки в городе Бишкек', howTo: 'Как сюда попасть?', count: 'объектов', compareHint: 'сравнение от 2 до 4 объектов', legalHint: 'Юр. заключение и отзывы — на сданных объектах' },
     catalog: {
       inNumbers: 'В цифрах', infrastructure: 'Инфраструктура', entrances: 'Подъезды',
       perSqm: 'за м²', yearShort: 'г.', scrollDown: 'Прокрутить вниз',
@@ -294,10 +300,16 @@ export const translations = {
       success: 'Спасибо! Мы свяжемся с вами в WhatsApp.',
       noObjects: 'Нет объектов',
     },
-    compareBar: { label: 'Сравнение', of: 'из', min: 'Выберите ещё минимум 1', clear: 'Очистить', go: 'Сравнить' },
+    compareBar: {
+      label: 'Сравнение', of: 'из', min: 'Выберите ещё {n} (минимум 2)', wait: 'Выберите 2 ЖК',
+      clear: 'Очистить', go: 'Сравнить', ready: 'Готово к сравнению', readyAdd: 'Готово · можно добавить ещё {n}',
+    },
     compare: {
-      title: 'Сравнение объектов', minHint: 'Выберите минимум 2 ЖК на главной странице для сравнения',
+      title: 'Сравнение объектов',
+      minHint: 'Выберите на главной минимум 2 ЖК (максимум 4)',
       toObjects: 'К объектам', clearAll: 'Очистить всё', param: 'Параметр',
+      countHint: 'Сравнивается {n} объект(ов) (максимум {max})',
+      addMore: 'добавить ещё {n}', maxReached: 'Максимум {max} объектов',
     },
     favorites: {
       title: 'Избранное',
@@ -444,7 +456,7 @@ export const translations = {
     },
     profile: { title: 'Profile', guest: 'No account — log in or sign up', language: 'Language', close: 'Close' },
     stats: { objects: 'complexes', building: 'building', commissioned: 'completed', avgPrice: 'avg price/m²', verified: 'verified' },
-    section: { list: 'Verified complexes', popular: 'Most popular new builds in Bishkek', howTo: 'How to get listed?', count: 'results', compareHint: 'select up to 4 to compare', legalHint: 'Legal reports and reviews — on completed complexes' },
+    section: { list: 'Verified complexes', popular: 'Most popular new builds in Bishkek', howTo: 'How to get listed?', count: 'results', compareHint: 'compare 2 to 4 complexes', legalHint: 'Legal reports and reviews — on completed complexes' },
     catalog: {
       inNumbers: 'In numbers', infrastructure: 'Infrastructure', entrances: 'Entrances',
       perSqm: 'per m²', yearShort: 'yr', scrollDown: 'Scroll down',
@@ -479,10 +491,16 @@ export const translations = {
       success: 'Thank you! We will contact you on WhatsApp.',
       noObjects: 'No complexes',
     },
-    compareBar: { label: 'Compare', of: 'of', min: 'Select at least 1 more', clear: 'Clear', go: 'Compare' },
+    compareBar: {
+      label: 'Compare', of: 'of', min: 'Select {n} more (min 2)', wait: 'Select 2 complexes',
+      clear: 'Clear', go: 'Compare', ready: 'Ready to compare', readyAdd: 'Ready · up to {n} more',
+    },
     compare: {
-      title: 'Compare complexes', minHint: 'Select at least 2 complexes on the home page to compare',
+      title: 'Compare complexes',
+      minHint: 'Select at least 2 complexes on the home page (max 4)',
       toObjects: 'Browse complexes', clearAll: 'Clear all', param: 'Parameter',
+      countHint: 'Comparing {n} complex(es) (max {max})',
+      addMore: 'add {n} more', maxReached: 'Maximum {max} complexes',
     },
     favorites: {
       title: 'Favorites',

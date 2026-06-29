@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 const CompareContext = createContext(null)
 const STORAGE_KEY = 'proverkakg_compare'
+const MIN = 2
 const MAX = 4
 
 export function CompareProvider({ children }) {
@@ -29,7 +30,17 @@ export function CompareProvider({ children }) {
   const clear = () => setSlugs([])
 
   return (
-    <CompareContext.Provider value={{ slugs, toggle, remove, clear, isSelected: (s) => slugs.includes(s), max: MAX }}>
+    <CompareContext.Provider value={{
+      slugs,
+      toggle,
+      remove,
+      clear,
+      isSelected: (s) => slugs.includes(s),
+      min: MIN,
+      max: MAX,
+      canCompare: slugs.length >= MIN,
+      remaining: MAX - slugs.length,
+    }}>
       {children}
     </CompareContext.Provider>
   )

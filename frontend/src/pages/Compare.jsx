@@ -7,7 +7,7 @@ import { complexUrls, verificationBadgeClass } from '../utils/complex'
 import LegalOpenButton from '../components/LegalOpenButton'
 
 export default function Compare() {
-  const { slugs, remove, clear } = useCompare()
+  const { slugs, remove, clear, max, remaining } = useCompare()
   const { t } = useLocale()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
@@ -39,7 +39,15 @@ export default function Compare() {
   return (
     <div className="compare-page">
       <div className="compare-header">
-        <h1>{t('compare.title')}</h1>
+        <div>
+          <h1>{t('compare.title')}</h1>
+          <p className="compare-sub muted">
+            {t('compare.countHint', { n: slugs.length, max })}
+            {remaining > 0 && (
+              <> · <Link to="/#complexes">{t('compare.addMore', { n: remaining })}</Link></>
+            )}
+          </p>
+        </div>
         <button type="button" className="btn-ghost" onClick={clear}>{t('compare.clearAll')}</button>
       </div>
 

@@ -12,6 +12,7 @@ export default function CompareToggle({ slug, className = 'btn-compare btn-sm' }
       type="button"
       className={`${className}${selected ? ' active' : ''}`}
       disabled={atMax}
+      title={atMax ? t('compare.maxReached', { max }) : undefined}
       onClick={(e) => {
         e.preventDefault()
         e.stopPropagation()
