@@ -75,7 +75,7 @@ def test_seed_preserves_custom_image_url(client):
     try:
         siren = db.query(Complex).filter(Complex.slug == "siren").first()
         assert siren is not None
-        custom = "/uploads/images/siren-custom-test.jpg"
+        custom = "/images/siren-custom-test.jpg"
         siren.image_url = custom
         db.commit()
 

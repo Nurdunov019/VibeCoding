@@ -150,7 +150,7 @@ export default function Admin() {
     if (!file) return
     setUploading(true)
     try {
-      const { url } = await api.adminUpload(file, 'image')
+      const { url } = await api.adminUpload(file, 'image', form.slug || slugify(form.name))
       setForm((f) => ({ ...f, image_url: url }))
       setMsg(t('admin.imageUploaded'))
     } catch (err) {

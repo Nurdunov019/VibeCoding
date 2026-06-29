@@ -67,11 +67,13 @@ export const api = {
     request(`/admin/documents/${id}`, { method: 'DELETE' }),
   adminRecalculate: (complexId) =>
     request(`/admin/complexes/${complexId}/recalculate`, { method: 'POST' }),
-  adminUpload: async (file, kind = 'image') => {
+  adminUpload: async (file, kind = 'image', slug = null) => {
     const token = readStorage('token')
     const fd = new FormData()
     fd.append('file', file)
-    const res = await fetch(`${API}/admin/upload?kind=${kind}`, {
+    const params = new URLSearchParams({ kind })
+    if (slug) params.set('slug', slug)
+    const res = await fetch(`${API}/admin/upload?${params}`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
       body: fd,

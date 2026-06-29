@@ -14,13 +14,31 @@ ADMIN_PASSWORD = "112233"
 # Admin panel / uploads may customize these — do not reset on every deploy restart.
 PRESERVE_IF_SET_FIELDS = frozenset({"image_url", "catalog_pdf_url"})
 
+# Old bundled paths replaced by committed images in frontend/public/images/.
+LEGACY_IMAGE_URLS = frozenset({"/images/siren.jpg"})
+
 SAMPLE_PDF = "https://www.w3.org/WAI/WCAG21/Techniques/pdf/img/table-word.pdf"
+
+
+def _should_apply_seed_image(current, seeded):
+    if not seeded:
+        return False
+    if not current:
+        return True
+    if current.startswith("/uploads/"):
+        return True
+    if current in LEGACY_IMAGE_URLS:
+        return True
+    return False
 
 
 def _apply_complex_seed(existing: Complex, data: dict) -> None:
     """Update complex from seed data without clobbering admin-customized media URLs."""
     for key, value in data.items():
-        if key in PRESERVE_IF_SET_FIELDS:
+        if key == "image_url":
+            if not _should_apply_seed_image(existing.image_url, value):
+                continue
+        elif key in PRESERVE_IF_SET_FIELDS:
             current = getattr(existing, key, None)
             if current:
                 continue
@@ -207,7 +225,7 @@ FEATURED_COMPLEXES = [
         "initial_payment_percent": 30,
         "installment_months": 24,
         "has_red_book": False,
-        "image_url": "/images/siren.jpg",
+        "image_url": "/images/siren.jpeg",
         "description": (
             "14-этажный жилой комплекс в ж/м Арча-Бешик по ул. Жайыл Баатыра, 50. "
             "Объект включает магазины, офисы и подземный автопаркинг. "

@@ -1,7 +1,7 @@
 import re
 import uuid
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
@@ -32,6 +32,7 @@ class LegalFilePayload(BaseModel):
 async def upload_file(
     file: UploadFile = File(...),
     kind: str = "image",
+    slug: Optional[str] = None,
     _: User = Depends(require_admin),
 ):
     ext = Path(file.filename or "").suffix.lower()
@@ -49,15 +50,27 @@ async def upload_file(
         subdir = "documents"
     if ext not in allowed:
         raise HTTPException(status_code=400, detail=FILE_TYPE_UNSUPPORTED.format(ext=ext))
+
+    content = await file.read()
+    if len(content) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail=FILE_TOO_LARGE)
+
+    if kind == "image" and slug:
+        safe_slug = re.sub(r"[^a-z0-9-]", "", slug.lower())
+        if not safe_slug:
+            raise HTTPException(status_code=400, detail="Invalid slug")
+        filename = f"{safe_slug}{ext}"
+        repo_root = Path(__file__).parent.parent.parent
+        for images_dir in (repo_root / "frontend" / "public" / "images", repo_root / "frontend" / "dist" / "images"):
+            images_dir.mkdir(parents=True, exist_ok=True)
+            (images_dir / filename).write_bytes(content)
+        return {"url": f"/images/{filename}", "filename": filename}
+
     dest_dir = UPLOAD_DIR / subdir
     dest_dir.mkdir(exist_ok=True)
 
     filename = f"{uuid.uuid4().hex}{ext}"
     path = dest_dir / filename
-    content = await file.read()
-    if len(content) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail=FILE_TOO_LARGE)
-
     path.write_bytes(content)
     return {"url": f"/uploads/{subdir}/{filename}", "filename": filename}
 

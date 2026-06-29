@@ -127,7 +127,7 @@ ADMIN_COMPLEXES = [
         "apartments_count": 544,
         "verification_score": 0,
         "verification_status": "unverified",
-        "image_url": "",
+        "image_url": "/images/akkula.jpeg",
         "features": (
             "Закрытый двор без машин. Автономная газовая котельная. "
             "Монолитный каркас с кирпичным заполнением. "
