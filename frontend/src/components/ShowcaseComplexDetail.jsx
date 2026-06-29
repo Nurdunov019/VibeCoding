@@ -13,6 +13,7 @@ import { useLocale } from '../context/LocaleContext'
 import { mediaUrl } from '../utils/mediaUrl'
 import { statusLabel, translateApiError } from '../utils/translate'
 import {
+  translateDescription,
   translateDocNotes,
   translateDocTitle,
   translateFeaturesText,
@@ -168,7 +169,7 @@ export default function ShowcaseComplexDetail({
             </div>
           </div>
           <div className="doc-written-list doc-written-list--showcase">
-            {verification.checks.map((c) => {
+            {verification.checks?.map((c) => {
               const doc = documents.find((d) => d.doc_type === c.type)
               const heading = doc?.title
                 ? translateDocTitle(doc.title, lang, c.type, t)
