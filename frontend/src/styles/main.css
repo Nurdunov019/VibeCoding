@@ -1787,6 +1787,21 @@ button { cursor: pointer; border: none; }
   flex-direction: column;
   gap: 10px;
 }
+.compare-picker-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.compare-picker-row .compare-picker-item {
+  flex: 1;
+  min-width: 0;
+}
+.compare-picker-legal,
+.compare-legal-btn {
+  flex-shrink: 0;
+  align-self: center;
+  white-space: nowrap;
+}
 .compare-picker-item {
   width: 100%;
   display: flex;

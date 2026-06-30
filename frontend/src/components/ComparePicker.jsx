@@ -3,6 +3,8 @@ import { api } from '../api'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { mediaUrl } from '../utils/mediaUrl'
+import { resolveLegalDocUrl } from '../data/legalDocuments'
+import LegalOpenButton from './LegalOpenButton'
 
 export default function ComparePicker({ showSearch = true }) {
   const { slugs, toggle, remove, max, min } = useCompare()
@@ -94,7 +96,7 @@ export default function ComparePicker({ showSearch = true }) {
           ) : (
             <ul className="compare-picker-list">
               {available.map((c) => (
-                <li key={c.slug}>
+                <li key={c.slug} className="compare-picker-row">
                   <button type="button" className="compare-picker-item" onClick={() => toggle(c.slug)}>
                     <span className="compare-picker-item-thumb">
                       {c.image_url ? (
@@ -112,6 +114,11 @@ export default function ComparePicker({ showSearch = true }) {
                     </span>
                     <span className="compare-picker-add">{t('compare.tapToAdd')}</span>
                   </button>
+                  <LegalOpenButton
+                    slug={c.slug}
+                    docUrl={resolveLegalDocUrl(c)}
+                    className="compare-picker-legal btn-outline btn-sm"
+                  />
                 </li>
               ))}
             </ul>

@@ -729,6 +729,26 @@
     padding: 10px 14px;
     font-size: 13px;
   }
+
+  .compare-picker-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .compare-picker-legal,
+  .compare-table .compare-legal-btn {
+    width: 100%;
+    min-height: 44px;
+    align-self: stretch;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .compare-table-wrap {
+    margin-left: -4px;
+    margin-right: -4px;
+    padding-bottom: 4px;
+  }
   .legal-view { padding: 28px; }
   .modal-card { width: min(480px, 100%); }
 }

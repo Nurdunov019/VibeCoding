@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { api } from '../api'
-import { getLegalDocUrl } from '../data/legalDocuments'
+import { resolveLegalDocUrl } from '../data/legalDocuments'
 import { useLocale } from '../context/LocaleContext'
 import LegalDocumentModal from './LegalDocumentModal'
 
@@ -11,7 +11,7 @@ export default function LegalOpenButton({
   label,
 }) {
   const { t } = useLocale()
-  const resolvedDocUrl = docUrl || getLegalDocUrl(slug)
+  const resolvedDocUrl = docUrl || resolveLegalDocUrl(slug)
   const [open, setOpen] = useState(false)
   const [report, setReport] = useState(null)
   const text = label || t('card.legal')
@@ -19,14 +19,16 @@ export default function LegalOpenButton({
   const handleClick = async (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if (!report) {
+    let nextReport = report
+    if (!nextReport) {
       try {
-        const data = await api.getLegalPreview(slug)
-        setReport(data)
+        nextReport = await api.getLegalPreview(slug)
+        setReport(nextReport)
       } catch {
-        if (!resolvedDocUrl) return
+        // preview unavailable
       }
     }
+    if (!nextReport && !resolvedDocUrl) return
     setOpen(true)
   }
 

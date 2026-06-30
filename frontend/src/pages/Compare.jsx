@@ -5,6 +5,7 @@ import ComparePicker from '../components/ComparePicker'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
 import { complexUrls, verificationBadgeClass } from '../utils/complex'
+import { resolveLegalDocUrl } from '../data/legalDocuments'
 import LegalOpenButton from '../components/LegalOpenButton'
 
 export default function Compare() {
@@ -150,8 +151,8 @@ export default function Compare() {
                       <td key={i.complex.slug}>
                         <LegalOpenButton
                           slug={i.complex.slug}
-                          docUrl={i.complex.legal_doc_url}
-                          className="btn-outline btn-sm"
+                          docUrl={resolveLegalDocUrl(i.complex)}
+                          className="btn-outline btn-sm compare-legal-btn"
                         />
                       </td>
                     ))}

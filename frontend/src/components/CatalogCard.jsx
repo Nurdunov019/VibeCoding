@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCompare } from '../context/CompareContext'
 import { useLocale } from '../context/LocaleContext'
-import { getLegalDocUrl } from '../data/legalDocuments'
+import { resolveLegalDocUrl } from '../data/legalDocuments'
 import { mediaUrl } from '../utils/mediaUrl'
 import { formatCompletion, formatLocation } from '../utils/formatCompletion'
 import CompareToggle from './CompareToggle'
@@ -12,7 +12,7 @@ export default function CatalogCard({ complex }) {
   const { picking, isSelected } = useCompare()
   const completion = formatCompletion(complex, t('catalog.yearShort'), lang)
   const location = formatLocation(complex, lang)
-  const legalDocUrl = complex.legal_doc_url || getLegalDocUrl(complex.slug)
+  const legalDocUrl = resolveLegalDocUrl(complex)
   const hasLegal = Boolean(legalDocUrl)
   const complexUrl = `/complex/${complex.slug}`
   const showCompare = picking || isSelected(complex.slug)
