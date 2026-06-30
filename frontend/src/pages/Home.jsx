@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import CatalogCard from '../components/CatalogCard'
 import ComplexCard from '../components/ComplexCard'
@@ -16,9 +16,10 @@ export default function Home() {
   const { picking, startPicking } = useCompare()
   const { t } = useLocale()
   const { region } = useRegion()
-  const [complexes, setComplexes] = useState([])
+  const [allComplexes, setAllComplexes] = useState([])
   const [stats, setStats] = useState(null)
   const [search, setSearch] = useState('')
+  const [searchOpen, setSearchOpen] = useState(false)
   const [status, setStatus] = useState('')
   const [classType, setClassType] = useState('')
   const [verifiedOnly, setVerifiedOnly] = useState(false)
@@ -36,21 +37,39 @@ export default function Home() {
 
   useEffect(() => {
     setLoading(true)
-    const params = {
-      ...regionApiParams(region),
-      search: search || undefined,
-      status: status || undefined,
-      class_type: classType || undefined,
-    }
-    Promise.all([api.getComplexes(params), api.getStats()])
+    Promise.all([api.getComplexes(regionApiParams(region)), api.getStats()])
       .then(([c, s]) => {
-        const list = verifiedOnly ? c.filter((x) => x.verification_status === 'verified') : c
-        setComplexes(list)
+        setAllComplexes(c)
         setStats(s)
       })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [search, status, classType, verifiedOnly, region])
+  }, [region])
+
+  const complexes = useMemo(() => {
+    let list = allComplexes
+    if (status) list = list.filter((c) => c.status === status)
+    if (classType) list = list.filter((c) => c.class_type === classType)
+    if (verifiedOnly) list = list.filter((c) => c.verification_status === 'verified')
+    const q = search.trim().toLowerCase()
+    if (q) {
+      list = list.filter(
+        (c) =>
+          (c.name || '').toLowerCase().includes(q)
+          || (c.developer || '').toLowerCase().includes(q)
+          || (c.slug || '').toLowerCase().includes(q),
+      )
+    }
+    return list
+  }, [allComplexes, search, status, classType, verifiedOnly])
+
+  useEffect(() => {
+    if (search.trim().length < 2) return undefined
+    const frame = requestAnimationFrame(() => {
+      document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [search])
 
   const resetFilters = () => {
     setSearch('')
@@ -82,11 +101,40 @@ export default function Home() {
         </div>
 
         <section className="filter-compact filter-on-hero">
-          <input
-            placeholder={t('filter.search')}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className="hero-search-wrap">
+            <input
+              type="search"
+              placeholder={t('filter.search')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setSearchOpen(true)}
+              onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
+              autoComplete="off"
+            />
+            {searchOpen && search.trim().length >= 1 && (
+              <ul className="hero-search-suggestions" role="listbox">
+                {complexes.length === 0 ? (
+                  <li className="hero-search-suggestion hero-search-suggestion--empty">{t('empty.notFound')}</li>
+                ) : (
+                  complexes.slice(0, 6).map((c) => (
+                    <li key={c.slug} className="hero-search-suggestion" role="option">
+                      <Link
+                        to={`/complex/${c.slug}`}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => {
+                          setSearch('')
+                          setSearchOpen(false)
+                        }}
+                      >
+                        <strong>{c.name}</strong>
+                        {c.developer && <span>{c.developer}</span>}
+                      </Link>
+                    </li>
+                  ))
+                )}
+              </ul>
+            )}
+          </div>
           <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="">{t('filter.allStatus')}</option>
             <option value="building">{t('filter.building')}</option>

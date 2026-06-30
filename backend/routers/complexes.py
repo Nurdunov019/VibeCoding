@@ -43,9 +43,16 @@ def list_complexes(
         q = q.filter(Complex.status == status)
     if class_type:
         q = q.filter(Complex.class_type == class_type)
-    if search:
-        q = q.filter(Complex.name.contains(search) | Complex.developer.contains(search))
     complexes = q.order_by(Complex.verification_score.desc(), Complex.name).all()
+    if search:
+        needle = search.casefold()
+        complexes = [
+            c
+            for c in complexes
+            if needle in (c.name or "").casefold()
+            or needle in (c.developer or "").casefold()
+            or needle in (c.slug or "").casefold()
+        ]
     return _attach_legal_doc_urls(db, complexes)
 
 

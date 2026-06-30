@@ -45,6 +45,17 @@ def test_complex_not_found(client):
     assert r.status_code == 404
 
 
+def test_search_case_insensitive(client):
+    r = client.get("/api/complexes", params={"search": "салкын"})
+    assert r.status_code == 200
+    slugs = {c["slug"] for c in r.json()}
+    assert "salkyn" in slugs
+
+    r2 = client.get("/api/complexes", params={"search": "brown"})
+    assert r2.status_code == 200
+    assert any(c["slug"] == "borsan-brown" for c in r2.json())
+
+
 def test_reviews_commissioned_only(client):
     r = client.get("/api/reviews/salkyn")
     assert r.status_code == 400
