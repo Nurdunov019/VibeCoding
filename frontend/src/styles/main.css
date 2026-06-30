@@ -415,6 +415,11 @@ button { cursor: pointer; border: none; }
 .hero-search-suggestion strong { font-size: 14px; }
 .hero-search-suggestion span { font-size: 12px; color: var(--muted); }
 .hero-search-suggestion--empty { padding: 12px; color: var(--muted); font-size: 14px; }
+
+.home-page--search-open .hero-banner,
+.home-page--search-open .hero-banner-content {
+  overflow: visible;
+}
 .filter-on-hero select:nth-of-type(1) { grid-area: status; }
 .filter-on-hero select:nth-of-type(2) { grid-area: class; }
 .filter-on-hero .verified-check { grid-area: verified; }

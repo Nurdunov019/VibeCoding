@@ -65,6 +65,8 @@ export default function Home() {
 
   useEffect(() => {
     if (search.trim().length < 2) return undefined
+    const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    if (!isDesktop) return undefined
     const frame = requestAnimationFrame(() => {
       document.getElementById('complexes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
@@ -83,7 +85,7 @@ export default function Home() {
   const slideImages = (building.length ? building : complexes).map((c) => c.image_url).filter(Boolean)
 
   return (
-    <div className="home-page">
+    <div className={`home-page${searchOpen && search.trim() ? ' home-page--search-open' : ''}`}>
       <HeroSlider images={slideImages}>
         <div className="hero-compact hero-compact--borsan">
           <p className="hero-brand">PROVERKAKG</p>
@@ -120,7 +122,7 @@ export default function Home() {
                     <li key={c.slug} className="hero-search-suggestion" role="option">
                       <Link
                         to={`/complex/${c.slug}`}
-                        onMouseDown={(e) => e.preventDefault()}
+                        onPointerDown={(e) => e.preventDefault()}
                         onClick={() => {
                           setSearch('')
                           setSearchOpen(false)
