@@ -150,7 +150,8 @@ export default function Compare() {
                       <td key={i.complex.slug}>
                         <LegalOpenButton
                           slug={i.complex.slug}
-                          fallbackHref={complexUrls(i.complex.slug, i.complex.status).legal}
+                          docUrl={i.complex.legal_doc_url}
+                          className="btn-outline btn-sm"
                         />
                       </td>
                     ))}

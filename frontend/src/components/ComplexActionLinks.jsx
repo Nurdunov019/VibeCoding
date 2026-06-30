@@ -12,7 +12,7 @@ export default function ComplexActionLinks({ slug, status, legalDocUrl, classNam
   return (
     <div className={`${className}${commissioned ? ' complex-actions-3' : ''}`}>
       <Link to={urls.detail} className="btn-outline btn-sm">{t('card.details')}</Link>
-      <LegalOpenButton slug={slug} docUrl={legalDocUrl} fallbackHref={urls.legal} />
+      <LegalOpenButton slug={slug} docUrl={legalDocUrl} />
       {commissioned && (
         <Link to={urls.reviews} className="btn-outline btn-sm">{t('card.reviews')}</Link>
       )}
