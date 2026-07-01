@@ -54,29 +54,31 @@ export default function TemplateGallery() {
         </div>
         <div className="intro-catalog-grid catalog-masonry catalog-masonry--intro">
           {introBlocks.map((b, i) => (
-            <Reveal key={b.id} as="article" className="intro-catalog-item hover-scale" delay={(i % 4) * 90}>
-              <div className="catalog-card intro-catalog-card img-zoom-wrap hover-zoom">
-                <div className="intro-catalog-preview img-zoom">
-                  <IntroPreviewArt style={b.style} />
+            <article key={b.id} className="intro-catalog-item hover-scale">
+              <Reveal delay={(i % 4) * 90}>
+                <div className="catalog-card intro-catalog-card img-zoom-wrap hover-zoom">
+                  <div className="intro-catalog-preview img-zoom">
+                    <IntroPreviewArt style={b.style} />
+                  </div>
                 </div>
-              </div>
-              <div className="catalog-item-label intro-catalog-label">
-                <span>{b.name}</span>
-                <span className="catalog-item-sep">|</span>
-                <span>{b.price}</span>
-              </div>
-              <div className="catalog-item-actions catalog-item-actions--stack">
-                <button type="button" className="catalog-btn catalog-btn--view" disabled>Көрүү</button>
-                <a
-                  href={orderWhatsapp(b.name)}
-                  className="catalog-btn catalog-btn--order"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Заказ
-                </a>
-              </div>
-            </Reveal>
+                <div className="catalog-item-label intro-catalog-label">
+                  <span>{b.name}</span>
+                  <span className="catalog-item-sep">|</span>
+                  <span>{b.price}</span>
+                </div>
+                <div className="catalog-item-actions catalog-item-actions--stack">
+                  <button type="button" className="catalog-btn catalog-btn--view" disabled>Көрүү</button>
+                  <a
+                    href={orderWhatsapp(b.name)}
+                    className="catalog-btn catalog-btn--order"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Заказ
+                  </a>
+                </div>
+              </Reveal>
+            </article>
           ))}
         </div>
       </section>

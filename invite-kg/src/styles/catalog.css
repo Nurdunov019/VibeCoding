@@ -72,24 +72,31 @@
   box-shadow: 0 8px 24px rgba(44, 34, 28, 0.15);
 }
 
-/* Grid — Pinterest masonry */
+/* Grid — catalog cards (CSS grid; column masonry breaks with transform/reveal) */
 .catalog-masonry {
-  column-count: 3;
-  column-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px 20px;
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
-.catalog-masonry .catalog-item {
-  break-inside: avoid;
-  margin-bottom: 24px;
-  display: inline-block;
+.catalog-masonry .catalog-item,
+.catalog-masonry .intro-catalog-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.catalog-masonry .reveal {
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
 .catalog-masonry--intro {
-  column-count: 2;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .catalog-item--tall .catalog-phone-screen {
@@ -571,16 +578,12 @@
 .intro-art--confetti { background: linear-gradient(180deg, #fce8ec, #f5d8e0); color: #6b4048; }
 .intro-art-confetti { font-size: 1.2rem; letter-spacing: 8px; opacity: 0.7; }
 
-/* Mobile — 2 columns masonry */
+/* Mobile — 2 columns */
 @media (max-width: 900px) {
   .catalog-masonry {
-    column-count: 2;
-    column-gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 12px;
     padding: 0 12px;
-  }
-
-  .catalog-masonry .catalog-item {
-    margin-bottom: 20px;
   }
 
   .catalog-grid {
