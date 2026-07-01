@@ -72,7 +72,11 @@ export const translations = {
       formComplexStatus: 'Объект статусу', formLat: 'Широта', formLng: 'Долгота', formDescription: 'Сүрөттөмө',
       formDocType: 'Түрү', formDocTitle: 'Аталышы', formDocNumber: 'Номер', formDocStatus: 'Статус',
     },
-    profile: { title: 'Профиль', guest: 'Аккаунт жок — кириңиз же катталыңыз', language: 'Тил', close: 'Жабуу' },
+    profile: {
+      title: 'Профиль', guest: 'Аккаунт жок — кириңиз же катталыңыз', guestName: 'Конок',
+      language: 'Тил', close: 'Жабуу', tabAccount: 'Аккаунт', tabFavorites: 'Тандалгандар',
+      logout: 'Чыгуу',
+    },
     stats: { objects: 'объект', building: 'курулуп жатат', commissioned: 'берилген', avgPrice: 'орточо баа/м²', verified: 'текшерилген' },
     section: { list: 'Текшерилген объекттер', popular: 'Бишкекте эң популярдуу жаңы үйлөр', howTo: 'Кантип кошулат?', count: 'объект', compareHint: '2ден 4кө чейин салыштыруу', legalHint: 'Юр. жыйынтык жана пикирлер — сдан объекттерде' },
     catalog: {
@@ -271,7 +275,11 @@ export const translations = {
       formComplexStatus: 'Статус объекта', formLat: 'Широта', formLng: 'Долгота', formDescription: 'Описание',
       formDocType: 'Тип', formDocTitle: 'Название', formDocNumber: 'Номер', formDocStatus: 'Статус',
     },
-    profile: { title: 'Профиль', guest: 'Нет аккаунта — войдите или зарегистрируйтесь', language: 'Язык', close: 'Закрыть' },
+    profile: {
+      title: 'Профиль', guest: 'Нет аккаунта — войдите или зарегистрируйтесь', guestName: 'Гость',
+      language: 'Язык', close: 'Закрыть', tabAccount: 'Аккаунт', tabFavorites: 'Избранное',
+      logout: 'Выйти',
+    },
     stats: { objects: 'объектов', building: 'строятся', commissioned: 'сданы', avgPrice: 'ср. цена/м²', verified: 'проверены' },
     section: { list: 'Проверенные объекты', popular: 'Самые популярные новостройки в городе Бишкек', howTo: 'Как сюда попасть?', count: 'объектов', compareHint: 'сравнение от 2 до 4 объектов', legalHint: 'Юр. заключение и отзывы — на сданных объектах' },
     catalog: {
@@ -470,7 +478,11 @@ export const translations = {
       formComplexStatus: 'Complex status', formLat: 'Latitude', formLng: 'Longitude', formDescription: 'Description',
       formDocType: 'Type', formDocTitle: 'Title', formDocNumber: 'Number', formDocStatus: 'Status',
     },
-    profile: { title: 'Profile', guest: 'No account — log in or sign up', language: 'Language', close: 'Close' },
+    profile: {
+      title: 'Profile', guest: 'No account — log in or sign up', guestName: 'Guest',
+      language: 'Language', close: 'Close', tabAccount: 'Account', tabFavorites: 'Favorites',
+      logout: 'Log out',
+    },
     stats: { objects: 'complexes', building: 'building', commissioned: 'completed', avgPrice: 'avg price/m²', verified: 'verified' },
     section: { list: 'Verified complexes', popular: 'Most popular new builds in Bishkek', howTo: 'How to get listed?', count: 'results', compareHint: 'compare 2 to 4 complexes', legalHint: 'Legal reports and reviews — on completed complexes' },
     catalog: {
