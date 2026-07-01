@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { eventTypes, introBlocks, templates } from '../../data/templates'
 import { orderWhatsapp } from '../../config/site'
 import Reveal from '../Reveal'
+import StaggerReveal from '../StaggerReveal'
 import CatalogItem from './CatalogItem'
 import IntroPreviewArt from './IntroPreviewArt'
 
