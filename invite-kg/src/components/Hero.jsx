@@ -1,5 +1,12 @@
-import { eventTypes } from '../data/templates'
 import { SITE } from '../config/site'
+
+const heroEvents = [
+  { icon: '💍', label: 'үйлөнүү' },
+  { icon: '🎂', label: 'туулган күн' },
+  { icon: '🏢', label: 'корпоратив' },
+  { icon: '🎀', label: 'gender party' },
+  { icon: '✨', label: 'мастер-класс' },
+]
 
 export default function Hero() {
   return (
@@ -12,10 +19,9 @@ export default function Hero() {
       <div className="container hero-inner">
         <p className="hero-eyebrow">{SITE.eyebrow}</p>
         <h1 className="hero-title">
-          Онлайн <em>чакыруу</em>
-          <br />
-          сайттары
+          Сайт <em>чакыруу</em>
         </h1>
+        <p className="hero-subtitle">онлайн чакыруу сайттары</p>
         <p className="hero-lead">
           Үйлөнүү, туулган күн, корпоратив жана башка иш-чаралар үчүн кооз мобилдик чакыруулар.
           Шаблон тандаңыз — биз сизге жеке сайт даярдайбыз.
@@ -25,8 +31,8 @@ export default function Hero() {
           <a href="#contact" className="btn btn-ghost">Заказ берүү</a>
         </div>
         <ul className="event-types">
-          {eventTypes.map((t) => (
-            <li key={t.id}>
+          {heroEvents.map((t) => (
+            <li key={t.label}>
               <span className="event-icon" aria-hidden>{t.icon}</span>
               {t.label}
             </li>

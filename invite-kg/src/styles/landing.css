@@ -270,6 +270,15 @@ img { max-width: 100%; }
   color: var(--primary);
 }
 
+.hero-subtitle {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-style: italic;
+  color: var(--muted);
+  margin: -8px 0 22px;
+  letter-spacing: 0.04em;
+}
+
 .hero-lead {
   max-width: 540px;
   margin: 0 auto 32px;

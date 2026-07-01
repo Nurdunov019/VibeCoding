@@ -1,6 +1,6 @@
 import Header from '../components/Header'
 import Hero from '../components/Hero'
-import TemplateGallery from '../components/TemplateGallery'
+import TemplateGallery from '../components/catalog/TemplateGallery'
 import PricingSection from '../components/PricingSection'
 import ReviewsSection from '../components/ReviewsSection'
 import FaqSection from '../components/FaqSection'
