@@ -20,13 +20,13 @@ export default function LandingPage() {
         <Reveal>
           <QuickOrderSection />
         </Reveal>
-        <Reveal delay={80}>
+        <Reveal delay={80} variant="blur">
           <PricingSection />
         </Reveal>
-        <Reveal delay={80}>
+        <Reveal delay={80} variant="fade">
           <ReviewsSection />
         </Reveal>
-        <Reveal delay={80}>
+        <Reveal delay={80} variant="blur">
           <FaqSection />
         </Reveal>
         <Reveal delay={80}>

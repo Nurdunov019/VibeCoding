@@ -6,6 +6,7 @@ import './styles/animations.css'
 import './styles/landing.css'
 import './styles/catalog.css'
 import './styles/invitation.css'
+import './styles/premium.css'
 
 export default function App() {
   return (

@@ -35,7 +35,7 @@ export default function PricingSection() {
                 </li>
               ))}
             </ul>
-            <a href={orderWhatsapp()} className="btn btn-primary btn-block" target="_blank" rel="noreferrer">Заказ берүү</a>
+            <a href={orderWhatsapp()} className="btn btn-primary btn-block btn-morph" target="_blank" rel="noreferrer">Заказ берүү</a>
           </div>
         </div>
       </div>

@@ -9,8 +9,6 @@ export const SITE = {
   contactName: 'Chakyruu',
   heroVideo:
     'https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_25fps.mp4',
-  weddingMusic:
-    'https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cb49e9b8c.mp3?filename=soft-piano-ambient-14049.mp3',
 }
 
 export function whatsappUrl(text) {

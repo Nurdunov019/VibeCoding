@@ -52,20 +52,76 @@
 }
 
 [data-wedding-theme='night'] .w-inv-page {
-  background: var(--inv-bg);
+  --inv-cream: #221c28;
+  --inv-cream-deep: #1a1520;
+  --inv-gold: #e8c878;
+  --inv-gold-light: #c4a062;
+  --inv-rose: #d4a5a5;
+  --inv-ink: #f5f0ea;
+  --inv-muted: #c4b8ad;
+  --inv-line: rgba(232, 200, 120, 0.25);
+  --inv-panel-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61, 51, 72, 0.5), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(160, 77, 92, 0.12), transparent 55%),
+    linear-gradient(180deg, #1a1520 0%, #141018 100%);
   color: var(--inv-text);
+}
+
+[data-wedding-theme='night'] .w-inv-panel,
+[data-wedding-theme='night'] .w-inv-rsvp,
+[data-wedding-theme='night'] .w-inv-countdown {
+  background: rgba(38, 31, 46, 0.92);
+  border-color: var(--border);
+}
+
+[data-wedding-theme='night'] .w-inv-panel--soft {
+  background: linear-gradient(165deg, #261f2e, #1e1824);
+}
+
+[data-wedding-theme='night'] .w-inv-venue-card,
+[data-wedding-theme='night'] .w-inv-program-list li,
+[data-wedding-theme='night'] .w-inv-countdown-item,
+[data-wedding-theme='night'] .w-inv-fieldset {
+  background: rgba(30, 24, 36, 0.8);
+  border-color: var(--border);
+}
+
+[data-wedding-theme='night'] .w-inv-field input {
+  background: rgba(20, 16, 24, 0.6);
+  border-color: #4a4058;
+  color: var(--inv-text);
+}
+
+[data-wedding-theme='night'] .w-inv-quote {
+  background: linear-gradient(135deg, rgba(61, 51, 72, 0.5), rgba(160, 77, 92, 0.08));
+}
+
+[data-wedding-theme='night'] .w-inv-date-badge {
+  background: linear-gradient(145deg, #221c28, #1a1520);
+  border-color: var(--border);
+}
+
+[data-wedding-theme='night'] .w-inv-intro-inner {
+  background: rgba(38, 31, 46, 0.85);
+  border-color: var(--border);
 }
 
 [data-wedding-theme='night'] .w-inv-section-title,
 [data-wedding-theme='night'] .w-inv-script,
 [data-wedding-theme='night'] .w-inv-cover-names,
 [data-wedding-theme='night'] .w-inv-date-stamp,
-[data-wedding-theme='night'] .w-inv-countdown-num {
+[data-wedding-theme='night'] .w-inv-countdown-num,
+[data-wedding-theme='night'] .flip-countdown-face,
+[data-wedding-theme='night'] .w-inv-venue-name,
+[data-wedding-theme='night'] .w-inv-footer-names {
   color: var(--inv-text);
 }
 
 [data-wedding-theme='night'] .w-inv-text,
-[data-wedding-theme='night'] .w-inv-rsvp-note {
+[data-wedding-theme='night'] .w-inv-rsvp-note,
+[data-wedding-theme='night'] .w-inv-radio,
+[data-wedding-theme='night'] .w-inv-check {
   color: var(--inv-muted);
 }
 
@@ -76,17 +132,23 @@
 [data-wedding-theme='night'] .w-inv-monogram-circle {
   border-color: var(--gold);
   color: var(--gold);
+  background: linear-gradient(145deg, #261f2e, #1e1824);
 }
 
 [data-wedding-theme='night'] .w-inv-submit {
-  background: var(--gold);
+  background: linear-gradient(135deg, var(--gold), #a88648);
   border-color: var(--gold);
   color: #1a1520;
 }
 
-[data-wedding-theme='night'] .w-inv-field input {
-  border-bottom-color: #4a4058;
-  color: var(--inv-text);
+[data-wedding-theme='night'] .w-inv-map-link {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+[data-wedding-theme='night'] .w-inv-map-link:hover {
+  background: var(--gold);
+  color: #1a1520;
 }
 
 [data-wedding-theme='night'] .site-header {
@@ -95,7 +157,8 @@
 }
 
 [data-wedding-theme='night'] .theme-toggle,
-[data-wedding-theme='night'] .music-toggle {
+[data-wedding-theme='night'] .music-toggle,
+[data-wedding-theme='night'] .music-toggle-picker {
   background: var(--surface);
   border-color: var(--border);
   color: var(--text);
@@ -144,8 +207,122 @@
 }
 
 .theme-toggle:hover,
-.music-toggle:hover {
+.music-toggle:hover,
+.music-toggle-picker:hover {
   transform: scale(1.05);
+}
+
+.music-widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.music-widget-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.music-toggle-picker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s, color 0.25s;
+}
+
+.music-widget--open .music-toggle-picker {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  transform: rotate(180deg);
+}
+
+.music-widget-now {
+  margin: 0;
+  max-width: 120px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-track-list {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  z-index: 200;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  min-width: 190px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(28, 20, 16, 0.14);
+}
+
+.music-track-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.2s ease;
+}
+
+.music-track-item:hover,
+.music-track-item--active {
+  background: rgba(160, 77, 92, 0.1);
+}
+
+.music-track-item--active .music-track-item-title {
+  color: var(--primary);
+}
+
+.music-track-item-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.music-track-item-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.header-tool.music-widget .music-widget-now {
+  display: none;
+}
+
+.header-tool.music-widget .music-track-list {
+  left: auto;
+  right: 0;
+}
+
+.inv-floating-tools .music-widget-now {
+  padding-left: 4px;
 }
 
 .header-tools {

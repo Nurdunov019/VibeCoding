@@ -5,7 +5,7 @@ function pad(n) {
   return String(n).padStart(2, '0')
 }
 
-function FlipDigit({ value }) {
+function FlipCell({ value, label }) {
   const [flip, setFlip] = useState(false)
   const prev = useRef(value)
 
@@ -20,23 +20,14 @@ function FlipDigit({ value }) {
   }, [value])
 
   return (
-    <div className={`flip-countdown-cell${flip ? ' flip-countdown-cell--flip' : ''}`}>
-      <span className="flip-countdown-face flip-countdown-face--front">{pad(value)}</span>
-      <span className="flip-countdown-face flip-countdown-face--back" aria-hidden>{pad(value)}</span>
+    <div className={`pr-count-cell${flip ? ' pr-count-cell--flip pr-count-cell--glow' : ''}`}>
+      <span className="pr-count-num">{value > 99 ? value : pad(value)}</span>
+      <span className="pr-count-label">{label}</span>
     </div>
   )
 }
 
-function CountdownCell({ value, label }) {
-  return (
-    <div className="w-inv-countdown-item">
-      <FlipDigit value={value} />
-      <span className="w-inv-countdown-label">{label}</span>
-    </div>
-  )
-}
-
-export default function Countdown({ targetDate }) {
+export default function PremiumCountdown({ targetDate }) {
   const [left, setLeft] = useState(null)
 
   useEffect(() => {
@@ -58,20 +49,22 @@ export default function Countdown({ targetDate }) {
   if (!left) return null
 
   const cells = [
-    { v: left.days, l: 'дней' },
-    { v: left.hours, l: 'часов' },
-    { v: left.mins, l: 'минут' },
+    { v: left.days, l: 'күн' },
+    { v: left.hours, l: 'саат' },
+    { v: left.mins, l: 'мүнөт' },
     { v: left.secs, l: 'секунд' },
   ]
 
   return (
-    <Reveal as="section" className="w-inv-section w-inv-countdown" variant="blur">
-      <h2 className="w-inv-section-title">До свадьбы осталось:</h2>
-      <div className="w-inv-countdown-row flip-countdown">
+    <section id="pr-countdown" className="pr-section pr-panel pr-panel--glass">
+      <Reveal variant="blur">
+        <h2 className="pr-section-title">Санаак</h2>
+      </Reveal>
+      <div className="pr-countdown-row">
         {cells.map((c) => (
-          <CountdownCell key={c.l} value={c.v} label={c.l} />
+          <FlipCell key={c.l} value={c.v} label={c.l} />
         ))}
       </div>
-    </Reveal>
+    </section>
   )
 }

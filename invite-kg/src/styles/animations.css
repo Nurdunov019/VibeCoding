@@ -31,9 +31,31 @@ html {
   will-change: opacity, transform;
 }
 
+.reveal--fade {
+  transform: none;
+}
+
+.reveal--blur {
+  opacity: 0;
+  filter: blur(14px);
+  transform: translateY(28px);
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .reveal--visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.reveal--blur.reveal--visible {
+  filter: blur(0);
+}
+
+.reveal--fade.reveal--visible {
+  transform: none;
 }
 
 /* Page load fade */
@@ -82,8 +104,248 @@ html {
   to { transform: scale(1.08); }
 }
 
+@keyframes ken-burns-hero {
+  from { transform: scale(1.04) translateY(0); }
+  to { transform: scale(1.12) translateY(-1.5%); }
+}
+
+.hero-video--ken-burns {
+  animation: ken-burns-hero 22s ease-in-out infinite alternate;
+}
+
 .img-zoom--slow {
   animation: ken-burns 18s ease-in-out infinite alternate;
+}
+
+/* Letter reveal */
+.letter-reveal span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.45em) rotateX(40deg);
+  filter: blur(4px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--letter-base-delay, 0ms) + var(--i, 0) * 38ms);
+}
+
+.letter-reveal--visible span {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+  filter: blur(0);
+}
+
+/* Stagger reveal */
+.stagger-reveal .stagger-child {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--reveal-delay, 0ms) + var(--stagger-i, 0) * var(--stagger-step, 80ms));
+}
+
+.stagger-reveal--visible .stagger-child {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Parallax */
+.parallax-layer {
+  transform: translate3d(0, var(--parallax-y, 0px), 0);
+  will-change: transform;
+}
+
+/* Timeline draw — program cards */
+.timeline-draw {
+  position: relative;
+}
+
+.timeline-draw li {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(0.15s + var(--i, 0) * 120ms);
+}
+
+.timeline-draw--visible li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Flip countdown */
+.flip-countdown {
+  perspective: 520px;
+}
+
+.flip-countdown-cell {
+  position: relative;
+  min-height: 2rem;
+  transform-style: preserve-3d;
+}
+
+.flip-countdown-face {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--inv-ink, #1a1a1a);
+  backface-visibility: hidden;
+}
+
+.flip-countdown-face--back {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(180deg);
+}
+
+.flip-countdown-cell--flip {
+  animation: flip-countdown 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes flip-countdown {
+  0% { transform: rotateX(0); }
+  49% { transform: rotateX(-90deg); }
+  50% { transform: rotateX(-90deg); }
+  100% { transform: rotateX(0); }
+}
+
+/* Morph button */
+.btn-morph {
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-radius 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s ease,
+    background 0.3s ease,
+    width 0.45s ease,
+    padding 0.45s ease;
+}
+
+.btn-morph::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.55s ease, opacity 0.55s ease;
+}
+
+.btn-morph:hover::before {
+  transform: scale(2.2);
+  opacity: 1;
+}
+
+.btn-morph:active {
+  transform: scale(0.97);
+}
+
+.btn-morph--loading {
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.btn-morph--loading .btn-morph-label {
+  animation: morph-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes morph-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* Success checkmark */
+.success-check {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px;
+}
+
+.success-check svg {
+  width: 100%;
+  height: 100%;
+}
+
+.success-check-circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: success-circle-draw 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.success-check-mark {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: success-check-draw 0.45s 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes success-circle-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes success-check-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Light bokeh */
+.bokeh-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bokeh-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.08) 55%, transparent 72%);
+  filter: blur(2px);
+  animation: bokeh-float var(--dur, 12s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+.bokeh-bg--warm .bokeh-orb {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 248, 240, 0.8) 0%, rgba(232, 200, 170, 0.12) 55%, transparent 72%);
+}
+
+.bokeh-bg--light .bokeh-orb {
+  background: radial-gradient(circle at 35% 35%, rgba(255, 252, 248, 0.85) 0%, rgba(196, 160, 98, 0.1) 50%, transparent 70%);
+}
+
+@keyframes bokeh-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: var(--bokeh-o, 0.35);
+  }
+  50% {
+    transform: translate(var(--dx, 16px), var(--dy, -24px)) scale(1.08);
+    opacity: calc(var(--bokeh-o, 0.35) + 0.2);
+  }
+}
+
+/* Intro line draw */
+@keyframes line-reveal {
+  from { transform: scaleX(0); opacity: 0.4; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+.w-inv-intro-line--draw {
+  transform-origin: center;
+  animation: line-reveal 0.9s 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Countdown tick */
@@ -143,17 +405,38 @@ html {
     scroll-behavior: auto;
   }
 
-  .reveal {
+  .reveal,
+  .reveal--blur {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
+  }
+
+  .letter-reveal span,
+  .stagger-reveal .stagger-child,
+  .timeline-draw li {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+
+  .parallax-layer {
+    transform: none !important;
   }
 
   .fade-in,
   .img-zoom--slow,
+  .hero-video--ken-burns,
   .countdown-tick,
   .w-inv-countdown-item--pulse,
-  .wa-float {
+  .wa-float,
+  .bokeh-orb,
+  .flip-countdown-cell--flip,
+  .success-check-circle,
+  .success-check-mark,
+  .w-inv-intro-line--draw {
     animation: none !important;
   }
 
@@ -169,5 +452,9 @@ html {
   .hover-lift:hover,
   .img-zoom-wrap:hover .img-zoom {
     transform: none;
+  }
+
+  .btn-morph::before {
+    display: none;
   }
 }

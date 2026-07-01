@@ -17,25 +17,27 @@ export default function TemplateGallery() {
     <>
       <section id="templates" className="catalog-section">
         <div className="catalog-section-head">
-          <h2 className="catalog-title">Шаблондор</h2>
-          <p className="catalog-note">
-            * Макет номери жана баасы төмөндө көрсөтүлгөн
-          </p>
+          <Reveal variant="blur">
+            <h2 className="catalog-title">Шаблондор</h2>
+            <p className="catalog-note">
+              * Макет номери жана баасы төмөндө көрсөтүлгөн
+            </p>
+          </Reveal>
         </div>
 
-        <div className="catalog-filters">
+        <StaggerReveal className="catalog-filters" step={60}>
           {eventTypes.map((e) => (
             <button
               key={e.id}
               type="button"
-              className={`catalog-filter${filter === e.id ? ' catalog-filter--active' : ''}`}
+              className={`catalog-filter hover-scale${filter === e.id ? ' catalog-filter--active' : ''}`}
               onClick={() => setFilter(e.id)}
             >
               <span aria-hidden>{e.icon}</span>
               {e.label}
             </button>
           ))}
-        </div>
+        </StaggerReveal>
 
         <div className="catalog-masonry">
           {filtered.map((t, i) => (

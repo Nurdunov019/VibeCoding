@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { fireConfetti } from '../../utils/confetti'
+import SuccessCheckmark from '../SuccessCheckmark'
 
 export default function RsvpForm({ deadline, alcoholOptions }) {
   const [name, setName] = useState('')
@@ -7,6 +8,7 @@ export default function RsvpForm({ deadline, alcoholOptions }) {
   const [alcohol, setAlcohol] = useState([])
   const [partner, setPartner] = useState('')
   const [song, setSong] = useState('')
+  const [submitting, setSubmitting] = useState(false)
   const [sent, setSent] = useState(false)
 
   const toggleAlcohol = (item) => {
@@ -17,14 +19,17 @@ export default function RsvpForm({ deadline, alcoholOptions }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    setSent(true)
-    if (attend === 'yes') fireConfetti()
+    setSubmitting(true)
+    window.setTimeout(() => {
+      setSent(true)
+      if (attend === 'yes') fireConfetti()
+    }, 650)
   }
 
   if (sent) {
     return (
-      <section className="w-inv-section w-inv-rsvp w-inv-rsvp--success">
-        <div className="w-inv-success-icon" aria-hidden>💕</div>
+      <section className="w-inv-section w-inv-rsvp w-inv-rsvp--success fade-in">
+        <SuccessCheckmark />
         <h2 className="w-inv-section-title">Спасибо!</h2>
         <p className="w-inv-text w-inv-text--center">
           {attend === 'yes'
@@ -89,7 +94,13 @@ export default function RsvpForm({ deadline, alcoholOptions }) {
           </>
         )}
 
-        <button type="submit" className="w-inv-submit">Отправить</button>
+        <button
+          type="submit"
+          className={`w-inv-submit btn-morph${submitting ? ' btn-morph--loading' : ''}`}
+          disabled={submitting}
+        >
+          <span className="btn-morph-label">{submitting ? '…' : 'Отправить'}</span>
+        </button>
       </form>
     </section>
   )
