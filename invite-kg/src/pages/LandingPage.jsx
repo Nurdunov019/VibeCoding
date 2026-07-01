@@ -1,6 +1,7 @@
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import TemplateGallery from '../components/catalog/TemplateGallery'
+import QuickOrderSection from '../components/QuickOrderSection'
 import PricingSection from '../components/PricingSection'
 import ReviewsSection from '../components/ReviewsSection'
 import FaqSection from '../components/FaqSection'
@@ -15,6 +16,7 @@ export default function LandingPage() {
       <main>
         <Hero />
         <TemplateGallery />
+        <QuickOrderSection />
         <PricingSection />
         <ReviewsSection />
         <FaqSection />
