@@ -121,10 +121,14 @@
   .lang-picker-btn {
     height: var(--header-chip-h);
     min-height: var(--header-chip-h);
-    min-width: var(--header-chip-w);
-    max-width: 118px;
     font-size: 12px;
     padding: 0 8px;
+  }
+  .lang-picker-btn--flag {
+    min-width: 40px;
+    max-width: 40px;
+    width: 40px;
+    padding: 0;
   }
 
   .compare-bar {
@@ -309,10 +313,14 @@
   .lang-picker-btn {
     height: var(--header-chip-h);
     min-height: var(--header-chip-h);
-    min-width: 84px;
-    max-width: 118px;
     font-size: 11px;
     padding: 0 8px;
+  }
+  .lang-picker-btn--flag {
+    min-width: 40px;
+    max-width: 40px;
+    width: 40px;
+    padding: 0;
   }
   .header-mobile-actions .lang-select {
     padding: 0 20px 0 6px;

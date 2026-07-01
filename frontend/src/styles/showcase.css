@@ -827,7 +827,8 @@ html.legal-modal-open .header {
 }
 
 .app--showcase .region-picker-btn,
-.app--showcase .lang-select {
+.app--showcase .lang-select,
+.app--showcase .lang-picker-btn {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.38);
   color: #fff;
@@ -873,7 +874,8 @@ html.legal-modal-open .header {
 }
 
 .app--showcase .header.header--showcase-light .region-picker-btn,
-.app--showcase .header.header--showcase-light .lang-select {
+.app--showcase .header.header--showcase-light .lang-select,
+.app--showcase .header.header--showcase-light .lang-picker-btn {
   background: #fff;
   border-color: rgba(28, 24, 20, 0.14);
   color: #1c1814;
@@ -1254,7 +1256,8 @@ html.legal-modal-open .header {
   }
 
   .app--showcase .header.header--showcase-light .region-picker-btn,
-  .app--showcase .header.header--showcase-light .lang-select {
+  .app--showcase .header.header--showcase-light .lang-select,
+  .app--showcase .header.header--showcase-light .lang-picker-btn {
     background: #fff;
     border-color: rgba(28, 24, 20, 0.14);
     color: #1c1814;

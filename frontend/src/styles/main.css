@@ -201,6 +201,18 @@ button { cursor: pointer; border: none; }
   overflow: hidden;
   font-family: inherit;
 }
+.lang-picker-btn--flag {
+  min-width: 40px;
+  max-width: 44px;
+  width: 40px;
+  padding: 0;
+  border-radius: 10px;
+}
+.lang-flag {
+  font-size: 22px;
+  line-height: 1;
+  display: block;
+}
 .lang-picker-label {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -227,6 +239,29 @@ button { cursor: pointer; border: none; }
 .lang-dropdown--portal {
   position: fixed;
   z-index: 500;
+}
+.lang-dropdown--flags {
+  min-width: 56px;
+  padding: 6px;
+}
+.lang-dropdown--flags li button {
+  justify-content: center;
+  padding: 8px;
+  min-height: 44px;
+  flex-direction: row;
+  text-align: center;
+  border-radius: 8px;
+  position: relative;
+}
+.lang-dropdown--flags .lang-flag {
+  font-size: 24px;
+}
+.lang-dropdown--flags .lang-check {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 11px;
+  line-height: 1;
 }
 .lang-dropdown li button {
   width: 100%;

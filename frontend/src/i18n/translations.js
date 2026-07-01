@@ -1,7 +1,7 @@
 export const LANGS = [
-  { code: 'ky', label: 'Кыргызча' },
-  { code: 'ru', label: 'Русский' },
-  { code: 'en', label: 'English' },
+  { code: 'ky', label: 'Кыргызча', flag: '🇰🇬' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'en', label: 'English', flag: '🇬🇧' },
 ]
 
 export const translations = {

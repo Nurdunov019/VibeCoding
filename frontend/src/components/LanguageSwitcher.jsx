@@ -14,6 +14,27 @@ function useMobileHeader() {
   return mobile
 }
 
+function LangMenu({ lang, onPick, className, style, id }) {
+  return (
+    <ul id={id} className={className} role="listbox" style={style}>
+      {LANGS.map((l) => (
+        <li key={l.code} role="option" aria-selected={lang === l.code}>
+          <button
+            type="button"
+            className={lang === l.code ? 'active' : ''}
+            onClick={() => onPick(l.code)}
+            aria-label={l.label}
+            title={l.label}
+          >
+            <span className="lang-flag" aria-hidden>{l.flag}</span>
+            {lang === l.code && <span className="lang-check">✓</span>}
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export default function LanguageSwitcher() {
   const { lang, setLang } = useLocale()
   const isMobile = useMobileHeader()
@@ -24,11 +45,16 @@ export default function LanguageSwitcher() {
 
   const current = LANGS.find((l) => l.code === lang) || LANGS[0]
 
+  const pick = (code) => {
+    setLang(code)
+    setOpen(false)
+  }
+
   const updateMenuPosition = () => {
     const btn = btnRef.current
     if (!btn) return
     const rect = btn.getBoundingClientRect()
-    const menuWidth = Math.max(rect.width, 180)
+    const menuWidth = 56
     const left = Math.max(8, rect.right - menuWidth)
     setMenuStyle({
       top: rect.bottom + 6,
@@ -68,64 +94,36 @@ export default function LanguageSwitcher() {
     }
   }, [open])
 
-  if (!isMobile) {
-    return (
-      <select
-        className="lang-select"
-        value={lang}
-        onChange={(e) => setLang(e.target.value)}
-        aria-label="Language"
-      >
-        {LANGS.map((l) => (
-          <option key={l.code} value={l.code}>{l.label}</option>
-        ))}
-      </select>
-    )
+  const menuProps = {
+    id: 'lang-picker-menu',
+    lang,
+    onPick: pick,
+    className: `lang-dropdown lang-dropdown--flags${isMobile ? ' lang-dropdown--portal' : ''}`,
+    style: isMobile ? menuStyle : undefined,
   }
 
-  const menu = open && menuStyle ? createPortal(
-    <ul
-      id="lang-picker-menu"
-      className="lang-dropdown lang-dropdown--portal"
-      role="listbox"
-      style={menuStyle}
-    >
-      {LANGS.map((l) => (
-        <li key={l.code} role="option" aria-selected={lang === l.code}>
-          <button
-            type="button"
-            className={lang === l.code ? 'active' : ''}
-            onClick={() => {
-              setLang(l.code)
-              setOpen(false)
-            }}
-          >
-            <span>{l.label}</span>
-            {lang === l.code && <span className="lang-check">✓</span>}
-          </button>
-        </li>
-      ))}
-    </ul>,
-    document.body,
+  const menu = open && (!isMobile || menuStyle) ? (
+    isMobile
+      ? createPortal(<LangMenu {...menuProps} />, document.body)
+      : <LangMenu {...menuProps} />
   ) : null
 
   return (
-    <div className="lang-picker" ref={ref}>
+    <div className={`lang-picker${open ? ' lang-picker--open' : ''}`} ref={ref}>
       <button
         ref={btnRef}
         type="button"
-        className="lang-picker-btn"
+        className="lang-picker-btn lang-picker-btn--flag"
         onClick={(e) => {
           e.stopPropagation()
           setOpen((v) => !v)
         }}
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-controls={open ? 'lang-picker-menu' : undefined}
-        aria-label="Language"
+        aria-label={current.label}
+        title={current.label}
       >
-        <span className="lang-picker-label">{current.label}</span>
-        <span className="lang-chevron" aria-hidden>▾</span>
+        <span className="lang-flag" aria-hidden>{current.flag}</span>
       </button>
       {menu}
     </div>
