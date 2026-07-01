@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useLocation, Routes, Route } from 'react-router-dom'
 import LandingPage from '../pages/LandingPage'
 import InvitationPage from '../pages/InvitationPage'
@@ -5,6 +6,10 @@ import PremiumInvitationPage from '../pages/PremiumInvitationPage'
 
 export default function AnimatedRoutes() {
   const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   return (
     <div key={location.pathname} className="page-transition">

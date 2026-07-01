@@ -34,6 +34,9 @@ export default function PremiumInvitationPage() {
   const activeSection = useSectionSpy(SECTION_IDS)
 
   useEffect(() => {
+    const prev = window.history.scrollRestoration
+    window.history.scrollRestoration = 'manual'
+    window.scrollTo(0, 0)
     document.body.classList.add('premium-open')
     const onMove = (e) => {
       document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`)
@@ -41,6 +44,7 @@ export default function PremiumInvitationPage() {
     }
     window.addEventListener('mousemove', onMove, { passive: true })
     return () => {
+      window.history.scrollRestoration = prev
       document.body.classList.remove('premium-open')
       window.removeEventListener('mousemove', onMove)
     }
@@ -56,8 +60,9 @@ export default function PremiumInvitationPage() {
         <MusicToggle />
       </div>
 
+      <PremiumHero data={data} />
+
       <main className="pr-main">
-        <PremiumHero data={data} />
         <PremiumInvite data={data} />
         <PremiumCountdown targetDate={data.date} />
         <PremiumLoveStory items={data.loveStory} />

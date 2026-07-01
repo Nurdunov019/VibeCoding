@@ -27,8 +27,22 @@
 .pr-main {
   position: relative;
   z-index: 1;
+  width: 100%;
   max-width: 520px;
   margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Hero — full viewport width */
+.pr-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 /* Ambient */
@@ -128,7 +142,9 @@
   font-size: 8px;
   font-weight: 600;
   color: var(--pr-muted);
-  text-decoration: none;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
   transition: transform 0.25s, background 0.25s, color 0.25s;
 }
 
@@ -164,15 +180,6 @@
 }
 
 /* Hero */
-.pr-hero {
-  position: relative;
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
 .pr-hero-bg {
   position: absolute;
   inset: 0;
@@ -189,8 +196,8 @@
 
 .pr-hero-glass {
   position: absolute;
-  inset: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  inset: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--pr-radius);
   pointer-events: none;
 }
@@ -1096,4 +1103,79 @@
   }
 
   .pr-cursor-light { display: none; }
+}
+
+/* ── Desktop / laptop ── */
+@media (min-width: 768px) {
+  .pr-main {
+    max-width: min(1040px, calc(100% - 64px));
+    padding: 0 32px;
+  }
+
+  .pr-hero-glass {
+    inset: 28px 40px;
+    border-radius: 12px;
+  }
+
+  .pr-hero-names {
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+  }
+
+  .pr-hero-quote {
+    font-size: 1.25rem;
+    max-width: 420px;
+  }
+
+  .pr-panel {
+    margin-inline: 0;
+    padding: 40px 36px;
+  }
+
+  .pr-section {
+    padding: 56px 0;
+  }
+
+  .pr-gallery-masonry {
+    columns: 3;
+    column-gap: 16px;
+    padding: 0;
+  }
+
+  .pr-insta-grid {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0;
+  }
+
+  .pr-dress-grid {
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  .pr-countdown-row {
+    gap: 16px;
+  }
+
+  .pr-count-cell {
+    min-width: 88px;
+    padding: 20px 16px;
+  }
+
+  .pr-floating-tools {
+    left: 32px;
+    bottom: 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pr-main {
+    max-width: min(1200px, calc(100% - 80px));
+  }
+
+  .pr-hero-glass {
+    inset: 36px 64px;
+  }
+
+  .pr-gallery-masonry {
+    columns: 4;
+  }
 }

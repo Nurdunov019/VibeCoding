@@ -17,14 +17,17 @@ export default function PremiumChrome({ progress, activeSection }) {
       <div className="pr-scroll-progress" style={{ '--progress': progress }} aria-hidden />
       <nav className="pr-section-nav" aria-label="Секциялар">
         {SECTIONS.map((s) => (
-          <a
+          <button
             key={s.id}
-            href={`#${s.id}`}
+            type="button"
             className={`pr-section-dot${activeSection === s.id ? ' pr-section-dot--active' : ''}`}
             title={s.label}
+            onClick={() => {
+              document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth' })
+            }}
           >
             <span>{s.label}</span>
-          </a>
+          </button>
         ))}
       </nav>
       <div className="pr-cursor-light" aria-hidden />
