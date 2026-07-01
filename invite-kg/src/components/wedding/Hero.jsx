@@ -1,4 +1,6 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import HeroPetals from './HeroPetals'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -7,8 +9,16 @@ const fadeUp = (delay = 0) => ({
 })
 
 export default function Hero({ data, onOpen }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  })
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 90])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.35])
+
   return (
-    <section id="wd-hero" className="wd-hero">
+    <section ref={ref} id="wd-hero" className="wd-hero">
       <div
         className="wd-hero-bg"
         style={{ '--hero-image': `url("${data.coverImage}")` }}
@@ -16,8 +26,12 @@ export default function Hero({ data, onOpen }) {
         aria-label="Свадебное фото"
       />
       <div className="wd-hero-overlay" />
+      <HeroPetals />
 
-      <div className="wd-hero-content">
+      <motion.div
+        className="wd-hero-content"
+        style={{ y: contentY, opacity: contentOpacity }}
+      >
         <motion.p className="wd-hero-date" {...fadeUp(0.15)}>
           {data.dateShort}
         </motion.p>
@@ -34,10 +48,10 @@ export default function Hero({ data, onOpen }) {
 
         <motion.div {...fadeUp(0.75)}>
           <button type="button" className="wd-hero-btn" onClick={onOpen}>
-            Открыть приглашение
+            Ачуу
           </button>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   )
 }

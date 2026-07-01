@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { weddingInvitation } from '../data/weddingInvitation'
 import { useWeddingTheme } from '../context/WeddingThemeContext'
-import Petals from '../components/wedding/Petals'
+import { fireConfettiRain } from '../utils/confetti'
 import Nav from '../components/wedding/Nav'
 import Hero from '../components/wedding/Hero'
-import Countdown from '../components/wedding/Countdown'
+import CountdownSection from '../components/wedding/CountdownSection'
 import Story from '../components/wedding/Story'
 import Program from '../components/wedding/Program'
 import Venue from '../components/wedding/Venue'
 import Gallery from '../components/wedding/Gallery'
+import FaqSection from '../components/wedding/FaqSection'
 import RsvpForm from '../components/wedding/RsvpForm'
 import Footer from '../components/wedding/Footer'
 import MusicToggle from '../components/MusicToggle'
@@ -35,13 +36,13 @@ export default function Home() {
   }
 
   const handleOpen = () => {
+    fireConfettiRain(30)
     setOpened(true)
     window.setTimeout(() => scrollTo('wd-countdown'), 400)
   }
 
   return (
     <div className="wd-page">
-      <Petals />
       <Nav opened={opened} />
       <div className="wd-music-float">
         <MusicToggle />
@@ -51,7 +52,7 @@ export default function Home() {
 
       {opened && (
         <>
-          <Countdown targetDate={data.date} />
+          <CountdownSection targetDate={data.date} />
           <Story photos={data.storyPhotos} timeline={data.timeline} />
           <Program items={data.program} />
           <Venue
@@ -60,6 +61,7 @@ export default function Home() {
             dressNote={data.dressNote}
           />
           <Gallery images={data.gallery} />
+          <FaqSection items={data.faq} />
           <RsvpForm storageKey={data.rsvpStorageKey} />
           <Footer data={data} onNav={scrollTo} />
         </>

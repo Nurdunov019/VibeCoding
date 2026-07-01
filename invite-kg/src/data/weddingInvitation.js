@@ -4,9 +4,9 @@ export const weddingInvitation = {
   templateName: 'Макет 3 — Classic',
   groom: 'Айбек',
   bride: 'Малика',
-  date: '2026-09-20T15:00:00',
-  dateDisplay: '20 сентябрь 2026',
-  dateShort: '20 · 09 · 2026',
+  date: '2026-08-15T15:00:00',
+  dateDisplay: '15 август 2026',
+  dateShort: '15 · 08 · 2026',
   coverImage:
     'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=1400',
   heroSubtitle: 'Сүйүүбүздү сиз менен бөлүшкүбүз келет',
@@ -65,6 +65,32 @@ export const weddingInvitation = {
     instagram: 'https://instagram.com/',
   },
   rsvpStorageKey: 'chakyruu-rsvp-demo3',
+  faq: [
+    {
+      q: 'Кийим коду кандай?',
+      a: 'Крем, алтын жана жашыл палитрага ылайык келиңиз. Кара түстү тандабаңыз.',
+    },
+    {
+      q: 'Балдарды алып келебизби?',
+      a: 'Ооба, балдар үчүн атайын бөлмө жана меню даярдалган.',
+    },
+    {
+      q: 'Белек катта жазабызбы?',
+      a: 'Каалооңуз боюнча. Конверт бөлмөсү кабыл алууда болот.',
+    },
+    {
+      q: 'Орду кантип табам?',
+      a: 'Төмөндөгү картадан Google Maps аркылуу маршрут ачыңыз.',
+    },
+    {
+      q: 'RSVP кантип жөнөтөм?',
+      a: 'Төмөндөгү форманы толтуруңуз — жооп браузериңизде сакталат.',
+    },
+    {
+      q: 'Кечке кечиксек болобу?',
+      a: 'Сураныч, 15:00го чейин келүүгө аракет кылыңыз — нике азаматы убактысында башталат.',
+    },
+  ],
 }
 
 export const WEDDING_NAV = [
@@ -74,5 +100,6 @@ export const WEDDING_NAV = [
   { id: 'wd-program', label: 'Программа' },
   { id: 'wd-venue', label: 'Орун' },
   { id: 'wd-gallery', label: 'Галерея' },
+  { id: 'wd-faq', label: 'FAQ' },
   { id: 'wd-rsvp', label: 'RSVP' },
 ]

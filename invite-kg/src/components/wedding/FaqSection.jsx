@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { faqItems } from '../data/faq'
-
-const ITEMS = faqItems.slice(0, 6)
+import SectionTitle from './SectionTitle'
 
 function FaqItem({ item, open, onToggle, index }) {
   return (
     <motion.article
-      className={`faq-item${open ? ' faq-item--open' : ''}`}
+      className={`wd-faq-item${open ? ' wd-faq-item--open' : ''}`}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
@@ -15,7 +13,7 @@ function FaqItem({ item, open, onToggle, index }) {
     >
       <motion.button
         type="button"
-        className="faq-q"
+        className="wd-faq-q"
         onClick={onToggle}
         aria-expanded={open}
         whileHover={{ x: 4 }}
@@ -23,7 +21,7 @@ function FaqItem({ item, open, onToggle, index }) {
       >
         <span>{item.q}</span>
         <motion.span
-          className="faq-icon"
+          className="wd-faq-icon"
           aria-hidden
           animate={{ rotate: open ? 45 : 0 }}
           transition={{ type: 'spring', stiffness: 320, damping: 18 }}
@@ -35,14 +33,14 @@ function FaqItem({ item, open, onToggle, index }) {
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
-            className="faq-body"
+            className="wd-faq-body"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.p
-              className="faq-a"
+              className="wd-faq-a"
               initial={{ y: -8 }}
               animate={{ y: 0 }}
               exit={{ y: -4 }}
@@ -57,26 +55,22 @@ function FaqItem({ item, open, onToggle, index }) {
   )
 }
 
-export default function FaqSection() {
+export default function FaqSection({ items }) {
   const [open, setOpen] = useState(0)
 
   return (
-    <section id="faq" className="section">
-      <div className="container container-narrow">
-        <div className="section-head">
-          <h2>Суроо — жооп</h2>
-        </div>
-        <div className="faq-list">
-          {ITEMS.map((item, i) => (
-            <FaqItem
-              key={item.q}
-              item={item}
-              index={i}
-              open={open === i}
-              onToggle={() => setOpen(open === i ? -1 : i)}
-            />
-          ))}
-        </div>
+    <section id="wd-faq" className="wd-section wd-faq">
+      <SectionTitle subtitle="Көп берилүүчү суроолор">Суроо — жооп</SectionTitle>
+      <div className="wd-faq-list">
+        {items.map((item, i) => (
+          <FaqItem
+            key={item.q}
+            item={item}
+            index={i}
+            open={open === i}
+            onToggle={() => setOpen(open === i ? -1 : i)}
+          />
+        ))}
       </div>
     </section>
   )
