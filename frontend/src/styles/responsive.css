@@ -102,8 +102,8 @@
 
   .header-top {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "region logo lang";
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas: "logo lang region";
     align-items: center;
     gap: 8px;
     height: var(--header-h);
@@ -112,11 +112,20 @@
   .region-picker { grid-area: region; flex-shrink: 0; }
   .header-logo {
     grid-area: logo;
-    justify-self: center;
+    justify-self: start;
     min-width: 0;
   }
   .header-logo .logo-tag { display: none; }
   .header-mobile-actions { grid-area: lang; flex-shrink: 0; }
+  .region-picker-btn,
+  .lang-picker-btn {
+    height: var(--header-chip-h);
+    min-height: var(--header-chip-h);
+    min-width: var(--header-chip-w);
+    max-width: 118px;
+    font-size: 12px;
+    padding: 0 8px;
+  }
 
   .compare-bar {
     position: fixed;
@@ -154,6 +163,52 @@
   .admin-form h3 {
     margin-top: 16px;
     padding-top: 16px;
+  }
+
+  .profile-sheet-backdrop {
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+  .profile-sheet {
+    width: min(88vw, 340px);
+    max-height: 100dvh;
+    height: 100%;
+    border-radius: 20px 0 0 20px;
+    animation: slideInRight 0.25s ease;
+    padding-bottom: 0;
+  }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  .profile-sheet-head {
+    flex-direction: row-reverse;
+  }
+  .profile-sheet-head h2 {
+    flex: 1;
+    text-align: right;
+  }
+  .profile-sheet-muted,
+  .profile-user-card {
+    text-align: right;
+  }
+  .profile-user-card {
+    flex-direction: row-reverse;
+  }
+  .profile-menu-item {
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .profile-lang-row {
+    flex-direction: row-reverse;
+    gap: 12px;
+  }
+  .profile-sheet-footer {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  .profile-sheet-exit {
+    justify-content: flex-end;
+    text-align: right;
   }
 }
 
@@ -240,8 +295,8 @@
 
   .header-top {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "region logo lang";
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas: "logo lang region";
     align-items: center;
     gap: 8px;
     height: 52px;
@@ -250,7 +305,8 @@
   }
   .region-picker { grid-area: region; margin-left: 0; flex-shrink: 0; }
   .region-picker-btn,
-  .header-mobile-actions .lang-select {
+  .header-mobile-actions .lang-select,
+  .lang-picker-btn {
     height: var(--header-chip-h);
     min-height: var(--header-chip-h);
     min-width: 84px;
@@ -263,7 +319,7 @@
   }
   .header-logo {
     grid-area: logo;
-    justify-self: center;
+    justify-self: start;
     min-width: 0;
     flex-direction: row;
     gap: 0;
