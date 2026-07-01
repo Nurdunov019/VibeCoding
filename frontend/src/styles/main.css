@@ -2924,16 +2924,20 @@ body.contact-picker-open .home-contact {
 }
 .profile-sheet-head h2 { font-size: 18px; font-weight: 800; margin: 0; }
 .profile-sheet-close {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: none;
   background: var(--bg);
   border-radius: 50%;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
   cursor: pointer;
   color: var(--muted);
+  flex-shrink: 0;
 }
+.profile-sheet-grab { display: none; }
+.profile-sheet-guest { display: none; }
+.profile-auth-actions { display: none; }
 .profile-sheet-muted { margin: 0 0 12px; font-size: 14px; }
 .profile-user-card {
   display: flex;

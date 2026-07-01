@@ -19,10 +19,12 @@ export default function MobileProfileSheet({ open, onClose }) {
 
   return (
     <div className="profile-sheet-backdrop" onClick={onClose}>
-      <div className="profile-sheet" onClick={(e) => e.stopPropagation()}>
+      <div className="profile-sheet" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={t('profile.title')}>
+        <div className="profile-sheet-grab" aria-hidden />
+
         <div className="profile-sheet-head">
           <h2>{t('profile.title')}</h2>
-          <button type="button" className="profile-sheet-close" onClick={onClose} aria-label="Close">×</button>
+          <button type="button" className="profile-sheet-close" onClick={onClose} aria-label={t('profile.close')}>×</button>
         </div>
 
         {loading ? (
@@ -36,20 +38,21 @@ export default function MobileProfileSheet({ open, onClose }) {
             </div>
           </div>
         ) : (
-          <p className="muted profile-sheet-muted">{t('profile.guest')}</p>
+          <p className="profile-sheet-guest">{t('profile.guest')}</p>
+        )}
+
+        {!loading && !user && (
+          <div className="profile-auth-actions">
+            <button type="button" className="btn-accent btn-block" onClick={() => { openLogin(); onClose() }}>
+              {t('auth.login')}
+            </button>
+            <button type="button" className="btn-outline btn-block" onClick={() => { openRegister(); onClose() }}>
+              {t('auth.register')}
+            </button>
+          </div>
         )}
 
         <nav className="profile-menu">
-          {!user && (
-            <>
-              <button type="button" className="profile-menu-item" onClick={() => { openLogin(); onClose() }}>
-                {t('auth.login')}
-              </button>
-              <button type="button" className="profile-menu-item accent" onClick={() => { openRegister(); onClose() }}>
-                {t('auth.register')}
-              </button>
-            </>
-          )}
           {user?.is_admin && !pathname.startsWith('/admin') && (
             <Link to="/admin" className="profile-menu-item" onClick={onClose}>{t('nav.admin')}</Link>
           )}
@@ -60,17 +63,13 @@ export default function MobileProfileSheet({ open, onClose }) {
           </div>
         </nav>
 
-        <div className="profile-sheet-footer">
-          {user ? (
+        {user && (
+          <div className="profile-sheet-footer">
             <button type="button" className="profile-menu-item danger profile-sheet-exit" onClick={handleLogout}>
               {t('auth.logout')}
             </button>
-          ) : (
-            <button type="button" className="profile-menu-item profile-sheet-exit" onClick={onClose}>
-              {t('profile.close')}
-            </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

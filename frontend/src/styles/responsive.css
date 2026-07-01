@@ -169,50 +169,74 @@
     padding-top: 16px;
   }
 
-  .profile-sheet-backdrop {
-    align-items: stretch;
-    justify-content: flex-end;
-  }
   .profile-sheet {
-    width: min(88vw, 340px);
-    max-height: 100dvh;
-    height: 100%;
-    border-radius: 20px 0 0 20px;
-    animation: slideInRight 0.25s ease;
-    padding-bottom: 0;
+    padding: 10px 20px 0;
+    max-height: min(82dvh, calc(100dvh - 72px));
   }
-  @keyframes slideInRight {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+  .profile-sheet-grab {
+    display: block;
+    width: 40px;
+    height: 4px;
+    border-radius: 999px;
+    background: #d1d5db;
+    margin: 0 auto 12px;
   }
-  .profile-sheet-head {
-    flex-direction: row-reverse;
+  .profile-sheet-guest {
+    display: block;
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+    background: var(--bg);
+    border-radius: 12px;
+    text-align: center;
   }
-  .profile-sheet-head h2 {
-    flex: 1;
-    text-align: right;
+  .profile-auth-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
   }
-  .profile-sheet-muted,
-  .profile-user-card {
-    text-align: right;
+  .profile-auth-actions .btn-block {
+    min-height: 48px;
+    font-size: 15px;
+    font-weight: 700;
   }
-  .profile-user-card {
-    flex-direction: row-reverse;
+  .profile-menu {
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
   }
   .profile-menu-item {
-    justify-content: flex-end;
-    text-align: right;
+    min-height: 52px;
+    padding: 14px 16px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .profile-menu-item:last-child {
+    border-bottom: none;
   }
   .profile-lang-row {
-    flex-direction: row-reverse;
+    justify-content: space-between;
+    flex-direction: row;
     gap: 12px;
   }
   .profile-sheet-footer {
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    padding: 12px 0 calc(12px + 68px + env(safe-area-inset-bottom));
+    border-top: none;
+    margin-top: 16px;
   }
   .profile-sheet-exit {
-    justify-content: flex-end;
-    text-align: right;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    border-radius: 12px;
+    background: #fff5f5;
   }
 }
 
