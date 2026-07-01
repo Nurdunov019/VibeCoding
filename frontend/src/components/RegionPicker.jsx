@@ -19,10 +19,10 @@ export default function RegionPicker() {
     if (!btn) return
     const rect = btn.getBoundingClientRect()
     const menuWidth = Math.max(rect.width, 220)
-    const left = Math.max(8, rect.right - menuWidth)
+    const left = Math.min(rect.left, window.innerWidth - menuWidth - 8)
     setMenuStyle({
       top: rect.bottom + 6,
-      left,
+      left: Math.max(8, left),
       width: menuWidth,
     })
   }

@@ -102,8 +102,8 @@
 
   .header-top {
     display: grid;
-    grid-template-columns: 1fr auto auto;
-    grid-template-areas: "logo lang region";
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "region logo lang";
     align-items: center;
     gap: 8px;
     height: var(--header-h);
@@ -112,7 +112,7 @@
   .region-picker { grid-area: region; flex-shrink: 0; }
   .header-logo {
     grid-area: logo;
-    justify-self: start;
+    justify-self: center;
     min-width: 0;
   }
   .header-logo .logo-tag { display: none; }
@@ -299,8 +299,8 @@
 
   .header-top {
     display: grid;
-    grid-template-columns: 1fr auto auto;
-    grid-template-areas: "logo lang region";
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "region logo lang";
     align-items: center;
     gap: 8px;
     height: 52px;
@@ -327,7 +327,7 @@
   }
   .header-logo {
     grid-area: logo;
-    justify-self: start;
+    justify-self: center;
     min-width: 0;
     flex-direction: row;
     gap: 0;
