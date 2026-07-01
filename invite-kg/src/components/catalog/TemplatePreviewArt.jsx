@@ -3,6 +3,7 @@ export default function TemplatePreviewArt({ style, featured }) {
   return (
     <div className={`preview-art preview-art--${style}${featured ? ' preview-art--featured' : ''}`}>
       <div className="preview-art-scroll">
+        <div className="preview-art-photo" aria-hidden />
         <div className="preview-art-hero">
           <span className="preview-art-eyebrow">үйлөнүүгө чакыруу</span>
           <span className="preview-art-names">Алмаз</span>
@@ -10,7 +11,6 @@ export default function TemplatePreviewArt({ style, featured }) {
           <span className="preview-art-names">Айзада</span>
           <span className="preview-art-date">15 · 08 · 2026</span>
         </div>
-        <div className="preview-art-photo" aria-hidden />
         <div className="preview-art-countdown">
           <span><b>42</b><small>күн</small></span>
           <span><b>08</b><small>саат</small></span>

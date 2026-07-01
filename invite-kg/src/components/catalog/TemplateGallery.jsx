@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { chunkTemplates, eventTypes, introBlocks, templates } from '../../data/templates'
+import { eventTypes, introBlocks, templates } from '../../data/templates'
 import { orderWhatsapp } from '../../config/site'
 import CatalogItem from './CatalogItem'
 import IntroPreviewArt from './IntroPreviewArt'
@@ -12,15 +12,13 @@ export default function TemplateGallery() {
     return templates.filter((t) => t.event === filter)
   }, [filter])
 
-  const rows = chunkTemplates(filtered, 3)
-
   return (
     <>
       <section id="templates" className="catalog-section">
         <div className="catalog-section-head">
           <h2 className="catalog-title">Шаблондор</h2>
           <p className="catalog-note">
-            * Макет номери жана баасы телефондун үстүндө көрсөтүлгөн
+            * Макет номери жана баасы төмөндө көрсөтүлгөн
           </p>
         </div>
 
@@ -38,20 +36,9 @@ export default function TemplateGallery() {
           ))}
         </div>
 
-        <div className="catalog-rows">
-          {rows.map((row, rowIdx) => (
-            <div key={row.map((t) => t.id).join('-')} className="catalog-row">
-              {rowIdx > 0 && rowIdx % 2 === 0 && (
-                <div className="catalog-row-divider" aria-hidden>
-                  <span>Шаблондор</span>
-                </div>
-              )}
-              <div className="catalog-row-grid">
-                {row.map((t) => (
-                  <CatalogItem key={t.id} template={t} />
-                ))}
-              </div>
-            </div>
+        <div className="catalog-grid">
+          {filtered.map((t) => (
+            <CatalogItem key={t.id} template={t} />
           ))}
         </div>
       </section>
@@ -61,18 +48,20 @@ export default function TemplateGallery() {
           <h2 className="catalog-title">Кирүү блоктору</h2>
           <p className="catalog-note muted">Анимациялуу ачылыш — конверт, аттар, конфетти, музыка</p>
         </div>
-        <div className="intro-catalog-grid">
+        <div className="intro-catalog-grid catalog-grid catalog-grid--intro">
           {introBlocks.map((b) => (
             <article key={b.id} className="intro-catalog-item">
-              <div className="intro-catalog-label">
+              <div className="catalog-card intro-catalog-card">
+                <div className="intro-catalog-preview">
+                  <IntroPreviewArt style={b.style} />
+                </div>
+              </div>
+              <div className="catalog-item-label intro-catalog-label">
                 <span>{b.name}</span>
                 <span className="catalog-item-sep">|</span>
-                <span>{b.price} сом</span>
+                <span>{b.price}</span>
               </div>
-              <div className="intro-catalog-preview">
-                <IntroPreviewArt style={b.style} />
-              </div>
-              <div className="catalog-item-actions">
+              <div className="catalog-item-actions catalog-item-actions--stack">
                 <button type="button" className="catalog-btn catalog-btn--view" disabled>Көрүү</button>
                 <a
                   href={orderWhatsapp(b.name)}

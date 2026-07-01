@@ -7,23 +7,25 @@ export default function CatalogItem({ template }) {
 
   return (
     <article className="catalog-item">
+      <div className="catalog-card">
+        <div className="catalog-phone">
+          <div className="catalog-phone-shell">
+            <div className="catalog-phone-island" aria-hidden />
+            <div className="catalog-phone-screen">
+              <TemplatePreviewArt style={template.style} featured={template.featured} />
+            </div>
+          </div>
+          <div className="catalog-phone-shadow" aria-hidden />
+        </div>
+      </div>
+
       <div className="catalog-item-label">
         <span>{template.name}</span>
         <span className="catalog-item-sep">|</span>
-        <span className="catalog-item-price">{priceLabel} сом</span>
+        <span className="catalog-item-price">{priceLabel}</span>
       </div>
 
-      <div className="catalog-phone">
-        <div className="catalog-phone-shell">
-          <div className="catalog-phone-island" aria-hidden />
-          <div className="catalog-phone-screen">
-            <TemplatePreviewArt style={template.style} featured={template.featured} />
-          </div>
-        </div>
-        <div className="catalog-phone-shadow" aria-hidden />
-      </div>
-
-      <div className="catalog-item-actions">
+      <div className="catalog-item-actions catalog-item-actions--stack">
         {template.preview ? (
           <Link to={template.preview} className="catalog-btn catalog-btn--view">
             Көрүү
