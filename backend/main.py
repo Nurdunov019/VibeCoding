@@ -41,6 +41,11 @@ def migrate_db():
             "UPDATE complexes SET floors = CAST(floors AS TEXT) "
             "WHERE floors IS NOT NULL AND typeof(floors) = 'integer'"
         ))
+    if insp.has_table("users"):
+        user_cols = {c["name"] for c in insp.get_columns("users")}
+        if "avatar_url" not in user_cols:
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN avatar_url VARCHAR"))
 
 
 migrate_db()

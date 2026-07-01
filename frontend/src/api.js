@@ -47,6 +47,23 @@ export const api = {
   register: (email, password, full_name) =>
     request('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, full_name }) }),
   me: () => request('/auth/me'),
+  uploadAvatar: async (file) => {
+    const token = readStorage('token')
+    const fd = new FormData()
+    fd.append('file', file)
+    const res = await fetch(`${API}/auth/avatar`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: fd,
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      const detail = err.detail
+      const msg = typeof detail === 'string' ? detail : 'Жүктөө катасы'
+      throw new Error(msg)
+    }
+    return res.json()
+  },
 
   adminGetComplexes: () => request('/admin/complexes'),
   adminCreateComplex: (data) =>

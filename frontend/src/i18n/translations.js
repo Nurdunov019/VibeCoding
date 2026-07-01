@@ -75,7 +75,7 @@ export const translations = {
     profile: {
       title: 'Профиль', guest: 'Аккаунт жок — кириңиз же катталыңыз', guestName: 'Конок',
       language: 'Тил', close: 'Жабуу', tabAccount: 'Аккаунт', tabFavorites: 'Тандалгандар',
-      logout: 'Чыгуу',
+      logout: 'Чыгуу', changePhoto: 'Сүрөт кошуу', uploadingPhoto: 'Жүктөлүүдө...',
     },
     stats: { objects: 'объект', building: 'курулуп жатат', commissioned: 'берилген', avgPrice: 'орточо баа/м²', verified: 'текшерилген' },
     section: { list: 'Текшерилген объекттер', popular: 'Бишкекте эң популярдуу жаңы үйлөр', howTo: 'Кантип кошулат?', count: 'объект', compareHint: '2ден 4кө чейин салыштыруу', legalHint: 'Юр. жыйынтык жана пикирлер — сдан объекттерде' },
@@ -278,7 +278,7 @@ export const translations = {
     profile: {
       title: 'Профиль', guest: 'Нет аккаунта — войдите или зарегистрируйтесь', guestName: 'Гость',
       language: 'Язык', close: 'Закрыть', tabAccount: 'Аккаунт', tabFavorites: 'Избранное',
-      logout: 'Выйти',
+      logout: 'Выйти', changePhoto: 'Добавить фото', uploadingPhoto: 'Загрузка...',
     },
     stats: { objects: 'объектов', building: 'строятся', commissioned: 'сданы', avgPrice: 'ср. цена/м²', verified: 'проверены' },
     section: { list: 'Проверенные объекты', popular: 'Самые популярные новостройки в городе Бишкек', howTo: 'Как сюда попасть?', count: 'объектов', compareHint: 'сравнение от 2 до 4 объектов', legalHint: 'Юр. заключение и отзывы — на сданных объектах' },
@@ -481,7 +481,7 @@ export const translations = {
     profile: {
       title: 'Profile', guest: 'No account — log in or sign up', guestName: 'Guest',
       language: 'Language', close: 'Close', tabAccount: 'Account', tabFavorites: 'Favorites',
-      logout: 'Log out',
+      logout: 'Log out', changePhoto: 'Add photo', uploadingPhoto: 'Uploading...',
     },
     stats: { objects: 'complexes', building: 'building', commissioned: 'completed', avgPrice: 'avg price/m²', verified: 'verified' },
     section: { list: 'Verified complexes', popular: 'Most popular new builds in Bishkek', howTo: 'How to get listed?', count: 'results', compareHint: 'compare 2 to 4 complexes', legalHint: 'Legal reports and reviews — on completed complexes' },

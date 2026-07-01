@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { api } from '../api'
 import { useAuth } from '../context/AuthContext'
 import { useAuthModal } from '../context/AuthModalContext'
 import { useFavorites } from '../context/FavoritesContext'
 import { useLocale } from '../context/LocaleContext'
+import { mediaUrl } from '../utils/mediaUrl'
 import LanguageSwitcher from './LanguageSwitcher'
 
 function LogoutIcon() {
@@ -71,17 +72,36 @@ function ProfileFavoritesTab({ onClose }) {
 }
 
 export default function MobileProfileSheet({ open, onClose }) {
-  const { user, logout, loading } = useAuth()
+  const { user, logout, loading, refreshUser } = useAuth()
   const { openLogin, openRegister } = useAuthModal()
   const { t } = useLocale()
   const { pathname } = useLocation()
   const [tab, setTab] = useState('account')
+  const [uploadingPhoto, setUploadingPhoto] = useState(false)
+  const [photoError, setPhotoError] = useState('')
+  const fileRef = useRef(null)
 
   if (!open) return null
 
   const handleLogout = () => {
     logout()
     onClose()
+  }
+
+  const handleAvatarPick = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !user) return
+    setUploadingPhoto(true)
+    setPhotoError('')
+    try {
+      await api.uploadAvatar(file)
+      await refreshUser()
+    } catch (err) {
+      setPhotoError(err.message)
+    } finally {
+      setUploadingPhoto(false)
+    }
   }
 
   const displayName = user?.full_name || t('profile.guestName')
@@ -114,9 +134,42 @@ export default function MobileProfileSheet({ open, onClose }) {
             <p className="muted">{t('empty.loading')}</p>
           ) : (
             <>
-              <div className={`profile-avatar profile-avatar--lg${user ? '' : ' profile-avatar--guest'}`}>
-                {user ? user.full_name.charAt(0).toUpperCase() : '👤'}
+              <div className="profile-avatar-wrap">
+                <button
+                  type="button"
+                  className={`profile-avatar profile-avatar--lg profile-avatar-btn${user ? '' : ' profile-avatar--guest'}`}
+                  onClick={() => user && !uploadingPhoto && fileRef.current?.click()}
+                  disabled={!user || uploadingPhoto}
+                  aria-label={user ? t('profile.changePhoto') : displayName}
+                >
+                  {user?.avatar_url ? (
+                    <img src={mediaUrl(user.avatar_url)} alt="" className="profile-avatar-img" />
+                  ) : (
+                    <span className="profile-avatar-fallback">{user ? user.full_name.charAt(0).toUpperCase() : '👤'}</span>
+                  )}
+                  {user && (
+                    <span className="profile-avatar-badge" aria-hidden>📷</span>
+                  )}
+                </button>
+                {user && (
+                  <button
+                    type="button"
+                    className="profile-avatar-label"
+                    onClick={() => !uploadingPhoto && fileRef.current?.click()}
+                    disabled={uploadingPhoto}
+                  >
+                    {uploadingPhoto ? t('profile.uploadingPhoto') : t('profile.changePhoto')}
+                  </button>
+                )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  className="profile-avatar-input"
+                  onChange={handleAvatarPick}
+                />
               </div>
+              {photoError && <p className="profile-photo-error">{photoError}</p>}
               <p className="profile-hero-name">{displayName}</p>
               {user && <p className="profile-hero-email muted">{user.email}</p>}
               {!user && <p className="profile-hero-guest muted">{t('profile.guest')}</p>}

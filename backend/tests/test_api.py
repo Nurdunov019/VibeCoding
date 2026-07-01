@@ -71,6 +71,15 @@ def test_login_invalid(client):
     assert r.status_code == 401
 
 
+def test_upload_avatar(client):
+    login = client.post("/api/auth/login", json={"email": "admin@proverkakg.kg", "password": "112233"})
+    token = login.json()["access_token"]
+    files = {"file": ("avatar.png", b"\x89PNG\r\n\x1a\n" + b"x" * 64, "image/png")}
+    r = client.post("/api/auth/avatar", files=files, headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    assert r.json()["avatar_url"].startswith("/uploads/avatars/")
+
+
 def test_admin_login(client):
     r = client.post("/api/auth/login", json={"email": "admin@proverkakg.kg", "password": "112233"})
     assert r.status_code == 200

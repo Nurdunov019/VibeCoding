@@ -24,6 +24,7 @@ class UserOut(BaseModel):
     id: int
     email: str
     full_name: str
+    avatar_url: Optional[str] = None
     is_admin: bool
 
     class Config:

@@ -223,12 +223,83 @@
     width: 88px;
     height: 88px;
     font-size: 34px;
-    margin: 0 auto 12px;
+    margin: 0 auto 8px;
   }
-  .profile-avatar--guest {
-    background: #3d3d3d;
-    font-size: 40px;
+  .profile-avatar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .profile-avatar-btn {
+    position: relative;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    flex-shrink: 0;
+  }
+  .profile-avatar-btn:disabled {
+    cursor: default;
+  }
+  .profile-avatar-btn.profile-avatar--guest {
+    background: #3d3d4a;
+    cursor: default;
+  }
+  .profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .profile-avatar-fallback {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 34px;
+    font-weight: 800;
+  }
+  .profile-avatar-badge {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 13px;
     line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+  .profile-avatar-label {
+    border: none;
+    background: none;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .profile-avatar-label:disabled {
+    color: var(--muted);
+    cursor: default;
+  }
+  .profile-avatar-input {
+    display: none;
+  }
+  .profile-photo-error {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--bad);
+    text-align: center;
   }
   .profile-hero-name {
     margin: 0;
