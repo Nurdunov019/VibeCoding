@@ -13,12 +13,15 @@ const styles = [
   'peach-bloom', 'emerald-night', 'snow-white',
 ]
 
+const sizes = ['tall', 'medium', 'compact']
+
 function makeTemplate(id, price, event = 'wedding', preview = null) {
   return {
     id,
     name: `Макет ${id}`,
     price,
     style: styles[(id - 1) % styles.length],
+    size: sizes[id % sizes.length],
     event,
     preview: id === 1 ? '/demo' : preview,
     featured: id === 1,

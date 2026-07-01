@@ -1,0 +1,181 @@
+/* Day / Night wedding themes */
+
+:root,
+[data-wedding-theme='day'] {
+  --bg: #f7f0e8;
+  --bg-alt: #efe4d8;
+  --surface: #fffcf8;
+  --text: #2c221c;
+  --muted: #8a7a6e;
+  --primary: #a04d5c;
+  --primary-dark: #7f3a48;
+  --gold: #c4a062;
+  --gold-light: #e8d4b0;
+  --border: #e5d6c8;
+  --shadow: 0 16px 48px rgba(44, 34, 28, 0.09);
+  --hero-overlay: linear-gradient(180deg, rgba(247, 240, 232, 0.55) 0%, rgba(247, 240, 232, 0.88) 55%, rgba(247, 240, 232, 0.96) 100%);
+  --header-bg: rgba(247, 240, 232, 0.88);
+  --catalog-bg: #faf6f1;
+  --inv-bg: #ffffff;
+  --inv-text: #1a1a1a;
+  --inv-muted: #555;
+  --inv-countdown-bg: #faf8f6;
+}
+
+[data-wedding-theme='night'] {
+  --bg: #141018;
+  --bg-alt: #1e1824;
+  --surface: #261f2e;
+  --text: #f3ebe3;
+  --muted: #b8a99a;
+  --primary: #d4a5a5;
+  --primary-dark: #b87a7a;
+  --gold: #e8c878;
+  --gold-light: #c4a062;
+  --border: #3d3348;
+  --shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  --hero-overlay: linear-gradient(180deg, rgba(20, 16, 24, 0.45) 0%, rgba(20, 16, 24, 0.82) 55%, rgba(20, 16, 24, 0.94) 100%);
+  --header-bg: rgba(20, 16, 24, 0.9);
+  --catalog-bg: #1a1520;
+  --inv-bg: #1a1520;
+  --inv-text: #f5f0ea;
+  --inv-muted: #c4b8ad;
+  --inv-countdown-bg: #221c28;
+}
+
+[data-wedding-theme='night'] .hero-video-overlay {
+  background: var(--hero-overlay);
+}
+
+[data-wedding-theme='night'] .catalog-section {
+  background: var(--catalog-bg);
+}
+
+[data-wedding-theme='night'] .w-inv-page {
+  background: var(--inv-bg);
+  color: var(--inv-text);
+}
+
+[data-wedding-theme='night'] .w-inv-section-title,
+[data-wedding-theme='night'] .w-inv-script,
+[data-wedding-theme='night'] .w-inv-cover-names,
+[data-wedding-theme='night'] .w-inv-date-stamp,
+[data-wedding-theme='night'] .w-inv-countdown-num {
+  color: var(--inv-text);
+}
+
+[data-wedding-theme='night'] .w-inv-text,
+[data-wedding-theme='night'] .w-inv-rsvp-note {
+  color: var(--inv-muted);
+}
+
+[data-wedding-theme='night'] .w-inv-countdown {
+  background: var(--inv-countdown-bg);
+}
+
+[data-wedding-theme='night'] .w-inv-monogram-circle {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+[data-wedding-theme='night'] .w-inv-submit {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1a1520;
+}
+
+[data-wedding-theme='night'] .w-inv-field input {
+  border-bottom-color: #4a4058;
+  color: var(--inv-text);
+}
+
+[data-wedding-theme='night'] .site-header {
+  background: var(--header-bg);
+  border-bottom-color: var(--border);
+}
+
+[data-wedding-theme='night'] .theme-toggle,
+[data-wedding-theme='night'] .music-toggle {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Theme + music toggles */
+.theme-toggle,
+.music-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s;
+}
+
+.theme-toggle {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.music-toggle {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 18px;
+}
+
+.music-toggle--on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(160, 77, 92, 0.2);
+  animation: music-pulse 2s ease-in-out infinite;
+}
+
+@keyframes music-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(160, 77, 92, 0.15); }
+  50% { box-shadow: 0 0 0 8px rgba(160, 77, 92, 0.08); }
+}
+
+.theme-toggle:hover,
+.music-toggle:hover {
+  transform: scale(1.05);
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-tool.theme-toggle .theme-toggle-label {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .header-tool.theme-toggle .theme-toggle-label {
+    display: inline;
+  }
+}
+
+.inv-floating-tools {
+  position: fixed;
+  left: 16px;
+  bottom: 88px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 481px) {
+  .inv-floating-tools {
+    bottom: 24px;
+  }
+}

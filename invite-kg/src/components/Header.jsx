@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SITE } from '../config/site'
+import ThemeToggle from './ThemeToggle'
+import MusicToggle from './MusicToggle'
 
 const nav = [
   { href: '#templates', label: 'Шаблондор' },
@@ -21,16 +23,20 @@ export default function Header() {
           <span className="logo-sub">{SITE.tagline}</span>
         </Link>
 
-        <button
-          type="button"
-          className="nav-toggle"
-          aria-label="Меню"
-          aria-expanded={open}
-          onClick={() => setOpen(!open)}
-        >
-          <span />
-          <span />
-        </button>
+        <div className="header-tools">
+          <ThemeToggle className="header-tool" />
+          <MusicToggle className="header-tool" />
+          <button
+            type="button"
+            className="nav-toggle"
+            aria-label="Меню"
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            <span />
+            <span />
+          </button>
+        </div>
 
         <nav className={`site-nav${open ? ' site-nav--open' : ''}`}>
           {nav.map((item) => (

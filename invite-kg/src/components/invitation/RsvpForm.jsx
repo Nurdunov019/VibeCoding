@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { fireConfetti } from '../../utils/confetti'
 
 export default function RsvpForm({ deadline, alcoholOptions }) {
   const [name, setName] = useState('')
@@ -17,13 +18,19 @@ export default function RsvpForm({ deadline, alcoholOptions }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     setSent(true)
+    if (attend === 'yes') fireConfetti()
   }
 
   if (sent) {
     return (
-      <section className="w-inv-section w-inv-rsvp">
+      <section className="w-inv-section w-inv-rsvp w-inv-rsvp--success">
+        <div className="w-inv-success-icon" aria-hidden>💕</div>
         <h2 className="w-inv-section-title">Спасибо!</h2>
-        <p className="w-inv-text w-inv-text--center">Ваш ответ принят. До встречи на празднике!</p>
+        <p className="w-inv-text w-inv-text--center">
+          {attend === 'yes'
+            ? 'Ваш ответ принят. До встречи на празднике!'
+            : 'Спасибо, что сообщили нам. Будем скучать!'}
+        </p>
       </section>
     )
   }

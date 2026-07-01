@@ -5,9 +5,10 @@ import TemplatePreviewArt from './TemplatePreviewArt'
 
 export default function CatalogItem({ template, revealDelay = 0 }) {
   const priceLabel = `${template.price.toLocaleString('ru-RU')}`
+  const sizeClass = template.size ? ` catalog-item--${template.size}` : ''
 
   return (
-    <Reveal as="article" className="catalog-item hover-scale" delay={revealDelay}>
+    <Reveal as="article" className={`catalog-item hover-scale${sizeClass}`} delay={revealDelay}>
       <div className="catalog-card">
         <div className="catalog-phone">
           <div className="catalog-phone-shell">

@@ -10,8 +10,21 @@ const heroEvents = [
 
 export default function Hero() {
   return (
-    <section className="hero">
-      <div className="hero-bg" aria-hidden>
+    <section className="hero hero--video">
+      <div className="hero-media" aria-hidden>
+        <video
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23f7f0e8' width='800' height='600'/%3E%3C/svg%3E"
+        >
+          <source src={SITE.heroVideo} type="video/mp4" />
+        </video>
+        <div className="hero-video-overlay" />
+      </div>
+      <div className="hero-bg">
         <div className="hero-blob hero-blob--1" />
         <div className="hero-blob hero-blob--2" />
         <div className="hero-grain" />

@@ -4,6 +4,8 @@ import IntroOverlay from '../components/invitation/IntroOverlay'
 import Countdown from '../components/invitation/Countdown'
 import RsvpForm from '../components/invitation/RsvpForm'
 import Reveal from '../components/Reveal'
+import ThemeToggle from '../components/ThemeToggle'
+import MusicToggle from '../components/MusicToggle'
 import { demoInvitation } from '../data/demoInvitation'
 
 export default function InvitationPage() {
@@ -12,6 +14,10 @@ export default function InvitationPage() {
 
   return (
     <div className="w-inv-page">
+      <div className="inv-floating-tools">
+        <ThemeToggle />
+        <MusicToggle />
+      </div>
       {!opened && (
         <IntroOverlay groom={inv.groom} bride={inv.bride} onOpen={() => setOpened(true)} />
       )}

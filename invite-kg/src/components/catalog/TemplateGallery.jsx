@@ -37,7 +37,7 @@ export default function TemplateGallery() {
           ))}
         </div>
 
-        <div className="catalog-grid">
+        <div className="catalog-masonry">
           {filtered.map((t, i) => (
             <CatalogItem key={t.id} template={t} revealDelay={(i % 6) * 80} />
           ))}
@@ -49,7 +49,7 @@ export default function TemplateGallery() {
           <h2 className="catalog-title">Кирүү блоктору</h2>
           <p className="catalog-note muted">Анимациялуу ачылыш — конверт, аттар, конфетти, музыка</p>
         </div>
-        <div className="intro-catalog-grid catalog-grid catalog-grid--intro">
+        <div className="intro-catalog-grid catalog-masonry catalog-masonry--intro">
           {introBlocks.map((b, i) => (
             <Reveal key={b.id} as="article" className="intro-catalog-item hover-scale" delay={(i % 4) * 90}>
               <div className="catalog-card intro-catalog-card img-zoom-wrap hover-zoom">

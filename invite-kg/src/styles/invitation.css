@@ -411,11 +411,16 @@
   transition: background 0.2s;
 }
 
-.w-inv-submit:hover {
-  background: #333;
+.w-inv-rsvp--success {
+  padding: 40px 24px 48px;
 }
 
-/* Footer */
+.w-inv-success-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  animation: fade-in 0.8s ease both;
+}
+
 .w-inv-footer {
   text-align: center;
   padding: 40px 24px 56px;

@@ -2,7 +2,7 @@
 
 .catalog-section {
   padding: 48px 0 88px;
-  background: #faf6f1;
+  background: var(--catalog-bg, #faf6f1);
 }
 
 .catalog-section--intro {
@@ -72,7 +72,39 @@
   box-shadow: 0 8px 24px rgba(44, 34, 28, 0.15);
 }
 
-/* Grid — 3 desktop, 2 mobile (weddinv) */
+/* Grid — Pinterest masonry */
+.catalog-masonry {
+  column-count: 3;
+  column-gap: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.catalog-masonry .catalog-item {
+  break-inside: avoid;
+  margin-bottom: 24px;
+  display: inline-block;
+  width: 100%;
+}
+
+.catalog-masonry--intro {
+  column-count: 2;
+}
+
+.catalog-item--tall .catalog-phone-screen {
+  aspect-ratio: 9 / 21;
+}
+
+.catalog-item--compact .catalog-phone-screen {
+  aspect-ratio: 9 / 14;
+}
+
+.catalog-item--medium .catalog-phone-screen {
+  aspect-ratio: 9 / 17;
+}
+
+/* Legacy grid fallback */
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -539,8 +571,18 @@
 .intro-art--confetti { background: linear-gradient(180deg, #fce8ec, #f5d8e0); color: #6b4048; }
 .intro-art-confetti { font-size: 1.2rem; letter-spacing: 8px; opacity: 0.7; }
 
-/* Mobile — 2 columns like weddinv */
+/* Mobile — 2 columns masonry */
 @media (max-width: 900px) {
+  .catalog-masonry {
+    column-count: 2;
+    column-gap: 12px;
+    padding: 0 12px;
+  }
+
+  .catalog-masonry .catalog-item {
+    margin-bottom: 20px;
+  }
+
   .catalog-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 28px 12px;
