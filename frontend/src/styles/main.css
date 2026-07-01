@@ -140,8 +140,7 @@ button { cursor: pointer; border: none; }
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
-  text-align: right;
-  flex-direction: row-reverse;
+  text-align: left;
 }
 .region-dropdown li button:hover,
 .region-dropdown li button.active { background: var(--accent-light); }
