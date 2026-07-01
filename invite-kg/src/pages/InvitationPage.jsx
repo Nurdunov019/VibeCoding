@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import IntroOverlay from '../components/invitation/IntroOverlay'
 import Countdown from '../components/invitation/Countdown'
 import RsvpForm from '../components/invitation/RsvpForm'
+import Reveal from '../components/Reveal'
 import { demoInvitation } from '../data/demoInvitation'
 
 export default function InvitationPage() {
@@ -16,11 +17,10 @@ export default function InvitationPage() {
       )}
 
       {opened && (
-        <main className="w-inv-main">
-          {/* Cover + names — maket1 */}
-          <section className="w-inv-cover">
-            <div className="w-inv-cover-photo" role="img" aria-label="Фото пары" />
-            <div className="w-inv-cover-overlay">
+        <main className="w-inv-main fade-in">
+          <section className="w-inv-cover img-zoom-wrap">
+            <div className="w-inv-cover-photo img-zoom img-zoom--slow" role="img" aria-label="Фото пары" />
+            <div className="w-inv-cover-overlay fade-in" style={{ '--fade-delay': '200ms' }}>
               <h1 className="w-inv-cover-names">
                 {inv.groom}
                 <span className="w-inv-cover-amp">&</span>
@@ -31,7 +31,7 @@ export default function InvitationPage() {
 
           <div className="w-inv-ornament-line" aria-hidden />
 
-          <section className="w-inv-section w-inv-greeting">
+          <Reveal as="section" className="w-inv-section w-inv-greeting">
             <h2 className="w-inv-script">Дорогие гости!</h2>
             <p className="w-inv-text w-inv-text--lead">
               {inv.dateDisplay} состоится долгожданное событие
@@ -39,27 +39,29 @@ export default function InvitationPage() {
             {inv.story.map((p) => (
               <p key={p} className="w-inv-text">{p}</p>
             ))}
-          </section>
+          </Reveal>
 
-          <section className="w-inv-monogram">
-            <div className="w-inv-monogram-circle">{inv.groomInitial}</div>
+          <Reveal as="section" className="w-inv-monogram" delay={60}>
+            <div className="w-inv-monogram-circle hover-scale">{inv.groomInitial}</div>
             <span className="w-inv-monogram-sep">|</span>
-            <div className="w-inv-monogram-circle">{inv.brideInitial}</div>
-          </section>
+            <div className="w-inv-monogram-circle hover-scale">{inv.brideInitial}</div>
+          </Reveal>
 
-          <p className="w-inv-day-label">день нашей свадьбы!</p>
+          <Reveal delay={80}>
+            <p className="w-inv-day-label">день нашей свадьбы!</p>
+          </Reveal>
 
-          <section className="w-inv-section w-inv-venue">
+          <Reveal as="section" className="w-inv-section w-inv-venue" delay={100}>
             <h2 className="w-inv-section-title">Место проведения</h2>
             <div className="w-inv-ornament-line w-inv-ornament-line--short" aria-hidden />
             <p className="w-inv-venue-name">{inv.venue}</p>
             <p className="w-inv-text">{inv.address}</p>
-            <a href={inv.mapUrl} className="w-inv-map-link" target="_blank" rel="noreferrer">
+            <a href={inv.mapUrl} className="w-inv-map-link hover-lift" target="_blank" rel="noreferrer">
               Открыть на карте
             </a>
-          </section>
+          </Reveal>
 
-          <section className="w-inv-section w-inv-program">
+          <Reveal as="section" className="w-inv-section w-inv-program" delay={100}>
             <div className="w-inv-ornament-line w-inv-ornament-line--short" aria-hidden />
             <ul className="w-inv-program-list">
               {inv.program.map((item) => (
@@ -69,29 +71,33 @@ export default function InvitationPage() {
                 </li>
               ))}
             </ul>
-          </section>
+          </Reveal>
 
-          <section className="w-inv-section w-inv-dress">
+          <Reveal as="section" className="w-inv-section w-inv-dress" delay={100}>
             <h2 className="w-inv-section-title">Dress code</h2>
             <p className="w-inv-text">{inv.dressCode}</p>
-          </section>
+          </Reveal>
 
-          <section className="w-inv-section w-inv-wishes">
+          <Reveal as="section" className="w-inv-section w-inv-wishes" delay={100}>
             <h2 className="w-inv-section-title">Пожелания</h2>
             <p className="w-inv-text">{inv.wishes}</p>
-          </section>
+          </Reveal>
 
-          <p className="w-inv-date-stamp">{inv.dateShort}</p>
+          <Reveal delay={120}>
+            <p className="w-inv-date-stamp">{inv.dateShort}</p>
+          </Reveal>
 
           <Countdown targetDate={inv.date} />
 
-          <section className="w-inv-section w-inv-request">
+          <Reveal as="section" className="w-inv-section w-inv-request" delay={80}>
             <h2 className="w-inv-section-title">Просьба</h2>
-          </section>
+          </Reveal>
 
-          <RsvpForm deadline={inv.rsvpDeadline} alcoholOptions={inv.alcoholOptions} />
+          <Reveal delay={100}>
+            <RsvpForm deadline={inv.rsvpDeadline} alcoholOptions={inv.alcoholOptions} />
+          </Reveal>
 
-          <footer className="w-inv-footer">
+          <footer className="w-inv-footer reveal reveal--visible">
             <p className="w-inv-footer-names">{inv.groom} & {inv.bride}</p>
             <Link to="/" className="w-inv-footer-brand">chakyruu.kg</Link>
           </footer>

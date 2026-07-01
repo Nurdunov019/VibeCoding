@@ -1,7 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Reveal from '../Reveal'
 
 function pad(n) {
   return String(n).padStart(2, '0')
+}
+
+function CountdownCell({ value, label }) {
+  const [tick, setTick] = useState(false)
+  const prev = useRef(value)
+
+  useEffect(() => {
+    if (prev.current !== value) {
+      setTick(true)
+      prev.current = value
+      const id = setTimeout(() => setTick(false), 450)
+      return () => clearTimeout(id)
+    }
+    return undefined
+  }, [value])
+
+  return (
+    <div className={`w-inv-countdown-item${tick ? ' w-inv-countdown-item--pulse' : ''}`}>
+      <span className={`w-inv-countdown-num${tick ? ' countdown-tick' : ''}`}>{pad(value)}</span>
+      <span className="w-inv-countdown-label">{label}</span>
+    </div>
+  )
 }
 
 export default function Countdown({ targetDate }) {
@@ -33,16 +56,13 @@ export default function Countdown({ targetDate }) {
   ]
 
   return (
-    <section className="w-inv-section w-inv-countdown">
+    <Reveal as="section" className="w-inv-section w-inv-countdown">
       <h2 className="w-inv-section-title">До свадьбы осталось:</h2>
       <div className="w-inv-countdown-row">
         {cells.map((c) => (
-          <div key={c.l} className="w-inv-countdown-item">
-            <span className="w-inv-countdown-num">{pad(c.v)}</span>
-            <span className="w-inv-countdown-label">{c.l}</span>
-          </div>
+          <CountdownCell key={c.l} value={c.v} label={c.l} />
         ))}
       </div>
-    </section>
+    </Reveal>
   )
 }

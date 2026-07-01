@@ -1,0 +1,149 @@
+/* Global motion — chakyruu.kg */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fade in + slide up on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Page load fade */
+.fade-in {
+  animation: fade-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--fade-delay, 0ms);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover scale */
+.hover-scale {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.04);
+}
+
+/* Image zoom (hover or continuous) */
+.img-zoom-wrap {
+  overflow: hidden;
+}
+
+.img-zoom {
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.img-zoom-wrap:hover .img-zoom,
+.hover-zoom:hover .img-zoom {
+  transform: scale(1.1);
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.img-zoom--slow {
+  animation: ken-burns 18s ease-in-out infinite alternate;
+}
+
+/* Countdown tick */
+@keyframes countdown-pop {
+  0% {
+    transform: scale(1.2) translateY(-4px);
+    opacity: 0.5;
+  }
+  60% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.countdown-tick {
+  animation: countdown-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes countdown-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(26, 26, 26, 0); }
+  50% { box-shadow: 0 0 24px rgba(26, 26, 26, 0.06); }
+}
+
+.w-inv-countdown-item--pulse {
+  animation: countdown-glow 1s ease;
+}
+
+/* Button / card subtle lift */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* WhatsApp float pulse */
+@keyframes wa-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+.wa-float {
+  animation: wa-pulse 3s ease-in-out infinite;
+}
+
+.wa-float:hover {
+  animation: none;
+  transform: scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .fade-in,
+  .img-zoom--slow,
+  .countdown-tick,
+  .w-inv-countdown-item--pulse,
+  .wa-float {
+    animation: none !important;
+  }
+
+  .hover-scale:hover,
+  .hover-lift:hover,
+  .img-zoom-wrap:hover .img-zoom {
+    transform: none;
+  }
+}

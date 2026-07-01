@@ -21,7 +21,7 @@ export default function IntroOverlay({ groom, bride, onOpen }) {
 
   return (
     <div className={`w-inv-intro${opening ? ' w-inv-intro--out' : ''}`}>
-      <div className="w-inv-intro-inner">
+      <div className="w-inv-intro-inner fade-in">
         <p className="w-inv-intro-tag">приглашение</p>
         <h1 className="w-inv-intro-names">
           {groom}

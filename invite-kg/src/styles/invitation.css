@@ -94,9 +94,16 @@
   overflow: hidden;
 }
 
+.w-inv-cover.img-zoom-wrap {
+  overflow: hidden;
+}
+
 .w-inv-cover-photo {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.35) 100%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23e8ddd4'/%3E%3Cstop offset='100%25' stop-color='%23c9b8a8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='400' height='600'/%3E%3Ccircle cx='200' cy='220' r='80' fill='%23d4c4b4' opacity='.5'/%3E%3C/svg%3E") center/cover;
@@ -201,6 +208,11 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.5rem;
   font-weight: 500;
+  transition: transform 0.35s ease;
+}
+
+.w-inv-monogram-circle.hover-scale:hover {
+  transform: scale(1.1);
 }
 
 .w-inv-monogram-sep {

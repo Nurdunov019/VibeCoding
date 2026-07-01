@@ -8,6 +8,7 @@ import FaqSection from '../components/FaqSection'
 import ContactSection from '../components/ContactSection'
 import Footer from '../components/Footer'
 import WhatsAppFloat from '../components/WhatsAppFloat'
+import Reveal from '../components/Reveal'
 
 export default function LandingPage() {
   return (
@@ -16,11 +17,21 @@ export default function LandingPage() {
       <main>
         <Hero />
         <TemplateGallery />
-        <QuickOrderSection />
-        <PricingSection />
-        <ReviewsSection />
-        <FaqSection />
-        <ContactSection />
+        <Reveal>
+          <QuickOrderSection />
+        </Reveal>
+        <Reveal delay={80}>
+          <PricingSection />
+        </Reveal>
+        <Reveal delay={80}>
+          <ReviewsSection />
+        </Reveal>
+        <Reveal delay={80}>
+          <FaqSection />
+        </Reveal>
+        <Reveal delay={80}>
+          <ContactSection />
+        </Reveal>
       </main>
       <Footer />
       <WhatsAppFloat />

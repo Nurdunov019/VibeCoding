@@ -9,8 +9,8 @@ export default function ReviewsSection() {
           <h2>Бизди тандагандар эмне дейт</h2>
         </div>
         <div className="reviews-grid">
-          {reviews.map((r) => (
-            <article key={r.name} className="review-card">
+          {reviews.map((r, i) => (
+            <article key={r.name} className="review-card hover-lift" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="review-stars" aria-label={`${r.stars} жылдыз`}>
                 {'★'.repeat(r.stars)}
               </div>

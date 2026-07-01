@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import InvitationPage from './pages/InvitationPage'
+import './styles/animations.css'
 import './styles/landing.css'
 import './styles/catalog.css'
 import './styles/invitation.css'

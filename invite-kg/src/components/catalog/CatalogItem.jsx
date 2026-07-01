@@ -1,18 +1,21 @@
 import { Link } from 'react-router-dom'
 import { orderWhatsapp } from '../../config/site'
+import Reveal from '../Reveal'
 import TemplatePreviewArt from './TemplatePreviewArt'
 
-export default function CatalogItem({ template }) {
+export default function CatalogItem({ template, revealDelay = 0 }) {
   const priceLabel = `${template.price.toLocaleString('ru-RU')}`
 
   return (
-    <article className="catalog-item">
+    <Reveal as="article" className="catalog-item hover-scale" delay={revealDelay}>
       <div className="catalog-card">
         <div className="catalog-phone">
           <div className="catalog-phone-shell">
             <div className="catalog-phone-island" aria-hidden />
-            <div className="catalog-phone-screen">
-              <TemplatePreviewArt style={template.style} featured={template.featured} />
+            <div className="catalog-phone-screen img-zoom-wrap hover-zoom">
+              <div className="img-zoom catalog-preview-zoom">
+                <TemplatePreviewArt style={template.style} featured={template.featured} />
+              </div>
             </div>
           </div>
           <div className="catalog-phone-shadow" aria-hidden />
@@ -27,7 +30,7 @@ export default function CatalogItem({ template }) {
 
       <div className="catalog-item-actions catalog-item-actions--stack">
         {template.preview ? (
-          <Link to={template.preview} className="catalog-btn catalog-btn--view">
+          <Link to={template.preview} className="catalog-btn catalog-btn--view hover-lift">
             Көрүү
           </Link>
         ) : (
@@ -37,13 +40,13 @@ export default function CatalogItem({ template }) {
         )}
         <a
           href={orderWhatsapp(template.name)}
-          className="catalog-btn catalog-btn--order"
+          className="catalog-btn catalog-btn--order hover-lift"
           target="_blank"
           rel="noreferrer"
         >
           Заказ
         </a>
       </div>
-    </article>
+    </Reveal>
   )
 }
