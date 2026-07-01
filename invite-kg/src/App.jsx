@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import { WeddingThemeProvider } from './context/WeddingThemeContext'
 import AnimatedRoutes from './components/PageTransition'
 import './styles/themes.css'
@@ -12,9 +12,9 @@ import './styles/wedding.css'
 export default function App() {
   return (
     <WeddingThemeProvider>
-      <BrowserRouter>
+      <HashRouter>
         <AnimatedRoutes />
-      </BrowserRouter>
+      </HashRouter>
     </WeddingThemeProvider>
   )
 }

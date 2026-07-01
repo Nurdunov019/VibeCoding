@@ -1,12 +1,16 @@
 services:
   - type: web
     name: chakyruu-kg
-    runtime: node
+    runtime: static
     rootDir: invite-kg
     plan: free
     buildCommand: npm install && npm run build
-    startCommand: npm start
+    staticPublishPath: ./dist
     pullRequestPreviewsEnabled: true
     envVars:
       - key: NODE_VERSION
         value: "20"
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
