@@ -7,6 +7,7 @@ import './styles/landing.css'
 import './styles/catalog.css'
 import './styles/invitation.css'
 import './styles/premium.css'
+import './styles/wedding.css'
 
 export default function App() {
   return (

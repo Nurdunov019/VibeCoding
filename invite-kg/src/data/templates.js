@@ -31,7 +31,7 @@ function makeTemplate(id, price, event = 'wedding', preview = null) {
 export const templates = [
   makeTemplate(1, 2500, 'wedding', '/demo'),
   { ...makeTemplate(2, 3500), preview: '/demo2', featured: true, name: 'Макет 2 — Premium' },
-  makeTemplate(3, 2750),
+  { ...makeTemplate(3, 3200), preview: '/demo3', name: 'Макет 3 — Classic' },
   makeTemplate(4, 3150),
   makeTemplate(5, 2500),
   makeTemplate(6, 2500),
