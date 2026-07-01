@@ -14,22 +14,25 @@ export default function IntroOverlay({ groom, bride, onOpen }) {
     setTimeout(() => {
       setVisible(false)
       onOpen?.()
-    }, 900)
+    }, 800)
   }
 
   if (!visible) return null
 
   return (
-    <div className={`inv-intro${opening ? ' inv-intro--opening' : ''}`}>
-      <div className="inv-intro-envelope" aria-hidden>
-        <div className="inv-intro-flap" />
-        <div className="inv-intro-body" />
+    <div className={`w-inv-intro${opening ? ' w-inv-intro--out' : ''}`}>
+      <div className="w-inv-intro-inner">
+        <p className="w-inv-intro-tag">приглашение</p>
+        <h1 className="w-inv-intro-names">
+          {groom}
+          <span className="w-inv-intro-amp">&</span>
+          {bride}
+        </h1>
+        <div className="w-inv-intro-line" aria-hidden />
+        <button type="button" className="w-inv-intro-open" onClick={handleOpen}>
+          открыть
+        </button>
       </div>
-      <p className="inv-intro-text">Сизге чакыруу келди</p>
-      <h1 className="inv-intro-names">{groom} & {bride}</h1>
-      <button type="button" className="inv-intro-btn" onClick={handleOpen}>
-        Ачуу
-      </button>
     </div>
   )
 }

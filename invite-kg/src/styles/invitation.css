@@ -1,284 +1,428 @@
-.invitation-page {
+/* weddinv.ru / maket1 style invitation */
+
+.w-inv-page {
   min-height: 100dvh;
-  background: #f8f1ea;
-  color: #3d2f2a;
-  font-family: 'Manrope', system-ui, sans-serif;
+  background: #fff;
+  color: #1a1a1a;
+  font-family: 'Montserrat', 'Outfit', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
-.invitation-main {
+.w-inv-main {
   max-width: 480px;
   margin: 0 auto;
-  padding: 0 0 48px;
+  overflow-x: hidden;
 }
 
-/* Intro overlay */
-.inv-intro {
+/* ── Intro screen ── */
+.w-inv-intro {
   position: fixed;
   inset: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 24px;
-  background: linear-gradient(180deg, #f3e8df 0%, #e8d5c8 100%);
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: #f5f0ea url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 4c-2 8-8 14-16 16 8 2 14 8 16 16 2-8 8-14 16-16-8-2-14-8-16-16z' fill='%23e8ddd2' opacity='.35'/%3E%3C/svg%3E") center/120px;
   text-align: center;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  padding: 24px;
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.inv-intro--opening {
+.w-inv-intro--out {
   opacity: 0;
-  transform: scale(1.04);
+  transform: scale(1.03);
   pointer-events: none;
 }
 
-.inv-intro-envelope {
+.w-inv-intro-tag {
+  margin: 0 0 20px;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #888;
+  font-weight: 400;
+}
+
+.w-inv-intro-names {
+  font-family: 'Great Vibes', 'Cormorant Garamond', cursive;
+  font-size: clamp(2.8rem, 12vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 24px;
+  color: #1a1a1a;
+}
+
+.w-inv-intro-amp {
+  display: block;
+  font-size: 0.55em;
+  margin: 4px 0;
+  font-style: italic;
+}
+
+.w-inv-intro-line {
+  width: 120px;
+  height: 1px;
+  background: #ccc;
+  margin: 0 auto 28px;
+}
+
+.w-inv-intro-open {
+  border: 1px solid #1a1a1a;
+  background: transparent;
+  color: #1a1a1a;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 14px 40px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.w-inv-intro-open:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* ── Cover hero ── */
+.w-inv-cover {
   position: relative;
-  width: 140px;
-  height: 96px;
-  margin-bottom: 8px;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: 72vh;
+  overflow: hidden;
 }
 
-.inv-intro-body {
+.w-inv-cover-photo {
   position: absolute;
-  inset: 20px 0 0;
-  background: #fff;
-  border: 1px solid #d9c4b5;
-  border-radius: 4px;
-  box-shadow: 0 8px 24px rgba(61, 47, 42, 0.12);
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.35) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23e8ddd4'/%3E%3Cstop offset='100%25' stop-color='%23c9b8a8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='400' height='600'/%3E%3Ccircle cx='200' cy='220' r='80' fill='%23d4c4b4' opacity='.5'/%3E%3C/svg%3E") center/cover;
 }
 
-.inv-intro-flap {
+.w-inv-cover-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 52px;
-  background: #f5ebe3;
-  border: 1px solid #d9c4b5;
-  clip-path: polygon(0 0, 50% 100%, 100% 0);
-  transform-origin: top center;
-  animation: flap 2.4s ease-in-out infinite;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 32px 20px 40px;
+  background: linear-gradient(transparent 40%, rgba(0, 0, 0, 0.45));
 }
 
-@keyframes flap {
-  0%, 100% { transform: rotateX(0deg); }
-  50% { transform: rotateX(18deg); }
-}
-
-.inv-intro-text {
+.w-inv-cover-names {
+  font-family: 'Great Vibes', 'Cormorant Garamond', cursive;
+  font-size: clamp(2.4rem, 11vw, 3.4rem);
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
   margin: 0;
+  line-height: 1.15;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.w-inv-cover-amp {
+  display: inline;
+  margin: 0 0.15em;
+  font-size: 0.7em;
+}
+
+/* ── Ornament lines ── */
+.w-inv-ornament-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #bbb 20%, #bbb 80%, transparent);
+  margin: 28px 40px;
+}
+
+.w-inv-ornament-line--short {
+  margin: 16px auto;
+  max-width: 200px;
+}
+
+/* ── Sections ── */
+.w-inv-section {
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.w-inv-script {
+  font-family: 'Great Vibes', 'Cormorant Garamond', cursive;
+  font-size: clamp(2rem, 8vw, 2.6rem);
+  font-weight: 400;
+  margin: 0 0 20px;
+  color: #1a1a1a;
+}
+
+.w-inv-section-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.35rem, 5vw, 1.6rem);
+  font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  font-size: 11px;
-  color: #8b6f63;
-}
-
-.inv-intro-names {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2rem, 8vw, 2.6rem);
-  font-weight: 600;
-  margin: 0;
-  font-style: italic;
-}
-
-.inv-intro-btn {
-  margin-top: 12px;
-  border: none;
-  background: #8b4d57;
-  color: white;
-  font: inherit;
-  font-weight: 600;
-  padding: 14px 36px;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(139, 77, 87, 0.28);
-}
-
-/* Invitation blocks */
-.inv-hero {
-  text-align: center;
-  padding: 48px 20px 32px;
-  background: linear-gradient(180deg, #fff 0%, #f8f1ea 100%);
-}
-
-.inv-eyebrow {
-  margin: 0 0 12px;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #8b6f63;
-}
-
-.inv-hero h1 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2.4rem, 10vw, 3.2rem);
-  font-weight: 600;
-  margin: 0 0 12px;
-  line-height: 1.1;
-}
-
-.inv-hero h1 span {
-  font-style: italic;
-  color: #8b4d57;
-}
-
-.inv-date,
-.inv-time {
-  margin: 4px 0;
-}
-
-.inv-date {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.25rem;
-}
-
-.inv-time {
-  color: #8b6f63;
-}
-
-.inv-block {
-  margin: 16px;
-  padding: 24px 20px;
-  background: #fff;
-  border: 1px solid #eadfd5;
-  border-radius: 16px;
-  text-align: center;
-}
-
-.inv-block h2 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.6rem;
   margin: 0 0 16px;
-  font-weight: 600;
+  color: #1a1a1a;
 }
 
-.inv-muted {
-  color: #8b6f63;
-  margin: 0 0 12px;
-}
-
-.inv-story p {
-  margin: 0;
-  line-height: 1.7;
-  font-size: 1.02rem;
-}
-
-.inv-countdown-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-.inv-countdown-cell {
-  background: #faf7f2;
-  border-radius: 12px;
-  padding: 12px 6px;
-}
-
-.inv-countdown-cell span {
-  display: block;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #8b4d57;
-}
-
-.inv-countdown-cell small {
-  font-size: 11px;
-  color: #8b6f63;
-}
-
-.inv-venue {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin: 0 0 4px;
-}
-
-.inv-link {
-  display: inline-block;
-  margin-top: 12px;
-  color: #8b4d57;
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.inv-program ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-}
-
-.inv-program li {
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f0e6dc;
-}
-
-.inv-program time {
-  font-weight: 700;
-  color: #8b4d57;
-}
-
-.inv-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  text-align: left;
-}
-
-.inv-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.w-inv-text {
+  margin: 0 0 14px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 300;
+  color: #333;
+  line-height: 1.75;
 }
 
-.inv-field input,
-.inv-field textarea {
-  font: inherit;
-  padding: 12px 14px;
-  border: 1px solid #eadfd5;
-  border-radius: 10px;
-  background: #faf7f2;
+.w-inv-text--lead {
+  font-size: 15px;
+  margin-bottom: 18px;
 }
 
-.inv-radio-group {
-  display: flex;
-  gap: 20px;
+.w-inv-text--center {
+  text-align: center;
 }
 
-.inv-radio-group label {
+/* Monogram */
+.w-inv-monogram {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 24px 8px;
+}
+
+.w-inv-monogram-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid #1a1a1a;
+  display: grid;
+  place-items: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
   font-weight: 500;
 }
 
-.inv-btn {
-  border: none;
-  background: #8b4d57;
-  color: white;
+.w-inv-monogram-sep {
+  font-size: 1.2rem;
+  color: #999;
+  font-weight: 300;
+}
+
+.w-inv-day-label {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  margin: 8px 0 24px;
+  color: #444;
+}
+
+/* Venue */
+.w-inv-venue-name {
+  font-weight: 500;
+  font-size: 15px;
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.w-inv-map-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  padding-bottom: 2px;
+}
+
+/* Program */
+.w-inv-program-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  text-align: left;
+  max-width: 280px;
+  margin-inline: auto;
+}
+
+.w-inv-program-list li {
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 300;
+  border-bottom: 1px solid #eee;
+}
+
+.w-inv-program-time {
+  color: #666;
+  margin-right: 8px;
+}
+
+.w-inv-program-title {
+  text-transform: lowercase;
+}
+
+/* Date stamp */
+.w-inv-date-stamp {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  margin: 32px 0 8px;
+  color: #1a1a1a;
+}
+
+/* Countdown */
+.w-inv-countdown {
+  padding: 24px 16px 32px;
+  background: #faf8f6;
+}
+
+.w-inv-countdown-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.w-inv-countdown-item {
+  min-width: 64px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.w-inv-countdown-num {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: #1a1a1a;
+}
+
+.w-inv-countdown-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: #888;
+  margin-top: 6px;
+}
+
+/* RSVP */
+.w-inv-rsvp-note {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.7;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.w-inv-form {
+  text-align: left;
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.w-inv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.w-inv-field span,
+.w-inv-fieldset legend {
+  font-size: 13px;
+  font-weight: 400;
+  color: #333;
+}
+
+.w-inv-field input {
   font: inherit;
-  font-weight: 600;
-  padding: 14px;
-  border-radius: 10px;
+  font-weight: 300;
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: transparent;
+  outline: none;
+}
+
+.w-inv-field input:focus {
+  border-bottom-color: #1a1a1a;
+}
+
+.w-inv-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.w-inv-fieldset legend {
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.w-inv-radio,
+.w-inv-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 300;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 
-.inv-footer {
-  text-align: center;
-  padding: 24px 16px;
-  color: #8b6f63;
+.w-inv-radio input,
+.w-inv-check input {
+  margin-top: 3px;
+  accent-color: #1a1a1a;
 }
 
-.inv-back {
-  display: inline-block;
-  margin-top: 8px;
-  color: #8b4d57;
-  font-weight: 600;
+.w-inv-submit {
+  display: block;
+  width: 100%;
+  margin-top: 28px;
+  padding: 14px;
+  border: 1px solid #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.w-inv-submit:hover {
+  background: #333;
+}
+
+/* Footer */
+.w-inv-footer {
+  text-align: center;
+  padding: 40px 24px 56px;
+  border-top: 1px solid #eee;
+}
+
+.w-inv-footer-names {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.6rem;
+  margin: 0 0 12px;
+}
+
+.w-inv-footer-brand {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #999;
+}
+
+body.invitation-open {
+  overflow: hidden;
 }

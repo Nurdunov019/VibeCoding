@@ -1,11 +1,18 @@
 import { useState } from 'react'
 
-export default function RsvpForm() {
-  const [status, setStatus] = useState('yes')
+export default function RsvpForm({ deadline, alcoholOptions }) {
   const [name, setName] = useState('')
-  const [guests, setGuests] = useState(1)
-  const [message, setMessage] = useState('')
+  const [attend, setAttend] = useState('yes')
+  const [alcohol, setAlcohol] = useState([])
+  const [partner, setPartner] = useState('')
+  const [song, setSong] = useState('')
   const [sent, setSent] = useState(false)
+
+  const toggleAlcohol = (item) => {
+    setAlcohol((prev) =>
+      prev.includes(item) ? prev.filter((x) => x !== item) : [...prev, item],
+    )
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -14,43 +21,68 @@ export default function RsvpForm() {
 
   if (sent) {
     return (
-      <section className="inv-block inv-rsvp">
-        <h2>Рахмат!</h2>
-        <p>Жообуңуз катталды. Көрүшкөнчө!</p>
+      <section className="w-inv-section w-inv-rsvp">
+        <h2 className="w-inv-section-title">Спасибо!</h2>
+        <p className="w-inv-text w-inv-text--center">Ваш ответ принят. До встречи на празднике!</p>
       </section>
     )
   }
 
   return (
-    <section className="inv-block inv-rsvp">
-      <h2>RSVP</h2>
-      <p className="inv-muted">Келесизби? Бизге билдириңиз</p>
-      <form className="inv-form" onSubmit={handleSubmit}>
-        <label className="inv-field">
-          Атыңыз
-          <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Толук аты" />
+    <section className="w-inv-section w-inv-rsvp">
+      <p className="w-inv-rsvp-note">
+        Чтобы всё прошло идеально, пожалуйста, заполните анкету до {deadline}.
+        Если вы с парой — заполните отдельно. Спасибо!
+      </p>
+      <h2 className="w-inv-section-title">Анкета гостя</h2>
+
+      <form className="w-inv-form" onSubmit={handleSubmit}>
+        <label className="w-inv-field">
+          <span>Ваше имя и фамилия</span>
+          <input value={name} onChange={(e) => setName(e.target.value)} required />
         </label>
-        <div className="inv-radio-group">
-          <label>
-            <input type="radio" name="rsvp" checked={status === 'yes'} onChange={() => setStatus('yes')} />
-            Келем
+
+        <fieldset className="w-inv-fieldset">
+          <legend>Планируете ли Вы присутствовать на свадьбе?</legend>
+          <label className="w-inv-radio">
+            <input type="radio" name="attend" checked={attend === 'yes'} onChange={() => setAttend('yes')} />
+            Да, с удовольствием!
           </label>
-          <label>
-            <input type="radio" name="rsvp" checked={status === 'no'} onChange={() => setStatus('no')} />
-            Келбейм
+          <label className="w-inv-radio">
+            <input type="radio" name="attend" checked={attend === 'no'} onChange={() => setAttend('no')} />
+            К сожалению, не смогу
           </label>
-        </div>
-        {status === 'yes' && (
-          <label className="inv-field">
-            Киши саны
-            <input type="number" min={1} max={10} value={guests} onChange={(e) => setGuests(Number(e.target.value))} />
-          </label>
+        </fieldset>
+
+        {attend === 'yes' && (
+          <>
+            <fieldset className="w-inv-fieldset">
+              <legend>Уточните предпочтения в алкоголе:</legend>
+              {alcoholOptions.map((opt) => (
+                <label key={opt} className="w-inv-check">
+                  <input
+                    type="checkbox"
+                    checked={alcohol.includes(opt)}
+                    onChange={() => toggleAlcohol(opt)}
+                  />
+                  {opt}
+                </label>
+              ))}
+            </fieldset>
+
+            <label className="w-inv-field">
+              <span>Имя и фамилия вашей второй половинки</span>
+              <input value={partner} onChange={(e) => setPartner(e.target.value)} />
+            </label>
+
+            <label className="w-inv-field">
+              <span>Какой трек вы хотели бы услышать на свадьбе?</span>
+              <input value={song} onChange={(e) => setSong(e.target.value)} />
+            </label>
+          </>
         )}
-        <label className="inv-field">
-          Куттуктоо
-          <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={3} placeholder="Тилегиңиз..." />
-        </label>
-        <button type="submit" className="inv-btn">Жөнөтүү</button>
+
+        <button type="submit" className="w-inv-submit">Отправить</button>
       </form>
     </section>
   )

@@ -11,11 +11,12 @@ export default function Countdown({ targetDate }) {
     const target = new Date(targetDate).getTime()
     const tick = () => {
       const diff = Math.max(0, target - Date.now())
-      const days = Math.floor(diff / 86400000)
-      const hours = Math.floor((diff % 86400000) / 3600000)
-      const mins = Math.floor((diff % 3600000) / 60000)
-      const secs = Math.floor((diff % 60000) / 1000)
-      setLeft({ days, hours, mins, secs })
+      setLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        mins: Math.floor((diff % 3600000) / 60000),
+        secs: Math.floor((diff % 60000) / 1000),
+      })
     }
     tick()
     const id = setInterval(tick, 1000)
@@ -24,21 +25,21 @@ export default function Countdown({ targetDate }) {
 
   if (!left) return null
 
-  const items = [
-    { label: 'күн', value: left.days },
-    { label: 'саат', value: left.hours },
-    { label: 'мүн', value: left.mins },
-    { label: 'сек', value: left.secs },
+  const cells = [
+    { v: left.days, l: 'дней' },
+    { v: left.hours, l: 'часов' },
+    { v: left.mins, l: 'минут' },
+    { v: left.secs, l: 'секунд' },
   ]
 
   return (
-    <section className="inv-block inv-countdown">
-      <h2>Калган убакыт</h2>
-      <div className="inv-countdown-grid">
-        {items.map((item) => (
-          <div key={item.label} className="inv-countdown-cell">
-            <span>{pad(item.value)}</span>
-            <small>{item.label}</small>
+    <section className="w-inv-section w-inv-countdown">
+      <h2 className="w-inv-section-title">До свадьбы осталось:</h2>
+      <div className="w-inv-countdown-row">
+        {cells.map((c) => (
+          <div key={c.l} className="w-inv-countdown-item">
+            <span className="w-inv-countdown-num">{pad(c.v)}</span>
+            <span className="w-inv-countdown-label">{c.l}</span>
           </div>
         ))}
       </div>
