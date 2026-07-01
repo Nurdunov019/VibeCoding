@@ -1,14 +1,5 @@
 import { motion } from 'framer-motion'
 
-const defaultVariants = {
-  hidden: { opacity: 0, y: 36 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
-  },
-}
-
 export default function Reveal({
   children,
   className = '',
@@ -16,16 +7,15 @@ export default function Reveal({
   as: Tag = motion.div,
   ...rest
 }) {
-  const Component = Tag === motion.div ? motion.div : Tag
+  const Component = Tag
 
   return (
     <Component
       className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.18, margin: '0px 0px -40px 0px' }}
-      variants={defaultVariants}
-      transition={{ delay: delay / 1000 }}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15, margin: '0px 0px -60px 0px' }}
+      transition={{ duration: 0.75, delay: delay / 1000, ease: [0.22, 1, 0.36, 1] }}
       {...rest}
     >
       {children}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { weddingInvitation } from '../data/weddingInvitation'
+import { useWeddingTheme } from '../context/WeddingThemeContext'
 import Petals from '../components/wedding/Petals'
 import Nav from '../components/wedding/Nav'
 import Hero from '../components/wedding/Hero'
@@ -14,16 +15,20 @@ import MusicToggle from '../components/MusicToggle'
 
 export default function Home() {
   const data = weddingInvitation
+  const { setTheme } = useWeddingTheme()
   const [opened, setOpened] = useState(false)
 
   useEffect(() => {
+    setTheme('day')
     window.history.scrollRestoration = 'manual'
     window.scrollTo(0, 0)
     document.body.classList.add('wedding-maket-open')
+    document.documentElement.classList.add('wedding-maket-active')
     return () => {
       document.body.classList.remove('wedding-maket-open')
+      document.documentElement.classList.remove('wedding-maket-active')
     }
-  }, [])
+  }, [setTheme])
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })

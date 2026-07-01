@@ -20,7 +20,12 @@
 }
 
 body.wedding-maket-open {
-  background: var(--wd-cream);
+  background: var(--wd-cream) !important;
+}
+
+html.wedding-maket-active,
+html.wedding-maket-active body {
+  background: var(--wd-cream) !important;
 }
 
 /* Petals */
@@ -28,7 +33,7 @@ body.wedding-maket-open {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 50;
+  z-index: 2;
   overflow: hidden;
 }
 
@@ -195,6 +200,10 @@ body.wedding-maket-open {
 .wd-hero-bg {
   position: absolute;
   inset: 0;
+  background-color: #5c4a3e;
+  background-image:
+    linear-gradient(to bottom, rgba(64, 55, 46, 0.2), rgba(64, 55, 46, 0.55)),
+    var(--hero-image, none);
   background-size: cover;
   background-position: center;
   transform: scale(1.05);
@@ -209,12 +218,12 @@ body.wedding-maket-open {
 .wd-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(64, 55, 46, 0.15), rgba(64, 55, 46, 0.55));
+  background: linear-gradient(to bottom, rgba(64, 55, 46, 0.1), rgba(64, 55, 46, 0.45));
 }
 
 .wd-hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   text-align: center;
   padding: 80px 24px 48px;
   color: #fff;
